@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TANTAWE ERP — نظام إدارة الموارد والحسابات</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap');
+    body {
+      font-family: 'Cairo', sans-serif;
+      background-color: #0f172a;
+      color: #e2e8f0;
+    }
+    .submenu {
+      display: none;
+    }
+    .submenu.open {
+      display: block;
+    }
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0f172a;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 9999px;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col md:flex-row">
+
+  <!-- الشريط الجانبي (Sidebar) -->
+  <aside class="w-full md:w-72 bg-slate-950 border-b md:border-b-0 md:border-l border-slate-800 flex-shrink-0 flex flex-col">
+    <!-- الهوية -->
+    <div class="p-4 border-b border-slate-800 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center font-extrabold text-xl text-white shadow-lg shadow-blue-900/30">
+          T
+        </div>
+        <div>
+          <h1 class="font-extrabold text-base text-white tracking-wide">TANTAWE ERP</h1>
+          <p class="text-[11px] text-blue-400">نظام محاسبي ومخزني متكامل</p>
+        </div>
+      </div>
+      <button onclick="toggleMobileNav()" class="md:hidden text-slate-400 hover:text-white p-2">
+        <i class="fas fa-bars text-lg"></i>
+      </button>
+    </div>
+
+    <!-- القائمة الرئيسية -->
+    <nav id="sidebar-nav" class="p-3 space-y-1 text-sm overflow-y-auto flex-1">
+      <button onclick="openScreen('dashboard')" data-nav="dashboard" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 hover:bg-slate-800/80 transition">
+        <i class="fas fa-gauge-high w-5 text-sky-400"></i>
+        <span>لوحة التحكم</span>
+      </button>
+
+      <!-- 1. المعلومات الأساسية -->
+      <div>
+        <button onclick="toggleGroup('grp-master')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-slate-200 hover:bg-slate-800/80 font-semibold">
+          <span class="flex items-center gap-3"><i class="fas fa-building-columns w-5 text-purple-400"></i>المعلومات الأساسية</span>
+          <i id="icon-grp-master" class="fas fa-chevron-down text-xs text-slate-400 transition-transform"></i>
+        </button>
+        <div id="grp-master" class="submenu pr-6 pt-1 space-y-1">
+          <button onclick="openScreen('company')" data-nav="company" class="nav-btn w-full text-right px-3 py-1.5 rounded-md text-xs text-slate-400 hover:text-white hover:bg-slate-800/60">اسم الشركة وبياناتها</button>
+          <button onclick="openScreen('branches')" data-nav="branches" class="nav-btn w-full text-right px-3 py-1.5 rounded-md text-xs text-slate-400 hover:text-white hover:bg-slate-800/60">الفروع</button>
+          <button onclick="openScreen('agents')" data-nav="agents" class="nav-btn w-full text-right px-3 py-1.5 rounded-md text-xs text-slate-400 hover:text-white hover:bg-slate-800/60">المناديب والمسوقين</button>
+          <button onclick="openScreen('regions')" data-nav="regions" class="nav-btn w-full text-right px-3 py-1.5 rounded-md text-xs text-slate-400 hover:text-white hover:bg-slate-800/60">المناطق</button>
+        </div>
+      </div>
+
+      <!-- 2. المشتريات -->
+      <div>
+        <button onclick="toggleGroup('grp-purchases')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-slate-200 hover:bg-slate-800/80 font-semibold">
+          <span class="flex items-center gap-3"><i class="fas fa-cart-shopping w-5 text-emerald-400"></i>المشتريات</span>
+          <i id="icon-grp-purchases" class="fas fa-chevron-down text-xs text-slate-400 transition-transform"></i>
+        </button>
+        <div id="grp-purchases" class="submenu pr-6 pt-1 space-y-1">
+          <button onclick="openScreen('add-supplier')" data-nav="add-supplier" class="nav-btn w-full text-right px-3 py-1.5 rounded-md text-xs text-slate-400 hover:text-white hover:bg-slate-800/60">إضافة مورد</button>
+          <button onclick="openScreen('purchase-order')" data-nav="purchase-order" class="nav-btn w-full text-right px-3 py-1.5 rounded-md text-xs text-slate-400 hover:text-white hover:bg-slate-800/60">أمر شراء</button>
+          <button onclick="openScreen('purchase-invoice')" data-nav="purchase-invoice" class="nav-btn w-full text-right px-3 py-1.5 rounded-md text-xs text-slate-400 hover:text-white hover:bg-slate-800/60">فاتورة مشتريات</button>
+        </div>
+      </div>
+
+      <!-- 3. المبيعات -->
+      <div>
+        <button onclick="toggleGroup('grp-sales')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-slate-200 hover:bg-slate-800/80 font-semibold">
+          <span class="flex items-center gap-3"><i class="fas fa-file-invoice-dollar w-5 text-amber-400"></i>المبيعات</span>
+          <i id="icon-grp-sales" class="fas fa-chevron-down text-xs text-slate-400 transition-transform"></i>
+        </button>
+        <div id="grp-sales" class="submenu pr-6 pt-1 space-y-1">
+          <button onclick="openScreen('add-customer')" data-nav="add-customer" class="nav-btn w-full text-right px-3 py-1.5 rounded-md text-xs text-slate-400 hover:text-white hover:bg-slate-800/60">إضافة عميل</button>
+          <button onclick="openScreen('sales-order')" data-nav="sales-order" class="nav-btn w-full text-right px-3 py-1.5 rounded-md text-xs text-slate-400 hover:text-white hover:bg-slate-800/60">أمر بيع</button>
+          <button onclick="openScreen('sales-invoice')" data-nav="sales-invoice" class="nav-btn w-full text-right px-3 py-1.5 rounded-md text-xs text-slate-400 hover:text-white hover:bg-slate-800/60">فاتورة بيع</button>
+        </div>
+      </div>
+
+      <!-- 4. المخازن -->
+      <div>
+        <button onclick="toggleGroup('grp-inventory')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-slate-200 hover:bg-slate-800/80 font-semibold">
+          <span class="flex items-center gap-3"><i class="fas fa-boxes-stacked w-5 text-cyan-400"></i>المخازن</span>
+          <i id="icon-grp-inventory" class="fas fa-chevron-down text-xs text-slate-400 transition-transform"></i>
+        </button>
+        <div id="grp-inventory" class="submenu pr-6 pt-1 space-y-1">
+          <button onclick="openScreen('categories')" data-nav="categories" class="nav-btn w-full text-right px-3 py-1.5 rounded-md text-xs text-slate-400 hover:text-white hover:bg-slate-800/60">فئات الأصناف</button>
+          <button onclick="openScreen('items')" data-nav="items" class="nav-btn w-full text-right px-3 py-1.5 rounded-md text-xs text-slate-400 hover:text-white hover:bg-slate-800/60">الأصناف</button>
+          <button onclick="openScreen('wh-in')" data-nav="wh-in" class="nav-btn w-full text-right px-3 py-1.5 rounded-md text-xs text-slate-400 hover:text-white hover:bg-slate-800/60">إذن إضافة مخزني</button>
+          <button onclick="openScreen('wh-out')" data-nav="wh-out" class="nav-btn w-full text-right px-3 py-1.5 rounded-md text-xs text-slate-400 hover:text-white hover:bg-slate-800/60">إذن صرف مخزني</button>
+          <button onclick="openScreen('int-in')" data-nav="int-in" class="nav-btn w-full text-right px-3 py-1.5 rounded-md text-xs text-slate-400 hover:text-white hover:bg-slate-800/60">إذن إضافة داخلي</button>
+          <button onclick="openScreen('int-out')" data-nav="int-out" class="nav-btn w-full text-right px-3 py-1.5 rounded-md text-xs text-slate-400 hover:text-white hover:bg-slate-800/60">إذن صرف داخلي</button>
+        </div>
+      </div>
+
+      <!-- 5. الحسابات -->
+      <div>
+        <button onclick="toggleGroup('grp-accounting')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-slate-200 hover:bg-slate-800/80 font-semibold">
+          <span class="flex items-center gap-3"><i class="fas fa-book w-5 text-rose-400"></i>الحسابات</span>
+          <i id="icon-grp-accounting" class="fas fa-chevron-down text-xs text-slate-400 transition-transform"></i>
+        </button>
+        <div id="grp-accounting" class="submenu pr-6 pt-1 space-y-1">
+          <button onclick="openScreen('coa')" data-nav="coa" class="nav-btn w-full text-right px-3 py-1.5 rounded-md text-xs text-slate-400 hover:text-white hover:bg-slate-800/60">شجرة الحسابات</button>
+          <button onclick="openScreen('cash-banks')" data-nav="cash-banks" class="nav-btn w-full text-right px-3 py-1.5 rounded-md text-xs text-slate-400 hover:text-white hover:bg-slate-800/60">الخزن والبنوك</button>
+
+          <!-- الأصول الثابتة وتفرعاتها الخمسة -->
+          <div class="pt-1">
+            <button onclick="toggleGroup('grp-assets')" class="w-full flex items-center justify-between px-3 py-1.5 rounded-md text-xs font-bold text-rose-300 hover:bg-slate-800/60">
+              <span>الأصول الثابتة</span>
+              <i id="icon-grp-assets" class="fas fa-chevron-down text-[10px]"></i>
+            </button>
+            <div id="grp-assets" class="submenu pr-3 pt-1 space-y-1 border-r border-slate-800 mr-2">
+              <button onclick="openScreen('asset-add')" data-nav="asset-add" class="nav-btn w-full text-right px-3 py-1 rounded text-xs text-slate-400 hover:text-white hover:bg-slate-800/60">إضافة أصل</button>
+              <button onclick="openScreen('asset-buy')" data-nav="asset-buy" class="nav-btn w-full text-right px-3 py-1 rounded text-xs text-slate-400 hover:text-white hover:bg-slate-800/60">شراء أصل</button>
+              <button onclick="openScreen('asset-sell')" data-nav="asset-sell" class="nav-btn w-full text-right px-3 py-1 rounded text-xs text-slate-400 hover:text-white hover:bg-slate-800/60">بيع أصل</button>
+              <button onclick="openScreen('asset-depreciate')" data-nav="asset-depreciate" class="nav-btn w-full text-right px-3 py-1 rounded text-xs text-slate-400 hover:text-white hover:bg-slate-800/60">إهلاك أصل</button>
+              <button onclick="openScreen('asset-scrap')" data-nav="asset-scrap" class="nav-btn w-full text-right px-3 py-1 rounded text-xs text-slate-400 hover:text-white hover:bg-slate-800/60">تخريد أصل</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. التقارير و SQL -->
+      <button onclick="openScreen('reports')" data-nav="reports" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 hover:bg-slate-800/80 transition">
+        <i class="fas fa-chart-pie w-5 text-yellow-400"></i>
+        <span>التقارير</span>
+      </button>
+      <button onclick="openScreen('sql')" data-nav="sql" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 hover:bg-slate-800/80 transition">
+        <i class="fas fa-database w-5 text-indigo-400"></i>
+        <span>تصدير SQL لـ Supabase</span>
+      </button>
+    </nav>
+  </aside>
+
+  <!-- منطقة المحتوى الرئيسية -->
+  <main class="flex-1 flex flex-col min-w-0">
+    <!-- شريط علوي -->
+    <header class="bg-slate-900/90 border-b border-slate-800 px-6 py-3.5 flex flex-wrap items-center justify-between gap-3">
+      <div>
+        <h2 id="screen-title" class="text-lg font-extrabold text-white">لوحة التحكم</h2>
+        <p id="screen-subtitle" class="text-xs text-slate-400">نظرة عامة على أرصدة المخزون والخزينة والحركات المحاسبية</p>
+      </div>
+      <div class="flex items-center gap-2">
+        <span id="company-badge" class="px-3 py-1 rounded-full text-xs bg-blue-950 text-blue-300 border border-blue-800/60">
+          شركة الطنطاوي التجارية
+        </span>
+        <button onclick="resetDemoData()" class="px-3 py-1.5 rounded-lg text-xs bg-slate-800 hover:bg-rose-950 hover:text-rose-200 border border-slate-700 transition">
+          <i class="fas fa-rotate-left ml-1"></i>إعادة ضبط البيانات
+        </button>
+      </div>
+    </header>
+
+    <!-- تنبيهات النظام -->
+    <div id="toast-box" class="px-6 pt-3 hidden">
+      <div id="toast-inner" class="px-4 py-2.5 rounded-lg text-sm font-semibold flex items-center justify-between border"></div>
+    </div>
+
+    <!-- المحتوى المتغير -->
+    <section id="content-area" class="p-6 flex-1 overflow-y-auto space-y-6"></section>
+  </main>
+
+  <script>
+    const STORAGE_KEY = 'tantawe_erp_v1';
+
+    const defaultState = {
+      company: { name: 'شركة الطنطاوي التجارية', taxId: '305-991-440', phone: '01000000000', address: 'شبين الكوم - المنوفية' },
+      branches: ['الفرع الرئيسي', 'فرع طنطا'],
+      agents: [{ name: 'أحمد حسن', role: 'مندوب مبيعات', commission: 3 }],
+      regions: ['المنوفية', 'الغربية', 'القاهرة'],
+      suppliers: [{ name: 'مورد الشاشات المتحدة', phone: '01111111111', balance: 0 }],
+      customers: [{ name: 'عميل نقدي / معرض السلام', phone: '01222222222', balance: 0 }],
+      categories: ['إلكترونيات', 'أجهزة مكتبية'],
+      items: [
+        { code: 'ITM-01', name: 'شاشة 24 بوصة', category: 'إلكترونيات', qty: 7, cost: 1000, price: 1350 }
+      ],
+      accounts: [
+        { code: '1101', name: 'الخزينة الرئيسية', type: 'أصول', debit: 0, credit: 0 },
+        { code: '1102', name: 'البنك الأهلي', type: 'أصول', debit: 0, credit: 0 },
+        { code: '1103', name: 'حساب المخزون', type: 'أصول', debit: 10000, credit: 3000 },
+        { code: '1104', name: 'العملاء', type: 'أصول', debit: 0, credit: 0 },
+        { code: '1201', name: 'الأصول الثابتة', type: 'أصول', debit: 0, credit: 0 },
+        { code: '1202', name: 'مجمع إهلاك الأصول الثابتة', type: 'أصول', debit: 0, credit: 0 },
+        { code: '2101', name: 'الموردون', type: 'خصوم', debit: 0, credit: 0 },
+        { code: '4101', name: 'إيرادات المبيعات', type: 'إيرادات', debit: 0, credit: 0 },
+        { code: '5101', name: 'تكلفة البضاعة المباعة', type: 'مصروفات', debit: 0, credit: 0 },
+        { code: '5102', name: 'مصروف الإهلاك', type: 'مصروفات', debit: 0, credit: 0 },
+        { code: '5103', name: 'أرباح / خسائر رأسمالية وتخريد', type: 'مصروفات', debit: 0, credit: 0 },
+        { code: '5109', name: 'حساب تسوية المخزون', type: 'مصروفات', debit: 3000, credit: 10000 }
+      ],
+      assets: [],
+      movements: [
+        { date: '2026-11-19', type: 'إذن إضافة داخلي', item: 'شاشة 24 بوصة', qty: 10, cost: 1000, note: 'إضافة افتتاحية' },
+        { date: '2026-11-19', type: 'إذن صرف داخلي', item: 'شاشة 24 بوصة', qty: -3, cost: 1000, note: 'صرف داخلي 3 قطع' }
+      ],
+      entries: [
+        { desc: 'إذن إضافة داخلي - شاشات', lines: [{ acc: '1103', dr: 10000, cr: 0 }, { acc: '5109', dr: 0, cr: 10000 }] },
+        { desc: 'إذن صرف داخلي - شاشات', lines: [{ acc: '5109', dr: 3000, cr: 0 }, { acc: '1103', dr: 0, cr: 3000 }] }
+      ]
+    };
+
+    let state = loadState();
+    let currentScreen = 'dashboard';
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        return raw ? JSON.parse(raw) : structuredClone(defaultState);
+      } catch {
+        return structuredClone(defaultState);
+      }
+    }
+
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      updateCompanyBadge();
+    }
+
+    function resetDemoData() {
+      state = structuredClone(defaultState);
+      saveState();
+      notify('تمت إعادة ضبط بيانات النظام إلى الحالة الافتراضية.', 'info');
+      openScreen(currentScreen);
+    }
+
+    function updateCompanyBadge() {
+      document.getElementById('company-badge').textContent = state.company.name || 'TANTAWE ERP';
+    }
+
+    function notify(msg, type = 'success') {
+      const box = document.getElementById('toast-box');
+      const inner = document.getElementById('toast-inner');
+      const styles = {
+        success: 'bg-emerald-950/90 text-emerald-200 border-emerald-700',
+        error: 'bg-rose-950/90 text-rose-200 border-rose-700',
+        info: 'bg-blue-950/90 text-blue-200 border-blue-700'
+      };
+      inner.className = `px-4 py-2.5 rounded-lg text-sm font-semibold flex items-center justify-between border ${styles[type] || styles.info}`;
+      inner.innerHTML = `<span>${msg}</span><button onclick="this.parentElement.parentElement.classList.add('hidden')" class="text-xs opacity-75 hover:opacity-100">إغلاق</button>`;
+      box.classList.remove('hidden');
+    }
+
+    function toggleGroup(id) {
+      const el = document.getElementById(id);
+      const icon = document.getElementById('icon-' + id);
+      el.classList.toggle('open');
+      if (icon) icon.classList.toggle('rotate-180');
+    }
+
+    function toggleMobileNav() {
+      document.getElementById('sidebar-nav').classList.toggle('hidden');
+    }
+
+    function postEntry(desc, lines) {
+      const totalDr = lines.reduce((s, l) => s + Number(l.dr || 0), 0);
+      const totalCr = lines.reduce((s, l) => s + Number(l.cr || 0), 0);
+      if (Math.abs(totalDr - totalCr) > 0.001) {
+        notify(`القيد غير متوازن! المدين (${totalDr}) لا يساوي الدائن (${totalCr})`, 'error');
+        return false;
+      }
+      lines.forEach(l => {
+        const acc = state.accounts.find(a => a.code === l.acc);
+        if (acc) {
+          acc.debit = Number(acc.debit || 0) + Number(l.dr || 0);
+          acc.credit = Number(acc.credit || 0) + Number(l.cr || 0);
+        }
+      });
+      state.entries.unshift({ desc, lines });
+      return true;
+    }
+
+    function adjustStock(itemName, deltaQty, unitCost, movementType, note = '') {
+      const item = state.items.find(i => i.name === itemName);
+      if (!item) {
+        notify('الصنف غير موجود في قائمة الأصناف.', 'error');
+        return false;
+      }
+      const nextQty = Number(item.qty) + Number(deltaQty);
+      if (nextQty < 0) {
+        notify(`الرصيد المتاح غير كافٍ للصرف! المتاح حالياً من "${item.name}": ${item.qty}`, 'error');
+        return false;
+      }
+      if (deltaQty > 0 && unitCost > 0) {
+        const prevVal = Number(item.qty) * Number(item.cost);
+        const addVal = Number(deltaQty) * Number(unitCost);
+        item.cost = nextQty > 0 ? Number(((prevVal + addVal) / nextQty).toFixed(2)) : Number(unitCost);
+      }
+      item.qty = nextQty;
+      state.movements.unshift({
+        date: new Date().toISOString().slice(0, 10),
+        type: movementType,
+        item: item.name,
+        qty: Number(deltaQty),
+        cost: Number(unitCost || item.cost),
+        note
+      });
+      return true;
+    }
+
+    function fmt(n) {
+      return Number(n || 0).toLocaleString('ar-EG', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    const screenMeta = {
+      dashboard: ['لوحة التحكم', 'ملخص سريع للمخزون، الخزينة، البنوك، والقيود المحاسبية'],
+      company: ['اسم الشركة وبياناتها', 'تحديث اسم الشركة والبيانات الأساسية للنظام'],
+      branches: ['الفروع', 'إضافة وإدارة فروع الشركة'],
+      agents: ['المناديب والمسوقين', 'تعريف مندوبي المبيعات والمسوقين ونسب العمولة'],
+      regions: ['المناطق', 'إدارة المناطق الجغرافية وخطوط التوزيع'],
+      'add-supplier': ['إضافة مورد', 'تسجيل مورد جديد في دليل الموردين'],
+      'purchase-order': ['أمر شراء', 'إصدار أمر شراء للموردين'],
+      'purchase-invoice': ['فاتورة مشتريات', 'تسجيل فاتورة شراء مع زيادة المخزون وإثبات القيد المحاسبي'],
+      'add-customer': ['إضافة عميل', 'تسجيل عميل جديد في دليل العملاء'],
+      'sales-order': ['أمر بيع', 'إصدار أمر بيع للعملاء'],
+      'sales-invoice': ['فاتورة بيع', 'إصدار فاتورة بيع مع خصم المخزون وقيد الإيراد وتكلفة البضاعة المباعة'],
+      categories: ['فئات الأصناف', 'تصنيف مجموعات الأصناف المخزنية'],
+      items: ['الأصناف', 'إضافة وتعديل الأصناف وأسعار التكلفة والبيع'],
+      'wh-in': ['إذن إضافة مخزني', 'إدخال كميات للمخزن ورفع رصيد المخزون'],
+      'wh-out': ['إذن صرف مخزني', 'صرف كميات من المخزن مع التحقق من عدم وجود رصيد سالب'],
+      'int-in': ['إذن إضافة داخلي', 'تسجيل إضافة داخلية للمخزن مع قيد تسوية المخزون'],
+      'int-out': ['إذن صرف داخلي', 'تسجيل صرف داخلي من المخزن مع قيد تسوية المخزون'],
+      coa: ['شجرة الحسابات', 'استعراض وإضافة الحسابات المحاسبية وأرصدتها'],
+      'cash-banks': ['الخزن والبنوك', 'تنفيذ سندات القبض والصرف على الخزينة والبنوك'],
+      'asset-add': ['إضافة أصل', 'تسجيل بطاقة أصل ثابت جديد'],
+      'asset-buy': ['شراء أصل', 'إثبات شراء أصل ثابت وتوليد قيد الشراء'],
+      'asset-sell': ['بيع أصل', 'بيع أصل ثابت واحتساب ناتج البيع وقيده المحاسبي'],
+      'asset-depreciate': ['إهلاك أصل', 'تنفيذ قسط إهلاك وتحديث مجمع الإهلاك'],
+      'asset-scrap': ['تخريد أصل', 'تخريد واستبعاد أصل ثابت وإثبات قيده'],
+      reports: ['التقارير', 'ميزان المراجعة، حركة المخزون، سجل القيود، والأصول الثابتة'],
+      sql: ['تصدير SQL لـ Supabase', 'توليد أوامر SQL لنسخها وتشغيلها مباشرة في Supabase SQL Editor']
+    };
+
+    function openScreen(name) {
+      currentScreen = name;
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.toggle('bg-blue-600/20', btn.dataset.nav === name);
+        btn.classList.toggle('text-blue-300', btn.dataset.nav === name);
+        btn.classList.toggle('font-bold', btn.dataset.nav === name);
+      });
+      const meta = screenMeta[name] || ['TANTAWE ERP', ''];
+      document.getElementById('screen-title').textContent = meta[0];
+      document.getElementById('screen-subtitle').textContent = meta[1];
+      renderScreen(name);
+    }
+
+    function card(title, bodyHtml) {
+      return `
+        <div class="bg-slate-900 border border-slate-800 rounded-xl p-5 shadow">
+          <h3 class="text-base font-bold text-white mb-4 pb-2 border-b border-slate-800">${title}</h3>
+          ${bodyHtml}
+        </div>`;
+    }
+
+    function itemOptions(selected = '') {
+      return state.items.map(i => `<option value="${i.name}" ${i.name === selected ? 'selected' : ''}>${i.name} (متاح: ${i.qty} | تكلفة: ${i.cost})</option>`).join('');
+    }
+
+    function renderScreen(name) {
+      const area = document.getElementById('content-area');
+      const acc = code => state.accounts.find(a => a.code === code) || { debit: 0, credit: 0 };
+      const invBal = Number(acc('1103').debit) - Number(acc('1103').credit);
+      const cashBal = Number(acc('1101').debit) - Number(acc('1101').credit);
+      const bankBal = Number(acc('1102').debit) - Number(acc('1102').credit);
+      const revBal = Number(acc('4101').credit) - Number(acc('4101').debit);
+
+      if (name === 'dashboard') {
+        area.innerHTML = `
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="bg-slate-900 border border-slate-800 rounded-xl p-4">
+              <p class="text-xs text-slate-400">رصيد حساب المخزون (1103)</p>
+              <p class="text-2xl font-extrabold text-cyan-400 mt-1">${fmt(invBal)}</p>
+            </div>
+            <div class="bg-slate-900 border border-slate-800 rounded-xl p-4">
+              <p class="text-xs text-slate-400">رصيد الخزينة الرئيسية (1101)</p>
+              <p class="text-2xl font-extrabold text-emerald-400 mt-1">${fmt(cashBal)}</p>
+            </div>
+            <div class="bg-slate-900 border border-slate-800 rounded-xl p-4">
+              <p class="text-xs text-slate-400">رصيد البنك الأهلي (1102)</p>
+              <p class="text-2xl font-extrabold text-blue-400 mt-1">${fmt(bankBal)}</p>
+            </div>
+            <div class="bg-slate-900 border border-slate-800 rounded-xl p-4">
+              <p class="text-xs text-slate-400">إيرادات المبيعات (4101)</p>
+              <p class="text-2xl font-extrabold text-amber-400 mt-1">${fmt(revBal)}</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            ${card('أرصدة الأصناف الحالية', `
+              <div class="overflow-x-auto">
+                <table class="w-full text-sm text-right">
+                  <thead class="text-xs text-slate-400 border-b border-slate-800">
+                    <tr><th class="py-2">الصنف</th><th class="py-2">الكمية</th><th class="py-2">التكلفة</th><th class="py-2">سعر البيع</th></tr>
+                  </thead>
+                  <tbody class="divide-y divide-slate-800/60">
+                    ${state.items.map(i => `<tr><td class="py-2 font-semibold text-white">${i.name}</td><td class="py-2 text-cyan-300">${i.qty}</td><td class="py-2">${fmt(i.cost)}</td><td class="py-2 text-emerald-300">${fmt(i.price)}</td></tr>`).join('')}
+                  </tbody>
+                </table>
+              </div>
+            `)}
+            ${card('آخر القيود المحاسبية', `
+              <div class="space-y-2 max-h-64 overflow-y-auto">
+                ${state.entries.slice(0, 6).map(e => `
+                  <div class="p-3 rounded-lg bg-slate-950 border border-slate-800 text-xs">
+                    <div class="font-bold text-white mb-1">${e.desc}</div>
+                    ${e.lines.map(l => `<div class="flex justify-between text-slate-400"><span>حساب ${l.acc}</span><span>مدين: ${fmt(l.dr)} | دائن: ${fmt(l.cr)}</span></div>`).join('')}
+                  </div>
+                `).join('')}
+              </div>
+            `)}
+          </div>`;
+        return;
+      }
+
+      if (name === 'company') {
+        area.innerHTML = card('بيانات الشركة', `
+          <form onsubmit="saveCompany(event)" class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+            <div><label class="block text-xs text-slate-400 mb-1">اسم الشركة</label><input id="c-name" value="${state.company.name}" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2" required /></div>
+            <div><label class="block text-xs text-slate-400 mb-1">الرقم الضريبي / السجل</label><input id="c-tax" value="${state.company.taxId}" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2" /></div>
+            <div><label class="block text-xs text-slate-400 mb-1">رقم الهاتف</label><input id="c-phone" value="${state.company.phone}" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2" /></div>
+            <div><label class="block text-xs text-slate-400 mb-1">العنوان</label><input id="c-addr" value="${state.company.address}" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2" /></div>
+            <div class="md:col-span-2"><button class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-5 py-2 rounded-lg">حفظ بيانات الشركة</button></div>
+          </form>
+        `);
+        return;
+      }
+
+      if (name === 'branches' || name === 'regions') {
+        const isBranch = name === 'branches';
+        const list = isBranch ? state.branches : state.regions;
+        const label = isBranch ? 'اسم الفرع' : 'اسم المنطقة';
+        area.innerHTML = card(isBranch ? 'إدارة الفروع' : 'إدارة المناطق', `
+          <form onsubmit="addSimpleList(event, '${isBranch ? 'branches' : 'regions'}')" class="flex gap-2 mb-4">
+            <input id="simple-val" placeholder="${label}" class="flex-1 bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm" required />
+            <button class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-4 py-2 rounded-lg text-sm">إضافة</button>
+          </form>
+          <div class="flex flex-wrap gap-2">
+            ${list.map(x => `<span class="px-3 py-1.5 rounded-lg bg-slate-950 border border-slate-800 text-sm">${x}</span>`).join('')}
+          </div>
+        `);
+        return;
+      }
+
+      if (name === 'agents') {
+        area.innerHTML = card('المناديب والمسوقين', `
+          <form onsubmit="addAgent(event)" class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-5 text-sm">
+            <input id="ag-name" placeholder="اسم المندوب / المسوق" class="bg-slate-950 border border-slate-700 rounded-lg px-3 py-2" required />
+            <select id="ag-role" class="bg-slate-950 border border-slate-700 rounded-lg px-3 py-2">
+              <option value="مندوب مبيعات">مندوب مبيعات</option>
+              <option value="مسوق">مسوق</option>
+            </select>
+            <div class="flex gap-2">
+              <input id="ag-comm" type="number" step="0.5" placeholder="نسبة العمولة %" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2" required />
+              <button class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-4 py-2 rounded-lg">إضافة</button>
+            </div>
+          </form>
+          <table class="w-full text-sm text-right">
+            <thead class="text-xs text-slate-400 border-b border-slate-800"><tr><th class="py-2">الاسم</th><th class="py-2">الصفة</th><th class="py-2">العمولة</th></tr></thead>
+            <tbody class="divide-y divide-slate-800/60">
+              ${state.agents.map(a => `<tr><td class="py-2 text-white font-semibold">${a.name}</td><td class="py-2">${a.role}</td><td class="py-2 text-amber-300">${a.commission}%</td></tr>`).join('')}
+            </tbody>
+          </table>
+        `);
+        return;
+      }
+
+      if (name === 'add-supplier' || name === 'add-customer') {
+        const isSup = name === 'add-supplier';
+        const list = isSup ? state.suppliers : state.customers;
+        area.innerHTML = card(isSup ? 'إضافة مورد' : 'إضافة عميل', `
+          <form onsubmit="addParty(event, '${isSup ? 'suppliers' : 'customers'}')" class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-5 text-sm">
+            <input id="p-name" placeholder="${isSup ? 'اسم المورد' : 'اسم العميل'}" class="bg-slate-950 border border-slate-700 rounded-lg px-3 py-2" required />
+            <input id="p-phone" placeholder="رقم الهاتف" class="bg-slate-950 border border-slate-700 rounded-lg px-3 py-2" />
+            <div class="flex gap-2">
+              <input id="p-bal" type="number" step="0.01" placeholder="رصيد افتتاحي" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2" />
+              <button class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-4 py-2 rounded-lg">حفظ</button>
+            </div>
+          </form>
+          <table class="w-full text-sm text-right">
+            <thead class="text-xs text-slate-400 border-b border-slate-800"><tr><th class="py-2">الاسم</th><th class="py-2">الهاتف</th><th class="py-2">الرصيد</th></tr></thead>
+            <tbody class="divide-y divide-slate-800/60">
+              ${list.map(p => `<tr><td class="py-2 text-white font-semibold">${p.name}</td><td class="py-2">${p.phone || '-'}</td><td class="py-2">${fmt(p.balance)}</td></tr>`).join('')}
+            </tbody>
+          </table>
+        `);
+        return;
+      }
+
+      if (name === 'purchase-order' || name === 'sales-order') {
+        const isPO = name === 'purchase-order';
+        const parties = isPO ? state.suppliers : state.customers;
+        area.innerHTML = card(isPO ? 'أمر شراء' : 'أمر بيع', `
+          <form onsubmit="createOrder(event, '${isPO ? 'أمر شراء' : 'أمر بيع'}')" class="grid grid-cols-1 md:grid-cols-4 gap-3 text-sm">
+            <select id="ord-party" class="bg-slate-950 border border-slate-700 rounded-lg px-3 py-2">${parties.map(p => `<option>${p.name}</option>`).join('')}</select>
+            <select id="ord-item" class="bg-slate-950 border border-slate-700 rounded-lg px-3 py-2">${itemOptions()}</select>
+            <input id="ord-qty" type="number" min="1" placeholder="الكمية" class="bg-slate-950 border border-slate-700 rounded-lg px-3 py-2" required />
+            <button class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-4 py-2 rounded-lg">اعتماد ${isPO ? 'أمر الشراء' : 'أمر البيع'}</button>
+          </form>
+        `);
+        return;
+      }
+
+      if (name === 'purchase-invoice') {
+        area.innerHTML = card('فاتورة مشتريات', `
+          <form onsubmit="submitPurchaseInvoice(event)" class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+            <div><label class="block text-xs text-slate-400 mb-1">المورد</label><select id="pi-sup" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2">${state.suppliers.map(s => `<option>${s.name}</option>`).join('')}</select></div>
+            <div><label class="block text-xs text-slate-400 mb-1">الصنف</label><select id="pi-item" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2">${itemOptions()}</select></div>
+            <div><label class="block text-xs text-slate-400 mb-1">طريقة السداد</label><select id="pi-pay" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2"><option value="1101">نقدي (الخزينة الرئيسية)</option><option value="1102">تحويل بنكي (البنك الأهلي)</option><option value="2101">آجل (على حساب المورد)</option></select></div>
+            <div><label class="block text-xs text-slate-400 mb-1">الكمية</label><input id="pi-qty" type="number" step="0.01" min="0.01" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2" required /></div>
+            <div><label class="block text-xs text-slate-400 mb-1">سعر الوحدة</label><input id="pi-cost" type="number" step="0.01" min="0.01" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2" required /></div>
+            <div class="flex items-end"><button class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-4 py-2 rounded-lg">ترحيل فاتورة المشتريات</button></div>
+          </form>
+        `);
+        return;
+      }
+
+      if (name === 'sales-invoice') {
+        area.innerHTML = card('فاتورة بيع', `
+          <form onsubmit="submitSalesInvoice(event)" class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+            <div><label class="block text-xs text-slate-400 mb-1">العميل</label><select id="si-cus" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2">${state.customers.map(c => `<option>${c.name}</option>`).join('')}</select></div>
+            <div><label class="block text-xs text-slate-400 mb-1">الصنف</label><select id="si-item" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2">${itemOptions()}</select></div>
+            <div><label class="block text-xs text-slate-400 mb-1">نوع البيع</label><select id="si-pay" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2"><option value="1101">نقدي (الخزينة الرئيسية)</option><option value="1102">تحويل بنكي (البنك الأهلي)</option><option value="1104">آجل (على حساب العملاء)</option></select></div>
+            <div><label class="block text-xs text-slate-400 mb-1">الكمية</label><input id="si-qty" type="number" step="0.01" min="0.01" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2" required /></div>
+            <div><label class="block text-xs text-slate-400 mb-1">سعر البيع للوحدة</label><input id="si-price" type="number" step="0.01" min="0.01" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2" required /></div>
+            <div class="flex items-end"><button class="w-full bg-amber-600 hover:bg-amber-500 text-white font-bold px-4 py-2 rounded-lg">ترحيل فاتورة البيع</button></div>
+          </form>
+        `);
+        return;
+      }
+
+      if (name === 'categories') {
+        area.innerHTML = card('فئات الأصناف', `
+          <form onsubmit="addSimpleList(event, 'categories')" class="flex gap-2 mb-4">
+            <input id="simple-val" placeholder="اسم الفئة الجديدة" class="flex-1 bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm" required />
+            <button class="bg-cyan-600 hover:bg-cyan-500 text-white font-bold px-4 py-2 rounded-lg text-sm">إضافة فئة</button>
+          </form>
+          <div class="flex flex-wrap gap-2">
+            ${state.categories.map(c => `<span class="px-3 py-1.5 rounded-lg bg-slate-950 border border-slate-800 text-sm">${c}</span>`).join('')}
+          </div>
+        `);
+        return;
+      }
+
+      if (name === 'items') {
+        area.innerHTML = card('الأصناف', `
+          <form onsubmit="addItem(event)" class="grid grid-cols-1 md:grid-cols-5 gap-3 mb-5 text-sm">
+            <input id="it-code" placeholder="كود الصنف" class="bg-slate-950 border border-slate-700 rounded-lg px-3 py-2" required />
+            <input id="it-name" placeholder="اسم الصنف" class="bg-slate-950 border border-slate-700 rounded-lg px-3 py-2" required />
+            <select id="it-cat" class="bg-slate-950 border border-slate-700 rounded-lg px-3 py-2">${state.categories.map(c => `<option>${c}</option>`).join('')}</select>
+            <input id="it-cost" type="number" step="0.01" placeholder="التكلفة" class="bg-slate-950 border border-slate-700 rounded-lg px-3 py-2" required />
+            <div class="flex gap-2">
+              <input id="it-price" type="number" step="0.01" placeholder="سعر البيع" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2" required />
+              <button class="bg-cyan-600 hover:bg-cyan-500 text-white font-bold px-3 py-2 rounded-lg">إضافة</button>
+            </div>
+          </form>
+          <table class="w-full text-sm text-right">
+            <thead class="text-xs text-slate-400 border-b border-slate-800"><tr><th class="py-2">الكود</th><th class="py-2">الصنف</th><th class="py-2">الفئة</th><th class="py-2">الرصيد</th><th class="py-2">التكلفة</th><th class="py-2">البيع</th></tr></thead>
+            <tbody class="divide-y divide-slate-800/60">
+              ${state.items.map(i => `<tr><td class="py-2 text-slate-400">${i.code}</td><td class="py-2 text-white font-semibold">${i.name}</td><td class="py-2">${i.category}</td><td class="py-2 text-cyan-300 font-bold">${i.qty}</td><td class="py-2">${fmt(i.cost)}</td><td class="py-2 text-emerald-300">${fmt(i.price)}</td></tr>`).join('')}
+            </tbody>
+          </table>
+        `);
+        return;
+      }
+
+      if (['wh-in', 'wh-out', 'int-in', 'int-out'].includes(name)) {
+        const map = {
+          'wh-in': ['إذن إضافة مخزني', 1, '1103', '5109'],
+          'wh-out': ['إذن صرف مخزني', -1, '5109', '1103'],
+          'int-in': ['إذن إضافة داخلي', 1, '1103', '5109'],
+          'int-out': ['إذن صرف داخلي', -1, '5109', '1103']
+        };
+        const [title, sign, drAcc, crAcc] = map[name];
+        area.innerHTML = card(title, `
+          <form onsubmit="submitStockVoucher(event, '${title}', ${sign}, '${drAcc}', '${crAcc}')" class="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
+            <div><label class="block text-xs text-slate-400 mb-1">الصنف</label><select id="sv-item" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2">${itemOptions()}</select></div>
+            <div><label class="block text-xs text-slate-400 mb-1">الكمية</label><input id="sv-qty" type="number" step="0.01" min="0.01" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2" required /></div>
+            <div><label class="block text-xs text-slate-400 mb-1">تكلفة الوحدة</label><input id="sv-cost" type="number" step="0.01" min="0.01" value="1000" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2" required /></div>
+            <div><label class="block text-xs text-slate-400 mb-1">ملاحظات / بيان</label><input id="sv-note" placeholder="بيان الإذن" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2" /></div>
+            <div class="md:col-span-4"><button class="bg-cyan-600 hover:bg-cyan-500 text-white font-bold px-5 py-2 rounded-lg">تنفيذ ${title} وترحيل القيد</button></div>
+          </form>
+        `);
+        return;
+      }
+
+      if (name === 'coa') {
+        area.innerHTML = card('شجرة الحسابات', `
+          <form onsubmit="addAccount(event)" class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-5 text-sm">
+            <input id="acc-code" placeholder="كود الحساب (مثال: 1105)" class="bg-slate-950 border border-slate-700 rounded-lg px-3 py-2" required />
+            <input id="acc-name" placeholder="اسم الحساب" class="bg-slate-950 border border-slate-700 rounded-lg px-3 py-2" required />
+            <select id="acc-type" class="bg-slate-950 border border-slate-700 rounded-lg px-3 py-2">
+              <option>أصول</option><option>خصوم</option><option>إيرادات</option><option>مصروفات</option>
+            </select>
+            <button class="bg-rose-600 hover:bg-rose-500 text-white font-bold px-4 py-2 rounded-lg">إضافة حساب</button>
+          </form>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm text-right">
+              <thead class="text-xs text-slate-400 border-b border-slate-800"><tr><th class="py-2">الكود</th><th class="py-2">اسم الحساب</th><th class="py-2">النوع</th><th class="py-2">إجمالي مدين</th><th class="py-2">إجمالي دائن</th><th class="py-2">الصافي</th></tr></thead>
+              <tbody class="divide-y divide-slate-800/60">
+                ${state.accounts.map(a => {
+                  const net = Number(a.debit || 0) - Number(a.credit || 0);
+                  return `<tr><td class="py-2 font-mono text-blue-300">${a.code}</td><td class="py-2 text-white font-semibold">${a.name}</td><td class="py-2">${a.type}</td><td class="py-2">${fmt(a.debit)}</td><td class="py-2">${fmt(a.credit)}</td><td class="py-2 font-bold ${net >= 0 ? 'text-emerald-300' : 'text-amber-300'}">${fmt(net)}</td></tr>`;
+                }).join('')}
+              </tbody>
+            </table>
+          </div>
+        `);
+        return;
+      }
+
+      if (name === 'cash-banks') {
+        area.innerHTML = card('الخزن والبنوك — سندات القبض والصرف', `
+          <form onsubmit="submitTreasuryVoucher(event)" class="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
+            <div><label class="block text-xs text-slate-400 mb-1">نوع السند</label><select id="tr-type" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2"><option value="receipt">سند قبض (إيداع)</option><option value="payment">سند صرف (سحب)</option></select></div>
+            <div><label class="block text-xs text-slate-400 mb-1">الخزينة / البنك</label><select id="tr-cb" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2"><option value="1101">الخزينة الرئيسية (1101)</option><option value="1102">البنك الأهلي (1102)</option></select></div>
+            <div><label class="block text-xs text-slate-400 mb-1">الحساب المقابل</label><select id="tr-opp" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2">${state.accounts.filter(a => !['1101','1102'].includes(a.code)).map(a => `<option value="${a.code}">${a.code} - ${a.name}</option>`).join('')}</select></div>
+            <div><label class="block text-xs text-slate-400 mb-1">المبلغ</label><input id="tr-amt" type="number" step="0.01" min="0.01" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2" required /></div>
+            <div class="md:col-span-3"><input id="tr-desc" placeholder="بيان السند" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2" /></div>
+            <div><button class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-4 py-2 rounded-lg">ترحيل السند</button></div>
+          </form>
+        `);
+        return;
+      }
+
+      if (['asset-add', 'asset-buy', 'asset-sell', 'asset-depreciate', 'asset-scrap'].includes(name)) {
+        const assetOptions = state.assets.length
+          ? state.assets.map((a, idx) => `<option value="${idx}">${a.name} (القيمة: ${fmt(a.value)} | مجمع الإهلاك: ${fmt(a.dep)})</option>`).join('')
+          : `<option value="">لا توجد أصول مسجلة بعد</option>`;
+
+        let formHtml = '';
+        if (name === 'asset-add') {
+          formHtml = `
+            <form onsubmit="addAsset(event)" class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+              <input id="as-name" placeholder="اسم الأصل الثابت (مثال: سيارة نقل)" class="bg-slate-950 border border-slate-700 rounded-lg px-3 py-2" required />
+              <input id="as-val" type="number" step="0.01" min="0.01" placeholder="القيمة التاريخية" class="bg-slate-950 border border-slate-700 rounded-lg px-3 py-2" required />
+              <button class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-4 py-2 rounded-lg">إضافة الأصل</button>
+            </form>`;
+        } else if (name === 'asset-buy') {
+          formHtml = `
+            <form onsubmit="buyAsset(event)" class="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
+              <input id="ab-name" placeholder="اسم الأصل المشترى" class="bg-slate-950 border border-slate-700 rounded-lg px-3 py-2" required />
+              <input id="ab-val" type="number" step="0.01" min="0.01" placeholder="تكلفة الشراء" class="bg-slate-950 border border-slate-700 rounded-lg px-3 py-2" required />
+              <select id="ab-pay" class="bg-slate-950 border border-slate-700 rounded-lg px-3 py-2"><option value="1101">الخزينة الرئيسية</option><option value="1102">البنك الأهلي</option><option value="2101">الموردون (آجل)</option></select>
+              <button class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-4 py-2 rounded-lg">شراء وترحيل القيد</button>
+            </form>`;
+        } else if (name === 'asset-sell') {
+          formHtml = `
+            <form onsubmit="sellAsset(event)" class="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
+              <select id="asel-idx" class="bg-slate-950 border border-slate-700 rounded-lg px-3 py-2">${assetOptions}</select>
+              <input id="asel-price" type="number" step="0.01" min="0" placeholder="سعر البيع" class="bg-slate-950 border border-slate-700 rounded-lg px-3 py-2" required />
+              <select id="asel-cb" class="bg-slate-950 border border-slate-700 rounded-lg px-3 py-2"><option value="1101">تحصيل بالخزينة</option><option value="1102">تحصيل بالبنك</option></select>
+              <button class="bg-amber-600 hover:bg-amber-500 text-white font-bold px-4 py-2 rounded-lg">تنفيذ بيع الأصل</button>
+            </form>`;
+        } else if (name === 'asset-depreciate') {
+          formHtml = `
+            <form onsubmit="depreciateAsset(event)" class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+              <select id="adep-idx" class="bg-slate-950 border border-slate-700 rounded-lg px-3 py-2">${assetOptions}</select>
+              <input id="adep-amt" type="number" step="0.01" min="0.01" placeholder="قيمة قسط الإهلاك" class="bg-slate-950 border border-slate-700 rounded-lg px-3 py-2" required />
+              <button class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-4 py-2 rounded-lg">ترحيل قيد الإهلاك</button>
+            </form>`;
+        } else if (name === 'asset-scrap') {
+          formHtml = `
+            <form onsubmit="scrapAsset(event)" class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+              <select id="ascr-idx" class="bg-slate-950 border border-slate-700 rounded-lg px-3 py-2">${assetOptions}</select>
+              <button class="bg-rose-600 hover:bg-rose-500 text-white font-bold px-4 py-2 rounded-lg">تخريد الأصل وترحيل القيد</button>
+            </form>`;
+        }
+
+        const titles = {
+          'asset-add': 'الأصول الثابتة — إضافة أصل',
+          'asset-buy': 'الأصول الثابتة — شراء أصل',
+          'asset-sell': 'الأصول الثابتة — بيع أصل',
+          'asset-depreciate': 'الأصول الثابتة — إهلاك أصل',
+          'asset-scrap': 'الأصول الثابتة — تخريد أصل'
+        };
+
+        area.innerHTML = `
+          ${card(titles[name], formHtml)}
+          ${card('سجل الأصول الثابتة', `
+            <table class="w-full text-sm text-right">
+              <thead class="text-xs text-slate-400 border-b border-slate-800"><tr><th class="py-2">الأصل</th><th class="py-2">القيمة التاريخية</th><th class="py-2">مجمع الإهلاك</th><th class="py-2">الحالة</th></tr></thead>
+              <tbody class="divide-y divide-slate-800/60">
+                ${state.assets.length ? state.assets.map(a => `<tr><td class="py-2 text-white font-semibold">${a.name}</td><td class="py-2">${fmt(a.value)}</td><td class="py-2 text-amber-300">${fmt(a.dep)}</td><td class="py-2">${a.status}</td></tr>`).join('') : `<tr><td colspan="4" class="py-3 text-center text-slate-500">لا توجد أصول مسجلة</td></tr>`}
+              </tbody>
+            </table>
+          `)}
+        `;
+        return;
+      }
+
+      if (name === 'reports') {
+        area.innerHTML = `
+          ${card('ميزان المراجعة', `
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm text-right">
+                <thead class="text-xs text-slate-400 border-b border-slate-800"><tr><th class="py-2">كود</th><th class="py-2">الحساب</th><th class="py-2">مدين</th><th class="py-2">دائن</th><th class="py-2">الرصيد</th></tr></thead>
+                <tbody class="divide-y divide-slate-800/60">
+                  ${state.accounts.map(a => {
+                    const net = Number(a.debit || 0) - Number(a.credit || 0);
+                    return `<tr><td class="py-2 font-mono">${a.code}</td><td class="py-2 text-white">${a.name}</td><td class="py-2">${fmt(a.debit)}</td><td class="py-2">${fmt(a.credit)}</td><td class="py-2 font-bold">${fmt(net)}</td></tr>`;
+                  }).join('')}
+                </tbody>
+              </table>
+            </div>
+          `)}
+          ${card('تقرير حركات المخزون', `
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm text-right">
+                <thead class="text-xs text-slate-400 border-b border-slate-800"><tr><th class="py-2">التاريخ</th><th class="py-2">نوع الحركة</th><th class="py-2">الصنف</th><th class="py-2">الكمية</th><th class="py-2">التكلفة</th><th class="py-2">البيان</th></tr></thead>
+                <tbody class="divide-y divide-slate-800/60">
+                  ${state.movements.map(m => `<tr><td class="py-2">${m.date}</td><td class="py-2 text-cyan-300">${m.type}</td><td class="py-2 text-white">${m.item}</td><td class="py-2 font-bold">${m.qty}</td><td class="py-2">${fmt(m.cost)}</td><td class="py-2 text-slate-400">${m.note || '-'}</td></tr>`).join('')}
+                </tbody>
+              </table>
+            </div>
+          `)}
+        `;
+        return;
+      }
+
+      if (name === 'sql') {
+        const sqlLines = [
+          '-- أوامر ترحيل الأرصدة الحالية إلى Supabase (PostgreSQL)',
+          ...state.accounts.map(a =>
+            `UPDATE accounts SET debit = ${Number(a.debit || 0)}, credit = ${Number(a.credit || 0)} WHERE code = '${a.code}';`
+          )
+        ].join('\n');
+
+        area.innerHTML = card('تصدير SQL لـ Supabase', `
+          <p class="text-xs text-slate-400 mb-3">انسخ الأوامر التالية والصقها في SQL Editor داخل Supabase لتحديث أرصدة الحسابات:</p>
+          <textarea id="sql-output" rows="12" readonly class="w-full bg-slate-950 border border-slate-700 rounded-lg p-3 text-xs font-mono text-emerald-300">${sqlLines}</textarea>
+          <button onclick="copySql()" class="mt-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-4 py-2 rounded-lg text-sm">نسخ كود SQL</button>
+        `);
+      }
+    }
+
+    function saveCompany(e) {
+      e.preventDefault();
+      state.company = {
+        name: document.getElementById('c-name').value.trim(),
+        taxId: document.getElementById('c-tax').value.trim(),
+        phone: document.getElementById('c-phone').value.trim(),
+        address: document.getElementById('c-addr').value.trim()
+      };
+      saveState();
+      notify('تم حفظ بيانات الشركة بنجاح.');
+    }
+
+    function addSimpleList(e, key) {
+      e.preventDefault();
+      const val = document.getElementById('simple-val').value.trim();
+      if (!val) return;
+      state[key].push(val);
+      saveState();
+      notify(`تمت إضافة "${val}" بنجاح.`);
+      renderScreen(currentScreen);
+    }
+
+    function addAgent(e) {
+      e.preventDefault();
+      state.agents.push({
+        name: document.getElementById('ag-name').value.trim(),
+        role: document.getElementById('ag-role').value,
+        commission: Number(document.getElementById('ag-comm').value)
+      });
+      saveState();
+      notify('تمت إضافة المندوب/المسوق بنجاح.');
+      renderScreen(currentScreen);
+    }
+
+    function addParty(e, key) {
+      e.preventDefault();
+      state[key].push({
+        name: document.getElementById('p-name').value.trim(),
+        phone: document.getElementById('p-phone').value.trim(),
+        balance: Number(document.getElementById('p-bal').value || 0)
+      });
+      saveState();
+      notify('تم الحفظ بنجاح.');
+      renderScreen(currentScreen);
+    }
+
+    function createOrder(e, orderType) {
+      e.preventDefault();
+      const party = document.getElementById('ord-party').value;
+      const item = document.getElementById('ord-item').value;
+      const qty = Number(document.getElementById('ord-qty').value);
+      state.movements.unshift({
+        date: new Date().toISOString().slice(0, 10),
+        type: orderType,
+        item,
+        qty,
+        cost: 0,
+        note: `لصالح: ${party}`
+      });
+      saveState();
+      notify(`تم تسجيل ${orderType} لـ ${party} بكمية ${qty}.`);
+    }
+
+    function submitPurchaseInvoice(e) {
+      e.preventDefault();
+      const sup = document.getElementById('pi-sup').value;
+      const itemName = document.getElementById('pi-item').value;
+      const payAcc = document.getElementById('pi-pay').value;
+      const qty = Number(document.getElementById('pi-qty').value);
+      const cost = Number(document.getElementById('pi-cost').value);
+      const total = qty * cost;
+
+      if (!adjustStock(itemName, qty, cost, 'فاتورة مشتريات', `مورد: ${sup}`)) return;
+      if (!postEntry(`فاتورة مشتريات (${itemName}) - مورد: ${sup}`, [
+        { acc: '1103', dr: total, cr: 0 },
+        { acc: payAcc, dr: 0, cr: total }
+      ])) return;
+
+      saveState();
+      notify(`تم ترحيل فاتورة المشتريات بقيمة ${fmt(total)} وتحديث المخزون والحسابات.`);
+      renderScreen(currentScreen);
+    }
+
+    function submitSalesInvoice(e) {
+      e.preventDefault();
+      const cus = document.getElementById('si-cus').value;
+      const itemName = document.getElementById('si-item').value;
+      const payAcc = document.getElementById('si-pay').value;
+      const qty = Number(document.getElementById('si-qty').value);
+      const price = Number(document.getElementById('si-price').value);
+      const itemObj = state.items.find(i => i.name === itemName);
+      if (!itemObj) return;
+
+      const unitCost = Number(itemObj.cost || 0);
+      const revTotal = qty * price;
+      const cogsTotal = qty * unitCost;
+
+      if (!adjustStock(itemName, -qty, unitCost, 'فاتورة بيع', `عميل: ${cus}`)) return;
+
+      const okRev = postEntry(`فاتورة بيع (${itemName}) - عميل: ${cus}`, [
+        { acc: payAcc, dr: revTotal, cr: 0 },
+        { acc: '4101', dr: 0, cr: revTotal }
+      ]);
+      const okCogs = postEntry(`تكلفة بضاعة مباعة (${itemName})`, [
+        { acc: '5101', dr: cogsTotal, cr: 0 },
+        { acc: '1103', dr: 0, cr: cogsTotal }
+      ]);
+
+      if (!okRev || !okCogs) return;
+      saveState();
+      notify(`تم ترحيل فاتورة البيع بقيمة ${fmt(revTotal)} وتكلفة مبيعات ${fmt(cogsTotal)}.`);
+      renderScreen(currentScreen);
+    }
+
+    function addItem(e) {
+      e.preventDefault();
+      state.items.push({
+        code: document.getElementById('it-code').value.trim(),
+        name: document.getElementById('it-name').value.trim(),
+        category: document.getElementById('it-cat').value,
+        qty: 0,
+        cost: Number(document.getElementById('it-cost').value),
+        price: Number(document.getElementById('it-price').value)
+      });
+      saveState();
+      notify('تمت إضافة الصنف بنجاح.');
+      renderScreen(currentScreen);
+    }
+
+    function submitStockVoucher(e, title, sign, drAcc, crAcc) {
+      e.preventDefault();
+      const itemName = document.getElementById('sv-item').value;
+      const qty = Number(document.getElementById('sv-qty').value);
+      const cost = Number(document.getElementById('sv-cost').value);
+      const note = document.getElementById('sv-note').value.trim();
+      const amount = qty * cost;
+
+      if (!adjustStock(itemName, sign * qty, cost, title, note)) return;
+      if (!postEntry(`${title} - ${itemName}`, [
+        { acc: drAcc, dr: amount, cr: 0 },
+        { acc: crAcc, dr: 0, cr: amount }
+      ])) return;
+
+      saveState();
+      notify(`تم تنفيذ ${title} بقيمة ${fmt(amount)}.`);
+      renderScreen(currentScreen);
+    }
+
+    function addAccount(e) {
+      e.preventDefault();
+      const code = document.getElementById('acc-code').value.trim();
+      if (state.accounts.some(a => a.code === code)) {
+        notify('كود الحساب موجود مسبقاً.', 'error');
+        return;
+      }
+      state.accounts.push({
+        code,
+        name: document.getElementById('acc-name').value.trim(),
+        type: document.getElementById('acc-type').value,
+        debit: 0,
+        credit: 0
+      });
+      saveState();
+      notify('تمت إضافة الحساب إلى شجرة الحسابات.');
+      renderScreen(currentScreen);
+    }
+
+    function submitTreasuryVoucher(e) {
+      e.preventDefault();
+      const type = document.getElementById('tr-type').value;
+      const cbAcc = document.getElementById('tr-cb').value;
+      const oppAcc = document.getElementById('tr-opp').value;
+      const amt = Number(document.getElementById('tr-amt').value);
+      const desc = document.getElementById('tr-desc').value.trim() || (type === 'receipt' ? 'سند قبض' : 'سند صرف');
+
+      const lines = type === 'receipt'
+        ? [{ acc: cbAcc, dr: amt, cr: 0 }, { acc: oppAcc, dr: 0, cr: amt }]
+        : [{ acc: oppAcc, dr: amt, cr: 0 }, { acc: cbAcc, dr: 0, cr: amt }];
+
+      if (!postEntry(desc, lines)) return;
+      saveState();
+      notify(`تم ترحيل السند بقيمة ${fmt(amt)}.`);
+      renderScreen(currentScreen);
+    }
+
+    function addAsset(e) {
+      e.preventDefault();
+      state.assets.push({
+        name: document.getElementById('as-name').value.trim(),
+        value: Number(document.getElementById('as-val').value),
+        dep: 0,
+        status: 'نشط'
+      });
+      saveState();
+      notify('تمت إضافة الأصل الثابت.');
+      renderScreen(currentScreen);
+    }
+
+    function buyAsset(e) {
+      e.preventDefault();
+      const name = document.getElementById('ab-name').value.trim();
+      const val = Number(document.getElementById('ab-val').value);
+      const payAcc = document.getElementById('ab-pay').value;
+
+      if (!postEntry(`شراء أصل ثابت: ${name}`, [
+        { acc: '1201', dr: val, cr: 0 },
+        { acc: payAcc, dr: 0, cr: val }
+      ])) return;
+
+      state.assets.push({ name, value: val, dep: 0, status: 'نشط' });
+      saveState();
+      notify(`تم شراء الأصل "${name}" وترحيل القيد.`);
+      renderScreen(currentScreen);
+    }
+
+    function sellAsset(e) {
+      e.preventDefault();
+      const idx = Number(document.getElementById('asel-idx').value);
+      const asset = state.assets[idx];
+      if (!asset) return;
+      const price = Number(document.getElementById('asel-price').value);
+      const cbAcc = document.getElementById('asel-cb').value;
+      const bookVal = Number(asset.value) - Number(asset.dep);
+      const diff = price - bookVal;
+
+      const lines = [
+        { acc: cbAcc, dr: price, cr: 0 },
+        { acc: '1202', dr: Number(asset.dep), cr: 0 },
+        { acc: '1201', dr: 0, cr: Number(asset.value) }
+      ];
+      if (diff >= 0) {
+        lines.push({ acc: '5103', dr: 0, cr: diff });
+      } else {
+        lines.push({ acc: '5103', dr: Math.abs(diff), cr: 0 });
+      }
+
+      if (!postEntry(`بيع أصل ثابت: ${asset.name}`, lines)) return;
+      asset.status = `مباع (${fmt(price)})`;
+      saveState();
+      notify(`تم بيع الأصل "${asset.name}" وترحيل القيد.`);
+      renderScreen(currentScreen);
+    }
+
+    function depreciateAsset(e) {
+      e.preventDefault();
+      const idx = Number(document.getElementById('adep-idx').value);
+      const asset = state.assets[idx];
+      if (!asset) return;
+      const amt = Number(document.getElementById('adep-amt').value);
+
+      if (!postEntry(`إهلاك أصل ثابت: ${asset.name}`, [
+        { acc: '5102', dr: amt, cr: 0 },
+        { acc: '1202', dr: 0, cr: amt }
+      ])) return;
+
+      asset.dep = Number(asset.dep) + amt;
+      saveState();
+      notify(`تم ترحيل إهلاك بقيمة ${fmt(amt)} للأصل "${asset.name}".`);
+      renderScreen(currentScreen);
+    }
+
+    function scrapAsset(e) {
+      e.preventDefault();
+      const idx = Number(document.getElementById('ascr-idx').value);
+      const asset = state.assets[idx];
+      if (!asset) return;
+      const rem = Math.max(0, Number(asset.value) - Number(asset.dep));
+
+      const lines = [{ acc: '1201', dr: 0, cr: Number(asset.value) }];
+      if (Number(asset.dep) > 0) lines.push({ acc: '1202', dr: Number(asset.dep), cr: 0 });
+      if (rem > 0) lines.push({ acc: '5103', dr: rem, cr: 0 });
+
+      if (!postEntry(`تخريد أصل ثابت: ${asset.name}`, lines)) return;
+      asset.status = 'مُخرّد';
+      saveState();
+      notify(`تم تخريد الأصل "${asset.name}" وترحيل القيد.`);
+      renderScreen(currentScreen);
+    }
+
+    function copySql() {
+      const ta = document.getElementById('sql-output');
+      ta.select();
+      document.execCommand('copy');
+      notify('تم نسخ أوامر SQL بنجاح.');
+    }
+
+    toggleGroup('grp-accounting');
+    toggleGroup('grp-assets');
+    updateCompanyBadge();
+    openScreen('dashboard');
+  </script>
+</body>
+</html>
