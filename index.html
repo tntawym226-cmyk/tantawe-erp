@@ -3,110 +3,102 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TANTAWE ERP - نظام إدارة الحسابات والموارد المتكامل</title>
+  <title>TANTAWE ERP - النظام الإداري والمحاسبي المتكامل</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     * { font-family: 'Cairo', sans-serif; box-sizing: border-box; }
-    body { background-color: #f1f5f9; color: #0f172a; margin: 0; }
-
-    /* Custom Scrollbar */
-    ::-webkit-scrollbar { width: 7px; height: 7px; }
-    ::-webkit-scrollbar-track { background: #f1f5f9; }
-    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
-    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-
-    /* Tab Active Styling */
-    .nav-tab {
+    body { background-color: #0f172a; color: #f8fafc; margin: 0; }
+    
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #0f172a; }
+    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 9999px; }
+    
+    .sidebar-menu-btn {
       display: flex;
       align-items: center;
-      gap: 10px;
+      justify-content: space-between;
       width: 100%;
       padding: 10px 14px;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #94a3b8;
+      transition: all 0.2s ease;
+    }
+    .sidebar-menu-btn:hover { background-color: rgba(255, 255, 255, 0.05); color: #f8fafc; }
+    .sidebar-menu-btn.active-mod { background: rgba(16, 185, 129, 0.15); color: #34d399; }
+
+    .sub-tab-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      padding: 8px 12px 8px 28px;
       border-radius: 10px;
-      font-size: 0.9rem;
+      font-size: 0.8rem;
       font-weight: 600;
       color: #cbd5e1;
       transition: all 0.2s ease;
-      border-right: 4px solid transparent;
-      text-align: right;
+      border-right: 3px solid transparent;
     }
-    .nav-tab:hover {
-      background-color: rgba(255, 255, 255, 0.07);
-      color: #ffffff;
-    }
-    .nav-tab.active {
-      background: linear-gradient(90deg, rgba(16, 185, 129, 0.22) 0%, rgba(16, 185, 129, 0.05) 100%);
-      color: #34d399;
+    .sub-tab-btn:hover { background-color: rgba(255, 255, 255, 0.08); color: #ffffff; }
+    .sub-tab-btn.active {
+      background: linear-gradient(90deg, rgba(16, 185, 129, 0.2) 0%, rgba(16, 185, 129, 0.02) 100%);
+      color: #10b981;
       border-right-color: #10b981;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
     }
 
-    /* Print Styles */
     @media print {
       body { background: #ffffff !important; color: #000000 !important; }
       .no-print { display: none !important; }
       .print-only { display: block !important; }
-      #main-content-area { padding: 0 !important; margin: 0 !important; width: 100% !important; }
-      .card-box {
-        box-shadow: none !important;
-        border: 1px solid #cbd5e1 !important;
-        break-inside: avoid;
-      }
+      #main-content { padding: 0 !important; margin: 0 !important; width: 100% !important; }
+      .card-box { box-shadow: none !important; border: 1px solid #cbd5e1 !important; background: #fff !important; color: #000 !important; }
       table { border-collapse: collapse !important; width: 100% !important; }
-      th, td { border: 1px solid #cbd5e1 !important; color: #000000 !important; }
+      th, td { border: 1px solid #cbd5e1 !important; color: #000 !important; }
     }
     .print-only { display: none; }
   </style>
 </head>
-<body>
+<body class="bg-slate-950 text-slate-100">
 
   <!-- ================= شاشة تسجيل الدخول ================= -->
-  <div id="login-screen" class="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-950 flex items-center justify-center p-4">
-    <div class="w-full max-w-md bg-white rounded-2xl shadow-2xl border border-slate-100 overflow-hidden">
-      <div class="bg-slate-900 text-white p-6 text-center relative">
-        <div class="w-14 h-14 mx-auto mb-3 rounded-2xl bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-2xl font-extrabold text-emerald-400">
+  <div id="login-screen" class="min-h-screen bg-slate-950 flex items-center justify-center p-4">
+    <div class="w-full max-w-md bg-slate-900 rounded-3xl shadow-2xl border border-slate-800 overflow-hidden">
+      <div class="bg-slate-900 p-8 text-center border-b border-slate-800">
+        <div class="w-16 h-16 mx-auto mb-3 rounded-2xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-3xl font-extrabold text-emerald-400">
           T
         </div>
-        <h1 class="text-2xl font-extrabold tracking-wide">TANTAWE ERP</h1>
-        <p class="text-slate-300 text-xs mt-1">نظام إدارة الحسابات والمخزون والموارد البشرية</p>
+        <h1 class="text-2xl font-black text-white tracking-wide">TANTAWE ERP</h1>
+        <p class="text-slate-400 text-xs mt-1">نظام إداري ومحاسبي متكامل لإدارة المنشآت</p>
       </div>
 
       <form id="login-form" class="p-6 space-y-4">
-        <div id="login-error" class="hidden bg-rose-50 border border-rose-200 text-rose-700 text-xs font-semibold px-3 py-2.5 rounded-xl">
+        <div id="login-error" class="hidden bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs font-semibold px-4 py-3 rounded-xl text-center">
           اسم المستخدم أو كلمة المرور غير صحيحة.
         </div>
 
         <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1.5">اسم المستخدم (Username)</label>
+          <label class="block text-xs font-bold text-slate-300 mb-1.5">اسم المستخدم</label>
           <input type="text" id="login-username" required placeholder="أدخل اسم المستخدم"
-            class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm" />
+            class="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-white focus:outline-none focus:border-emerald-500 text-sm transition" />
         </div>
 
         <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1.5">كلمة المرور (Password)</label>
-          <div class="relative">
-            <input type="password" id="login-password" required placeholder="أدخل كلمة المرور"
-              class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm" />
-            <button type="button" onclick="toggleLoginPassword()" class="absolute left-3 top-2.5 text-xs font-bold text-slate-500 hover:text-slate-800">
-              إظهار
-            </button>
-          </div>
+          <label class="block text-xs font-bold text-slate-300 mb-1.5">كلمة المرور</label>
+          <input type="password" id="login-password" required placeholder="أدخل كلمة المرور"
+            class="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-white focus:outline-none focus:border-emerald-500 text-sm transition" />
         </div>
 
-        <div class="flex items-center justify-between text-xs text-slate-600 bg-slate-50 p-3 rounded-xl border border-slate-200">
-          <div>
-            <span class="font-bold text-slate-800">حساب المدير:</span>
-            <span class="mx-1">المستخدم: <code class="bg-white px-1.5 py-0.5 rounded border">admin</code></span>
-            <span>المرور: <code class="bg-white px-1.5 py-0.5 rounded border">1234</code></span>
-          </div>
-          <button type="button" onclick="fillDemoAdmin()" class="text-emerald-700 font-bold hover:underline">
-            تعبئة سريعة
-          </button>
+        <div class="flex items-center justify-between text-xs text-slate-400 bg-slate-950 p-3 rounded-xl border border-slate-800">
+          <div>افتراضي: <code class="text-emerald-400">admin</code> / <code class="text-emerald-400">1234</code></div>
+          <button type="button" onclick="fillDemoAdmin()" class="text-emerald-400 font-bold hover:underline">تعبئة سريعة</button>
         </div>
 
-        <button type="submit" class="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-lg shadow-emerald-600/20 transition">
-          تسجيل الدخول إلى النظام
+        <button type="submit" class="w-full py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm shadow-lg shadow-emerald-600/20 transition">
+          تسجيل الدخول للنظام
         </button>
       </form>
     </div>
@@ -115,742 +107,463 @@
   <!-- ================= التطبيق الرئيسي ================= -->
   <div id="app-shell" class="hidden min-h-screen flex flex-col lg:flex-row">
 
-    <!-- القائمة الجانبية -->
-    <aside id="sidebar" class="no-print w-full lg:w-72 bg-slate-900 text-white flex-shrink-0 flex flex-col justify-between lg:sticky lg:top-0 lg:h-screen overflow-y-auto">
+    <!-- القائمة الجانبية الموديلية -->
+    <aside id="sidebar" class="no-print w-full lg:w-72 bg-slate-900 border-l border-slate-800 flex-shrink-0 flex flex-col justify-between lg:sticky lg:top-0 lg:h-screen overflow-y-auto">
       <div>
-        <!-- هوية البرنامج -->
-        <div class="p-4 border-b border-slate-800 flex items-center justify-between">
+        <div class="p-5 border-b border-slate-800 flex items-center justify-between">
           <div class="flex items-center gap-3">
-            <div id="sidebar-logo-box" class="w-10 h-10 rounded-xl bg-emerald-500 text-slate-950 font-extrabold flex items-center justify-center text-lg overflow-hidden">
-              <span id="sidebar-logo-text">TE</span>
-              <img id="sidebar-logo-img" src="" alt="Logo" class="hidden w-full h-full object-cover" />
+            <div class="w-10 h-10 rounded-xl bg-emerald-500 text-slate-950 font-black flex items-center justify-center text-lg">
+              TE
             </div>
             <div>
-              <div id="sidebar-company-name" class="font-extrabold text-sm text-white leading-tight">TANTAWE ERP</div>
-              <div id="sidebar-branch-label" class="text-[11px] text-emerald-400 font-semibold">الفرع الرئيسي</div>
+              <div id="sidebar-company-name" class="font-black text-sm text-white">TANTAWE ERP</div>
+              <div id="sidebar-branch-label" class="text-[11px] text-emerald-400 font-bold">الفرع الرئيسي</div>
             </div>
           </div>
-          <button onclick="toggleMobileMenu()" class="lg:hidden text-slate-400 hover:text-white text-sm px-2 py-1 rounded border border-slate-700">
-            قائمة
-          </button>
         </div>
 
-        <!-- روابط التبويبات -->
-        <nav id="sidebar-nav" class="p-3 space-y-1">
-          <div class="px-3 pt-1 pb-1 text-[11px] font-bold text-slate-400 uppercase">الرئيسية والمالية</div>
-          <button data-tab="dashboard" onclick="switchTab('dashboard')" class="nav-tab active">
-            <span>📊</span> <span>لوحة التحكم</span>
-          </button>
-          <button data-tab="expenses-revenues" onclick="switchTab('expenses-revenues')" class="nav-tab">
-            <span>💸</span> <span>المصروفات والإيرادات</span>
-          </button>
-          <button data-tab="journal" onclick="switchTab('journal')" class="nav-tab">
-            <span>📒</span> <span>القيود اليومية</span>
-          </button>
-          <button data-tab="coa" onclick="switchTab('coa')" class="nav-tab">
-            <span>🌳</span> <span>شجرة الحسابات</span>
-          </button>
+        <!-- الموديولات والقوائم المنسدلة -->
+        <nav class="p-3 space-y-1">
+          
+          <!-- 1. الشاشة الرئيسية والتحليل -->
+          <div>
+            <button onclick="switchTab('dashboard')" class="sidebar-menu-btn active-mod" data-mod="dashboard">
+              <span class="flex items-center gap-2"><span>📊</span> <span>التحليل اليومي (الرئيسية)</span></span>
+            </button>
+          </div>
 
-          <div class="px-3 pt-3 pb-1 text-[11px] font-bold text-slate-400 uppercase">التجارة والمخزون</div>
-          <button data-tab="invoices" onclick="switchTab('invoices')" class="nav-tab">
-            <span>🧾</span> <span>الفواتير (مبيعات / مشتريات)</span>
-          </button>
-          <button data-tab="stock-orders" onclick="switchTab('stock-orders')" class="nav-tab">
-            <span>📦</span> <span>أذون الإضافة والصرف</span>
-          </button>
+          <!-- 2. موديول الموارد البشرية -->
+          <div class="space-y-1">
+            <button onclick="toggleSubmenu('menu-hr')" class="sidebar-menu-btn">
+              <span class="flex items-center gap-2"><span>👥</span> <span>الموارد البشرية</span></span>
+              <span class="text-xs">▾</span>
+            </button>
+            <div id="menu-hr" class="hidden space-y-1 pr-2">
+              <button onclick="switchTab('hr-employees')" class="sub-tab-btn" data-tab="hr-employees"><span>👤</span> الموظفين</button>
+              <button onclick="switchTab('hr-penalties')" class="sub-tab-btn" data-tab="hr-penalties"><span>⚠️</span> العقوبات والجزاءات</button>
+              <button onclick="switchTab('hr-bonuses')" class="sub-tab-btn" data-tab="hr-bonuses"><span>🎁</span> المكافآت والبدلات</button>
+              <button onclick="switchTab('hr-attendance')" class="sub-tab-btn" data-tab="hr-attendance"><span>📅</span> الحضور والإجازات</button>
+            </div>
+          </div>
 
-          <div class="px-3 pt-3 pb-1 text-[11px] font-bold text-slate-400 uppercase">الأصول والموارد والتقارير</div>
-          <button data-tab="assets" onclick="switchTab('assets')" class="nav-tab">
-            <span>🏢</span> <span>الأصول الثابتة والإهلاك</span>
-          </button>
-          <button data-tab="hr" onclick="switchTab('hr')" class="nav-tab">
-            <span>👥</span> <span>الموارد البشرية والمرتبات</span>
-          </button>
-          <button data-tab="reports" onclick="switchTab('reports')" class="nav-tab">
-            <span>📑</span> <span>التقارير وكشوف الحساب</span>
-          </button>
-          <button data-tab="settings" onclick="switchTab('settings')" class="nav-tab">
-            <span>⚙️</span> <span>إعدادات النظام</span>
-          </button>
+          <!-- 3. موديول الحسابات -->
+          <div class="space-y-1">
+            <button onclick="toggleSubmenu('menu-acc')" class="sidebar-menu-btn">
+              <span class="flex items-center gap-2"><span>💰</span> <span>موديول الحسابات</span></span>
+              <span class="text-xs">▾</span>
+            </button>
+            <div id="menu-acc" class="hidden space-y-1 pr-2">
+              <button onclick="switchTab('acc-assets')" class="sub-tab-btn" data-tab="acc-assets"><span>🏢</span> الأصول الثابتة والإهلاك</button>
+              <button onclick="switchTab('acc-expenses')" class="sub-tab-btn" data-tab="acc-expenses"><span>💸</span> المصروفات</button>
+              <button onclick="switchTab('acc-revenues')" class="sub-tab-btn" data-tab="acc-revenues"><span>📈</span> الإيرادات</button>
+              <button onclick="switchTab('acc-treasury')" class="sub-tab-btn" data-tab="acc-treasury"><span>💵</span> الخزن والصناديق</button>
+              <button onclick="switchTab('acc-banks')" class="sub-tab-btn" data-tab="acc-banks"><span>🏦</span> البنوك والحسابات</button>
+              <button onclick="switchTab('acc-coa')" class="sub-tab-btn" data-tab="acc-coa"><span>🌳</span> شجرة الحسابات</button>
+              <button onclick="switchTab('acc-journal')" class="sub-tab-btn" data-tab="acc-journal"><span>📒</span> القيود اليومية</button>
+            </div>
+          </div>
+
+          <!-- 4. موديول المخازن -->
+          <div class="space-y-1">
+            <button onclick="toggleSubmenu('menu-inv')" class="sidebar-menu-btn">
+              <span class="flex items-center gap-2"><span>📦</span> <span>موديول المخازن</span></span>
+              <span class="text-xs">▾</span>
+            </button>
+            <div id="menu-inv" class="hidden space-y-1 pr-2">
+              <button onclick="switchTab('inv-items')" class="sub-tab-btn" data-tab="inv-items"><span>🏷️</span> الفئات والأصناف</button>
+              <button onclick="switchTab('inv-add-ext')" class="sub-tab-btn" data-tab="inv-add-ext"><span>📥</span> إذن إضافة مخزني</button>
+              <button onclick="switchTab('inv-add-int')" class="sub-tab-btn" data-tab="inv-add-int"><span>🔄</span> إذن إضافة داخلي</button>
+              <button onclick="switchTab('inv-issue-ext')" class="sub-tab-btn" data-tab="inv-issue-ext"><span>📤</span> إذن صرف مخزني</button>
+              <button onclick="switchTab('inv-issue-int')" class="sub-tab-btn" data-tab="inv-issue-int"><span>🔀</span> إذن صرف داخلي</button>
+            </div>
+          </div>
+
+          <!-- 5. موديول المبيعات -->
+          <div class="space-y-1">
+            <button onclick="toggleSubmenu('menu-sales')" class="sidebar-menu-btn">
+              <span class="flex items-center gap-2"><span>🛍️</span> <span>موديول المبيعات</span></span>
+              <span class="text-xs">▾</span>
+            </button>
+            <div id="menu-sales" class="hidden space-y-1 pr-2">
+              <button onclick="switchTab('sales-inv')" class="sub-tab-btn" data-tab="sales-inv"><span>🧾</span> فواتير المبيعات</button>
+              <button onclick="switchTab('sales-orders')" class="sub-tab-btn" data-tab="sales-orders"><span>📋</span> طلبات البيع</button>
+              <button onclick="switchTab('sales-vouchers')" class="sub-tab-btn" data-tab="sales-vouchers"><span>💵</span> سندات القبض</button>
+              <button onclick="switchTab('sales-customers')" class="sub-tab-btn" data-tab="sales-customers"><span>👥</span> دليل العملاء</button>
+            </div>
+          </div>
+
+          <!-- 6. موديول المشتريات -->
+          <div class="space-y-1">
+            <button onclick="toggleSubmenu('menu-pur')" class="sidebar-menu-btn">
+              <span class="flex items-center gap-2"><span>🛒</span> <span>موديول المشتريات</span></span>
+              <span class="text-xs">▾</span>
+            </button>
+            <div id="menu-pur" class="hidden space-y-1 pr-2">
+              <button onclick="switchTab('pur-inv')" class="sub-tab-btn" data-tab="pur-inv"><span>🧾</span> فواتير المشتريات</button>
+              <button onclick="switchTab('pur-orders')" class="sub-tab-btn" data-tab="pur-orders"><span>📝</span> طلبات الشراء</button>
+              <button onclick="switchTab('pur-vouchers')" class="sub-tab-btn" data-tab="pur-vouchers"><span>💸</span> سندات الصرف للموردين</button>
+              <button onclick="switchTab('pur-vendors')" class="sub-tab-btn" data-tab="pur-vendors"><span>🏭</span> دليل الموردين</button>
+            </div>
+          </div>
+
+          <!-- 7. موديول التقارير -->
+          <div class="space-y-1">
+            <button onclick="toggleSubmenu('menu-rep')" class="sidebar-menu-btn">
+              <span class="flex items-center gap-2"><span>📑</span> <span>موديول التقارير</span></span>
+              <span class="text-xs">▾</span>
+            </button>
+            <div id="menu-rep" class="hidden space-y-1 pr-2">
+              <button onclick="switchTab('rep-cust')" class="sub-tab-btn" data-tab="rep-cust"><span>👤</span> كشف حساب عميل</button>
+              <button onclick="switchTab('rep-vend')" class="sub-tab-btn" data-tab="rep-vend"><span>🏭</span> كشف حساب مورد</button>
+              <button onclick="switchTab('rep-treasury')" class="sub-tab-btn" data-tab="rep-treasury"><span>💵</span> تقرير الخزينة</button>
+              <button onclick="switchTab('rep-banks')" class="sub-tab-btn" data-tab="rep-banks"><span>🏦</span> تقرير البنوك</button>
+              <button onclick="switchTab('rep-exp')" class="sub-tab-btn" data-tab="rep-exp"><span>💸</span> تقرير المصروفات</button>
+              <button onclick="switchTab('rep-rev')" class="sub-tab-btn" data-tab="rep-rev"><span>📈</span> تقرير الإيرادات</button>
+            </div>
+          </div>
+
+          <!-- 8. المعلومات الأساسية والإعدادات -->
+          <div class="space-y-1">
+            <button onclick="toggleSubmenu('menu-info')" class="sidebar-menu-btn">
+              <span class="flex items-center gap-2"><span>⚙️</span> <span>المعلومات الأساسية</span></span>
+              <span class="text-xs">▾</span>
+            </button>
+            <div id="menu-info" class="hidden space-y-1 pr-2">
+              <button onclick="switchTab('info-company')" class="sub-tab-btn" data-tab="info-company"><span>🏢</span> اسم الشركة والبيانات</button>
+              <button onclick="switchTab('info-branches')" class="sub-tab-btn" data-tab="info-branches"><span>🏛️</span> الفروع</button>
+              <button onclick="switchTab('info-regions')" class="sub-tab-btn" data-tab="info-regions"><span>📍</span> المناطق والقطاعات</button>
+              <button onclick="switchTab('info-agents')" class="sub-tab-btn" data-tab="info-agents"><span>💼</span> المناديب والمندوبين</button>
+              <button onclick="switchTab('info-system')" class="sub-tab-btn" data-tab="info-system"><span>🔒</span> المستخدمين والنسخ الاحتياطي</button>
+            </div>
+          </div>
+
         </nav>
       </div>
 
-      <!-- بيانات المستخدم أسفل القائمة -->
-      <div class="p-3 border-t border-slate-800 bg-slate-950/50 space-y-2">
-        <div class="flex items-center justify-between text-xs">
-          <div>
-            <div class="font-bold text-white" id="current-user-display">المدير العام</div>
-            <div class="text-slate-400 text-[11px]" id="current-user-role">صلاحية كاملة</div>
-          </div>
-          <button onclick="logoutUser()" class="px-2.5 py-1.5 rounded-lg bg-rose-500/15 text-rose-300 hover:bg-rose-500/25 font-bold text-xs transition">
-            خروج
-          </button>
+      <div class="p-4 border-t border-slate-800 bg-slate-950/80 flex items-center justify-between">
+        <div>
+          <div id="user-display-name" class="font-bold text-xs text-white">المدير العام</div>
+          <div class="text-[10px] text-slate-400">صلاحية كاملة</div>
         </div>
+        <button onclick="logoutUser()" class="px-2.5 py-1.5 rounded-lg bg-rose-500/20 text-rose-300 font-bold text-xs hover:bg-rose-500/30">خروج</button>
       </div>
     </aside>
 
     <!-- المحتوى الرئيسي -->
-    <div id="main-content-area" class="flex-1 flex flex-col min-w-0">
-
-      <!-- الشريط العلوي -->
-      <header class="no-print bg-white border-b border-slate-200 px-4 lg:px-6 py-3 sticky top-0 z-20 flex flex-wrap items-center justify-between gap-3">
+    <div id="main-content" class="flex-1 flex flex-col min-w-0 bg-slate-950">
+      
+      <header class="no-print bg-slate-900 border-b border-slate-800 px-6 py-4 flex flex-wrap items-center justify-between gap-4 sticky top-0 z-30">
         <div>
-          <h2 id="page-title" class="text-lg font-extrabold text-slate-800">لوحة التحكم</h2>
-          <p id="page-subtitle" class="text-xs text-slate-500">نظرة عامة فورية على الحركة المالية والمخزنية</p>
+          <h2 id="page-title" class="text-xl font-black text-white">لوحة التحليل اليومي</h2>
+          <p id="page-subtitle" class="text-xs text-slate-400">ملخص وحركة العمليات اليومية في المنشأة</p>
         </div>
-
-        <div class="flex flex-wrap items-center gap-2">
-          <select id="header-branch-select" onchange="changeActiveBranch(this.value)"
-            class="px-3 py-1.5 rounded-xl border border-slate-300 bg-slate-50 text-xs font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+        <div class="flex items-center gap-3">
+          <select id="active-branch-select" onchange="changeBranch(this.value)" class="bg-slate-950 border border-slate-700 text-slate-200 rounded-xl px-3 py-2 text-xs font-bold focus:outline-none">
           </select>
-
-          <button onclick="printCurrentView()" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold flex items-center gap-1.5 transition">
-            <span>🖨️</span> <span>طباعة الشاشة</span>
-          </button>
-
-          <button onclick="exportSQLFile()" class="px-3 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 text-xs font-bold transition">
-            تصدير SQL
-          </button>
-
-          <button onclick="exportJSONBackup()" class="px-3 py-1.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-800 border border-blue-200 text-xs font-bold transition">
-            نسخة JSON
-          </button>
+          <button onclick="window.print()" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs border border-slate-700">🖨️ طباعة</button>
         </div>
       </header>
 
-      <!-- ترويسة الطباعة الرسمية -->
-      <div id="print-header-banner" class="print-only p-4 mb-4 border-b-2 border-slate-800">
-        <div class="flex items-center justify-between">
-          <div>
-            <h1 id="print-company-title" class="text-xl font-extrabold text-black">TANTAWE ERP</h1>
-            <p id="print-company-meta" class="text-xs text-slate-700 mt-1"></p>
-          </div>
-          <div class="text-left text-xs">
-            <div id="print-doc-title" class="font-bold text-sm">مستند / تقرير النظام</div>
-            <div id="print-date-now"></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- حاوية التبويبات -->
-      <main class="p-4 lg:p-6 space-y-6 flex-1">
-
-        <!-- ================= 1. لوحة التحكم ================= -->
+      <main class="p-6 space-y-6 flex-1">
+        
+        <!-- ================= 1. التحليل اليومي (الرئيسية) ================= -->
         <section id="tab-dashboard" class="tab-section space-y-6">
-          <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4" id="kpi-cards"></div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4" id="daily-kpi-cards"></div>
 
-          <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
-            <div class="card-box xl:col-span-2 bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
-              <div class="flex items-center justify-between mb-4">
-                <h3 class="font-extrabold text-slate-800 text-sm">أحدث الحركات المالية والمخزنية</h3>
-                <button onclick="switchTab('reports')" class="no-print text-xs font-bold text-emerald-700 hover:underline">عرض كل التقارير</button>
-              </div>
-              <div class="overflow-x-auto">
-                <table class="w-full text-xs text-right">
-                  <thead>
-                    <tr class="bg-slate-50 text-slate-600 border-b">
-                      <th class="p-2.5">النوع</th>
-                      <th class="p-2.5">البيان / المرجع</th>
-                      <th class="p-2.5">الفرع</th>
-                      <th class="p-2.5">التاريخ</th>
-                      <th class="p-2.5">القيمة</th>
-                    </tr>
-                  </thead>
-                  <tbody id="dashboard-recent-table" class="divide-y divide-slate-100"></tbody>
-                </table>
-              </div>
-            </div>
-
-            <div class="card-box bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-4">
-              <h3 class="font-extrabold text-slate-800 text-sm">ملخص الأداء والمخزون</h3>
-              <div id="dashboard-summary-list" class="space-y-3 text-xs"></div>
-            </div>
-          </div>
-        </section>
-
-        <!-- ================= 2. المصروفات والإيرادات ================= -->
-        <section id="tab-expenses-revenues" class="tab-section hidden space-y-6">
           <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <form id="tx-form" onsubmit="addExpenseRevenue(event)" class="card-box no-print bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-3.5">
-              <h3 class="font-extrabold text-slate-800 text-sm border-b pb-2.5">تسجيل مصروف أو إيراد جديد</h3>
+            <div class="card-box lg:col-span-2 bg-slate-900 rounded-2xl p-5 border border-slate-800 space-y-4">
+              <h3 class="font-bold text-sm text-white">مقارنة الإيرادات بالمصروفات والمبيعات</h3>
+              <div class="h-64"><canvas id="dailyChart"></canvas></div>
+            </div>
 
-              <div>
-                <label class="block text-xs font-bold text-slate-700 mb-1">نوع الحركة</label>
-                <select id="tx-type" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-bold">
-                  <option value="expense">مصروف (Expense)</option>
-                  <option value="revenue">إيراد (Revenue)</option>
-                </select>
-              </div>
-
-              <div>
-                <label class="block text-xs font-bold text-slate-700 mb-1">البند / الفئة</label>
-                <input type="text" id="tx-category" required placeholder="مثال: إيجار، كهرباء، صيانة، إيراد استشارات"
-                  class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs" />
-              </div>
-
-              <div>
-                <label class="block text-xs font-bold text-slate-700 mb-1">البيان / الوصف</label>
-                <input type="text" id="tx-desc" required placeholder="تفاصيل المصروف أو الإيراد"
-                  class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs" />
-              </div>
-
-              <div class="grid grid-cols-2 gap-3">
-                <div>
-                  <label class="block text-xs font-bold text-slate-700 mb-1">المبلغ</label>
-                  <input type="number" step="0.01" min="0.01" id="tx-amount" required placeholder="0.00"
-                    class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-bold" />
-                </div>
-                <div>
-                  <label class="block text-xs font-bold text-slate-700 mb-1">التاريخ</label>
-                  <input type="date" id="tx-date" required class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs" />
-                </div>
-              </div>
-
-              <div class="grid grid-cols-2 gap-3">
-                <div>
-                  <label class="block text-xs font-bold text-slate-700 mb-1">طريقة الدفع</label>
-                  <select id="tx-method" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs">
-                    <option value="نقدي - الخزينة">نقدي - الخزينة</option>
-                    <option value="تحويل بنكي">تحويل بنكي</option>
-                    <option value="بطاقة / محفظة">بطاقة / محفظة</option>
-                  </select>
-                </div>
-                <div>
-                  <label class="block text-xs font-bold text-slate-700 mb-1">الفرع</label>
-                  <select id="tx-branch" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs branch-select"></select>
-                </div>
-              </div>
-
-              <button type="submit" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs transition">
-                حفظ الحركة وإصدار سند
-              </button>
-            </form>
-
-            <div class="card-box lg:col-span-2 bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-4">
-              <div class="flex flex-wrap items-center justify-between gap-2 border-b pb-3">
-                <div>
-                  <h3 class="font-extrabold text-slate-800 text-sm">سجل المصروفات والإيرادات</h3>
-                  <p class="text-[11px] text-slate-500">يمكنك طباعة أي سند مصروف أو إيراد بشكل مستقل</p>
-                </div>
-                <div class="no-print flex items-center gap-2">
-                  <select id="tx-filter-type" onchange="renderExpensesRevenues()" class="px-3 py-1.5 rounded-xl border border-slate-300 text-xs font-bold">
-                    <option value="all">الكل</option>
-                    <option value="expense">المصروفات فقط</option>
-                    <option value="revenue">الإيرادات فقط</option>
-                  </select>
-                  <button onclick="printVoucherList('expenses-revenues')" class="px-3 py-1.5 rounded-xl bg-slate-800 text-white text-xs font-bold">
-                    🖨️ طباعة الكشف
-                  </button>
-                </div>
-              </div>
-
-              <div class="overflow-x-auto">
-                <table class="w-full text-xs text-right">
-                  <thead>
-                    <tr class="bg-slate-50 text-slate-600 border-b">
-                      <th class="p-2.5">رقم السند</th>
-                      <th class="p-2.5">النوع</th>
-                      <th class="p-2.5">البند والبيان</th>
-                      <th class="p-2.5">التاريخ</th>
-                      <th class="p-2.5">المبلغ</th>
-                      <th class="p-2.5 no-print">إجراءات</th>
-                    </tr>
-                  </thead>
-                  <tbody id="tx-table-body" class="divide-y divide-slate-100"></tbody>
-                </table>
-              </div>
+            <div class="card-box bg-slate-900 rounded-2xl p-5 border border-slate-800 space-y-4">
+              <h3 class="font-bold text-sm text-white">آخر الحركات اليومية المسجلة</h3>
+              <div id="dashboard-recent-list" class="space-y-3 text-xs"></div>
             </div>
           </div>
         </section>
 
-        <!-- ================= 3. القيود اليومية ================= -->
-        <section id="tab-journal" class="tab-section hidden space-y-6">
+        <!-- ================= 2. الموارد البشرية ================= -->
+        <section id="tab-hr-employees" class="tab-section hidden space-y-6">
           <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <form id="journal-form" onsubmit="addJournalEntry(event)" class="card-box no-print bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-3.5">
-              <h3 class="font-extrabold text-slate-800 text-sm border-b pb-2.5">إنشاء قيد يومية جديد</h3>
-
-              <div>
-                <label class="block text-xs font-bold text-slate-700 mb-1">حساب المدين (من حـ)</label>
-                <select id="je-debit" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs coa-select"></select>
-              </div>
-
-              <div>
-                <label class="block text-xs font-bold text-slate-700 mb-1">حساب الدائن (إلى حـ)</label>
-                <select id="je-credit" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs coa-select"></select>
-              </div>
-
-              <div class="grid grid-cols-2 gap-3">
-                <div>
-                  <label class="block text-xs font-bold text-slate-700 mb-1">المبلغ</label>
-                  <input type="number" step="0.01" min="0.01" id="je-amount" required class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-bold" />
-                </div>
-                <div>
-                  <label class="block text-xs font-bold text-slate-700 mb-1">التاريخ</label>
-                  <input type="date" id="je-date" required class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs" />
-                </div>
-              </div>
-
-              <div>
-                <label class="block text-xs font-bold text-slate-700 mb-1">شرح القيد</label>
-                <input type="text" id="je-desc" required placeholder="مثال: سداد دفعة مورد أو إثبات قيد"
-                  class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs" />
-              </div>
-
-              <button type="submit" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs transition">
-                ترحيل القيد اليومي
-              </button>
+            <form onsubmit="addEmployee(event)" class="card-box bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-3">
+              <h3 class="font-bold text-sm border-b border-slate-800 pb-2">إضافة موظف جديد</h3>
+              <div><label class="text-xs font-bold text-slate-400">اسم الموظف</label><input id="emp-name" required class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-xs text-white" /></div>
+              <div><label class="text-xs font-bold text-slate-400">الوظيفة / القسم</label><input id="emp-role" required class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-xs text-white" /></div>
+              <div><label class="text-xs font-bold text-slate-400">الراتب الأساسي</label><input type="number" id="emp-salary" required class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-xs text-white font-bold" /></div>
+              <button class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 font-bold text-xs text-white">حفظ الموظف</button>
             </form>
-
-            <div class="card-box lg:col-span-2 bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-4">
-              <div class="flex items-center justify-between border-b pb-3">
-                <h3 class="font-extrabold text-slate-800 text-sm">دفتر القيود اليومية</h3>
-                <button onclick="printCurrentView()" class="no-print px-3 py-1.5 rounded-xl bg-slate-800 text-white text-xs font-bold">
-                  🖨️ طباعة القيود
-                </button>
-              </div>
-              <div class="overflow-x-auto">
-                <table class="w-full text-xs text-right">
-                  <thead>
-                    <tr class="bg-slate-50 text-slate-600 border-b">
-                      <th class="p-2.5">رقم القيد</th>
-                      <th class="p-2.5">التاريخ</th>
-                      <th class="p-2.5">المدين</th>
-                      <th class="p-2.5">الدائن</th>
-                      <th class="p-2.5">المبلغ</th>
-                      <th class="p-2.5">البيان</th>
-                    </tr>
-                  </thead>
-                  <tbody id="journal-table-body" class="divide-y divide-slate-100"></tbody>
-                </table>
-              </div>
+            <div class="card-box lg:col-span-2 bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
+              <h3 class="font-bold text-sm">قائمة الموظفين</h3>
+              <table class="w-full text-xs text-right"><thead class="bg-slate-950 text-slate-400"><tr><th class="p-2.5">الكود</th><th class="p-2.5">الاسم</th><th class="p-2.5">الوظيفة</th><th class="p-2.5">الراتب</th></tr></thead><tbody id="tbl-employees" class="divide-y divide-slate-800"></tbody></table>
             </div>
           </div>
         </section>
 
-        <!-- ================= 4. شجرة الحسابات ================= -->
-        <section id="tab-coa" class="tab-section hidden space-y-6">
-          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <form onsubmit="addAccount(event)" class="card-box no-print bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-3.5">
-              <h3 class="font-extrabold text-slate-800 text-sm border-b pb-2.5">إضافة حساب جديد للشجرة</h3>
-              <div>
-                <label class="block text-xs font-bold text-slate-700 mb-1">كود الحساب</label>
-                <input type="text" id="coa-code" required placeholder="مثال: 1105" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs" />
-              </div>
-              <div>
-                <label class="block text-xs font-bold text-slate-700 mb-1">اسم الحساب</label>
-                <input type="text" id="coa-name" required placeholder="مثال: عهدة موظفين" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs" />
-              </div>
-              <div>
-                <label class="block text-xs font-bold text-slate-700 mb-1">نوع الحساب</label>
-                <select id="coa-type" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-bold">
-                  <option value="أصول">أصول</option>
-                  <option value="خصوم">خصوم</option>
-                  <option value="حقوق ملكية">حقوق ملكية</option>
-                  <option value="إيرادات">إيرادات</option>
-                  <option value="مصروفات">مصروفات</option>
-                </select>
-              </div>
-              <div>
-                <label class="block text-xs font-bold text-slate-700 mb-1">الرصيد الافتتاحي</label>
-                <input type="number" step="0.01" id="coa-balance" value="0" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs" />
-              </div>
-              <button type="submit" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs">
-                إضافة الحساب
-              </button>
+        <section id="tab-hr-penalties" class="tab-section hidden space-y-6">
+          <div class="card-box bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
+            <h3 class="font-bold text-sm">تسجيل العقوبات والجزاءات</h3>
+            <form onsubmit="addPenalty(event)" class="grid grid-cols-1 md:grid-cols-4 gap-3">
+              <select id="pen-emp" class="bg-slate-950 border border-slate-800 p-2.5 rounded-xl text-xs emp-select text-white"></select>
+              <input id="pen-reason" placeholder="سبب العقوبة / الجزاء" required class="bg-slate-950 border border-slate-800 p-2.5 rounded-xl text-xs text-white" />
+              <input type="number" id="pen-amount" placeholder="مبلغ الخصم" required class="bg-slate-950 border border-slate-800 p-2.5 rounded-xl text-xs text-white font-bold" />
+              <button class="bg-rose-600 hover:bg-rose-500 text-white font-bold rounded-xl text-xs py-2.5">تسجيل الجزاء</button>
             </form>
-
-            <div class="card-box lg:col-span-2 bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-4">
-              <div class="flex items-center justify-between border-b pb-3">
-                <h3 class="font-extrabold text-slate-800 text-sm">دليل الحسابات والأرصدة الحالية</h3>
-                <button onclick="printCurrentView()" class="no-print px-3 py-1.5 rounded-xl bg-slate-800 text-white text-xs font-bold">
-                  🖨️ طباعة الشجرة
-                </button>
-              </div>
-              <div class="overflow-x-auto">
-                <table class="w-full text-xs text-right">
-                  <thead>
-                    <tr class="bg-slate-50 text-slate-600 border-b">
-                      <th class="p-2.5">الكود</th>
-                      <th class="p-2.5">اسم الحساب</th>
-                      <th class="p-2.5">النوع</th>
-                      <th class="p-2.5">الرصيد الحالي</th>
-                    </tr>
-                  </thead>
-                  <tbody id="coa-table-body" class="divide-y divide-slate-100"></tbody>
-                </table>
-              </div>
-            </div>
+            <table class="w-full text-xs text-right mt-4"><thead class="bg-slate-950 text-slate-400"><tr><th class="p-2.5">الموظف</th><th class="p-2.5">السبب</th><th class="p-2.5">المبلغ المخصوم</th></tr></thead><tbody id="tbl-penalties" class="divide-y divide-slate-800"></tbody></table>
           </div>
         </section>
 
-        <!-- ================= 5. الفواتير ================= -->
-        <section id="tab-invoices" class="tab-section hidden space-y-6">
-          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <form onsubmit="addInvoice(event)" class="card-box no-print bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-3.5">
-              <h3 class="font-extrabold text-slate-800 text-sm border-b pb-2.5">إصدار فاتورة جديدة</h3>
-
-              <div class="grid grid-cols-2 gap-3">
-                <div>
-                  <label class="block text-xs font-bold text-slate-700 mb-1">نوع الفاتورة</label>
-                  <select id="inv-type" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-bold">
-                    <option value="sale">فاتورة مبيعات</option>
-                    <option value="purchase">فاتورة مشتريات</option>
-                  </select>
-                </div>
-                <div>
-                  <label class="block text-xs font-bold text-slate-700 mb-1">التاريخ</label>
-                  <input type="date" id="inv-date" required class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs" />
-                </div>
-              </div>
-
-              <div>
-                <label class="block text-xs font-bold text-slate-700 mb-1">اسم العميل / المورد</label>
-                <input type="text" id="inv-party" required placeholder="مثال: شركة النور للتوريدات" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs" />
-              </div>
-
-              <div>
-                <label class="block text-xs font-bold text-slate-700 mb-1">الصنف / البيان</label>
-                <input type="text" id="inv-item" required placeholder="مثال: أجهزة كمبيوتر وطابعات" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs" />
-              </div>
-
-              <div class="grid grid-cols-3 gap-2">
-                <div>
-                  <label class="block text-xs font-bold text-slate-700 mb-1">الكمية</label>
-                  <input type="number" min="1" id="inv-qty" value="1" required class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-bold" />
-                </div>
-                <div>
-                  <label class="block text-xs font-bold text-slate-700 mb-1">سعر الوحدة</label>
-                  <input type="number" step="0.01" min="0.01" id="inv-price" required class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-bold" />
-                </div>
-                <div>
-                  <label class="block text-xs font-bold text-slate-700 mb-1">الفرع</label>
-                  <select id="inv-branch" class="w-full px-2 py-2 rounded-xl border border-slate-300 text-xs branch-select"></select>
-                </div>
-              </div>
-
-              <button type="submit" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs">
-                حفظ وترحيل الفاتورة
-              </button>
+        <section id="tab-hr-bonuses" class="tab-section hidden space-y-6">
+          <div class="card-box bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
+            <h3 class="font-bold text-sm">تسجيل المكافآت والبدلات</h3>
+            <form onsubmit="addBonus(event)" class="grid grid-cols-1 md:grid-cols-4 gap-3">
+              <select id="bon-emp" class="bg-slate-950 border border-slate-800 p-2.5 rounded-xl text-xs emp-select text-white"></select>
+              <input id="bon-reason" placeholder="سبب المكافأة / بدل" required class="bg-slate-950 border border-slate-800 p-2.5 rounded-xl text-xs text-white" />
+              <input type="number" id="bon-amount" placeholder="قيمة المكافأة" required class="bg-slate-950 border border-slate-800 p-2.5 rounded-xl text-xs text-white font-bold" />
+              <button class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs py-2.5">صرف المكافأة</button>
             </form>
-
-            <div class="card-box lg:col-span-2 bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-4">
-              <div class="flex items-center justify-between border-b pb-3">
-                <h3 class="font-extrabold text-slate-800 text-sm">سجل الفواتير وطباعتها</h3>
-                <span class="text-[11px] text-slate-500">اضغط "طباعة فاتورة" لأي سطر لإخراج فاتورة رسمية</span>
-              </div>
-              <div class="overflow-x-auto">
-                <table class="w-full text-xs text-right">
-                  <thead>
-                    <tr class="bg-slate-50 text-slate-600 border-b">
-                      <th class="p-2.5">رقم الفاتورة</th>
-                      <th class="p-2.5">النوع</th>
-                      <th class="p-2.5">العميل / المورد</th>
-                      <th class="p-2.5">الإجمالي بالضريبة</th>
-                      <th class="p-2.5 no-print">طباعة</th>
-                    </tr>
-                  </thead>
-                  <tbody id="invoices-table-body" class="divide-y divide-slate-100"></tbody>
-                </table>
-              </div>
-            </div>
+            <table class="w-full text-xs text-right mt-4"><thead class="bg-slate-950 text-slate-400"><tr><th class="p-2.5">الموظف</th><th class="p-2.5">السبب</th><th class="p-2.5">المبلغ</th></tr></thead><tbody id="tbl-bonuses" class="divide-y divide-slate-800"></tbody></table>
           </div>
         </section>
 
-        <!-- ================= 6. أذون الإضافة والصرف ================= -->
-        <section id="tab-stock-orders" class="tab-section hidden space-y-6">
-          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <form onsubmit="addStockOrder(event)" class="card-box no-print bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-3.5">
-              <h3 class="font-extrabold text-slate-800 text-sm border-b pb-2.5">إصدار إذن إضافة أو صرف مخزني</h3>
-
-              <div class="grid grid-cols-2 gap-3">
-                <div>
-                  <label class="block text-xs font-bold text-slate-700 mb-1">نوع الإذن</label>
-                  <select id="so-type" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-bold">
-                    <option value="in">إذن إضافة مخزني</option>
-                    <option value="out">إذن صرف مخزني</option>
-                  </select>
-                </div>
-                <div>
-                  <label class="block text-xs font-bold text-slate-700 mb-1">التاريخ</label>
-                  <input type="date" id="so-date" required class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs" />
-                </div>
-              </div>
-
-              <div>
-                <label class="block text-xs font-bold text-slate-700 mb-1">اسم الصنف</label>
-                <input type="text" id="so-item" required placeholder="مثال: ورق طباعة A4 كرتونة" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs" />
-              </div>
-
-              <div class="grid grid-cols-2 gap-3">
-                <div>
-                  <label class="block text-xs font-bold text-slate-700 mb-1">الكمية</label>
-                  <input type="number" min="1" id="so-qty" required class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-bold" />
-                </div>
-                <div>
-                  <label class="block text-xs font-bold text-slate-700 mb-1">المخزن / الفرع</label>
-                  <select id="so-branch" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs branch-select"></select>
-                </div>
-              </div>
-
-              <div>
-                <label class="block text-xs font-bold text-slate-700 mb-1">الجهة المستلمة / الموردة / ملاحظات</label>
-                <input type="text" id="so-notes" placeholder="مثال: صرف لقسم الحسابات" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs" />
-              </div>
-
-              <button type="submit" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs">
-                حفظ الإذن المخزني
-              </button>
-            </form>
-
-            <div class="card-box lg:col-span-2 bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-4">
-              <div class="flex items-center justify-between border-b pb-3">
-                <h3 class="font-extrabold text-slate-800 text-sm">سجل أذون الإضافة والصرف</h3>
-                <span class="text-[11px] text-slate-500">إمكانية طباعة أي إذن إضافة أو صرف بمفرده</span>
-              </div>
-              <div class="overflow-x-auto">
-                <table class="w-full text-xs text-right">
-                  <thead>
-                    <tr class="bg-slate-50 text-slate-600 border-b">
-                      <th class="p-2.5">رقم الإذن</th>
-                      <th class="p-2.5">النوع</th>
-                      <th class="p-2.5">الصنف</th>
-                      <th class="p-2.5">الكمية</th>
-                      <th class="p-2.5">الفرع</th>
-                      <th class="p-2.5 no-print">طباعة</th>
-                    </tr>
-                  </thead>
-                  <tbody id="stock-orders-table-body" class="divide-y divide-slate-100"></tbody>
-                </table>
-              </div>
-            </div>
+        <section id="tab-hr-attendance" class="tab-section hidden space-y-6">
+          <div class="card-box bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
+            <h3 class="font-bold text-sm">سجل الحضور والغياب والإجازات</h3>
+            <p class="text-xs text-slate-400">متابعة الحضور اليومي ورصيد الإجازات لكل موظف.</p>
           </div>
         </section>
 
-        <!-- ================= 7. الأصول الثابتة والإهلاك ================= -->
-        <section id="tab-assets" class="tab-section hidden space-y-6">
-          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <form onsubmit="addAsset(event)" class="card-box no-print bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-3.5">
-              <h3 class="font-extrabold text-slate-800 text-sm border-b pb-2.5">إضافة أصل ثابت وحساب الإهلاك</h3>
-              <div>
-                <label class="block text-xs font-bold text-slate-700 mb-1">اسم الأصل</label>
-                <input type="text" id="asset-name" required placeholder="مثال: سيارة نقل أو خادم شبكات" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs" />
-              </div>
-              <div class="grid grid-cols-2 gap-3">
-                <div>
-                  <label class="block text-xs font-bold text-slate-700 mb-1">التكلفة التاريخية</label>
-                  <input type="number" step="0.01" min="1" id="asset-cost" required class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-bold" />
-                </div>
-                <div>
-                  <label class="block text-xs font-bold text-slate-700 mb-1">معدل الإهلاك السنوي (%)</label>
-                  <input type="number" step="0.1" min="0" max="100" id="asset-rate" value="20" required class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-bold" />
-                </div>
-              </div>
-              <div>
-                <label class="block text-xs font-bold text-slate-700 mb-1">الفرع</label>
-                <select id="asset-branch" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs branch-select"></select>
-              </div>
-              <button type="submit" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs">
-                تسجيل الأصل
-              </button>
+        <!-- ================= 3. موديول الحسابات ================= -->
+        <section id="tab-acc-assets" class="tab-section hidden space-y-6">
+          <div class="card-box bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
+            <h3 class="font-bold text-sm">إدارة الأصول الثابتة (إضافة / شراء / إهلاك / بيع / تخريد)</h3>
+            <form onsubmit="addAsset(event)" class="grid grid-cols-1 md:grid-cols-5 gap-3">
+              <input id="ast-name" placeholder="اسم الأصل" required class="bg-slate-950 border border-slate-800 p-2.5 rounded-xl text-xs text-white" />
+              <select id="ast-action" class="bg-slate-950 border border-slate-800 p-2.5 rounded-xl text-xs text-white">
+                <option value="شراء / إضافة">شراء / إضافة أصل</option>
+                <option value="إهلاك">حساب إهلاك</option>
+                <option value="بيع">بيع أصل</option>
+                <option value="تخريد">تخريد أصل</option>
+              </select>
+              <input type="number" id="ast-cost" placeholder="التكلفة / القيمة" required class="bg-slate-950 border border-slate-800 p-2.5 rounded-xl text-xs text-white font-bold" />
+              <input type="number" id="ast-rate" placeholder="نسبة الإهلاك %" value="10" class="bg-slate-950 border border-slate-800 p-2.5 rounded-xl text-xs text-white" />
+              <button class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs py-2.5">تسجيل الحركة</button>
             </form>
-
-            <div class="card-box lg:col-span-2 bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-4">
-              <div class="flex items-center justify-between border-b pb-3">
-                <h3 class="font-extrabold text-slate-800 text-sm">سجل الأصول الثابتة والإهلاك السنوي</h3>
-                <button onclick="printCurrentView()" class="no-print px-3 py-1.5 rounded-xl bg-slate-800 text-white text-xs font-bold">
-                  🖨️ طباعة جدول الأصول
-                </button>
-              </div>
-              <div class="overflow-x-auto">
-                <table class="w-full text-xs text-right">
-                  <thead>
-                    <tr class="bg-slate-50 text-slate-600 border-b">
-                      <th class="p-2.5">الأصل</th>
-                      <th class="p-2.5">التكلفة</th>
-                      <th class="p-2.5">نسبة الإهلاك</th>
-                      <th class="p-2.5">إهلاك سنوي</th>
-                      <th class="p-2.5">صافي القيمة الدفترية</th>
-                    </tr>
-                  </thead>
-                  <tbody id="assets-table-body" class="divide-y divide-slate-100"></tbody>
-                </table>
-              </div>
-            </div>
+            <table class="w-full text-xs text-right mt-4"><thead class="bg-slate-950 text-slate-400"><tr><th class="p-2.5">الأصل</th><th class="p-2.5">نوع الحركة</th><th class="p-2.5">القيمة</th><th class="p-2.5">الإهلاك السنوي</th></tr></thead><tbody id="tbl-assets" class="divide-y divide-slate-800"></tbody></table>
           </div>
         </section>
 
-        <!-- ================= 8. الموارد البشرية والمرتبات ================= -->
-        <section id="tab-hr" class="tab-section hidden space-y-6">
-          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <form onsubmit="addEmployee(event)" class="card-box no-print bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-3.5">
-              <h3 class="font-extrabold text-slate-800 text-sm border-b pb-2.5">إضافة موظف ومرتب</h3>
-              <div>
-                <label class="block text-xs font-bold text-slate-700 mb-1">اسم الموظف</label>
-                <input type="text" id="emp-name" required placeholder="مثال: محمود طنطاوي" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs" />
-              </div>
-              <div>
-                <label class="block text-xs font-bold text-slate-700 mb-1">المسمى الوظيفي</label>
-                <input type="text" id="emp-role" required placeholder="مثال: محاسب / دعم فني" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs" />
-              </div>
-              <div class="grid grid-cols-2 gap-3">
-                <div>
-                  <label class="block text-xs font-bold text-slate-700 mb-1">الراتب الأساسي</label>
-                  <input type="number" step="0.01" min="0" id="emp-salary" required class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-bold" />
-                </div>
-                <div>
-                  <label class="block text-xs font-bold text-slate-700 mb-1">الفرع</label>
-                  <select id="emp-branch" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs branch-select"></select>
-                </div>
-              </div>
-              <button type="submit" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs">
-                حفظ بيانات الموظف
-              </button>
+        <section id="tab-acc-expenses" class="tab-section hidden space-y-6">
+          <div class="card-box bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
+            <h3 class="font-bold text-sm">تسجيل المصروفات</h3>
+            <form onsubmit="addExpense(event)" class="grid grid-cols-1 md:grid-cols-4 gap-3">
+              <input id="exp-cat" placeholder="بند المصروف (إيجار/كهرباء/صيانة)" required class="bg-slate-950 border border-slate-800 p-2.5 rounded-xl text-xs text-white" />
+              <input id="exp-desc" placeholder="البيان" required class="bg-slate-950 border border-slate-800 p-2.5 rounded-xl text-xs text-white" />
+              <input type="number" id="exp-amount" placeholder="المبلغ" required class="bg-slate-950 border border-slate-800 p-2.5 rounded-xl text-xs text-white font-bold" />
+              <button class="bg-rose-600 hover:bg-rose-500 text-white font-bold rounded-xl text-xs py-2.5">صرف مصروف</button>
             </form>
-
-            <div class="card-box lg:col-span-2 bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-4">
-              <div class="flex items-center justify-between border-b pb-3">
-                <h3 class="font-extrabold text-slate-800 text-sm">كشف الموظفين والرواتب</h3>
-                <button onclick="printCurrentView()" class="no-print px-3 py-1.5 rounded-xl bg-slate-800 text-white text-xs font-bold">
-                  🖨️ طباعة كشف الرواتب
-                </button>
-              </div>
-              <div class="overflow-x-auto">
-                <table class="w-full text-xs text-right">
-                  <thead>
-                    <tr class="bg-slate-50 text-slate-600 border-b">
-                      <th class="p-2.5">الاسم</th>
-                      <th class="p-2.5">الوظيفة</th>
-                      <th class="p-2.5">الفرع</th>
-                      <th class="p-2.5">الراتب الشهري</th>
-                    </tr>
-                  </thead>
-                  <tbody id="hr-table-body" class="divide-y divide-slate-100"></tbody>
-                </table>
-              </div>
-            </div>
+            <table class="w-full text-xs text-right mt-4"><thead class="bg-slate-950 text-slate-400"><tr><th class="p-2.5">البند</th><th class="p-2.5">البيان</th><th class="p-2.5">المبلغ</th></tr></thead><tbody id="tbl-expenses" class="divide-y divide-slate-800"></tbody></table>
           </div>
         </section>
 
-        <!-- ================= 9. التقارير ================= -->
-        <section id="tab-reports" class="tab-section hidden space-y-6">
-          <div class="card-box bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-4">
-            <div class="flex flex-wrap items-center justify-between gap-3 border-b pb-3">
-              <div>
-                <h3 class="font-extrabold text-slate-800 text-sm">التقارير المالية والإدارية الشاملة</h3>
-                <p class="text-xs text-slate-500">قائمة الأرباح والخسائر التقديرية، المصروفات، الإيرادات، والمبيعات والمشتريات</p>
-              </div>
-              <button onclick="printCurrentView()" class="no-print px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold">
-                🖨️ طباعة التقرير الكامل
-              </button>
-            </div>
-
-            <div id="reports-summary-grid" class="grid grid-cols-1 md:grid-cols-4 gap-4"></div>
-
-            <div class="overflow-x-auto pt-2">
-              <h4 class="font-bold text-xs text-slate-700 mb-2">تفاصيل الحركات المالية المسجلة</h4>
-              <table class="w-full text-xs text-right">
-                <thead>
-                  <tr class="bg-slate-50 text-slate-600 border-b">
-                    <th class="p-2.5">التاريخ</th>
-                    <th class="p-2.5">التصنيف</th>
-                    <th class="p-2.5">البيان</th>
-                    <th class="p-2.5">الفرع</th>
-                    <th class="p-2.5">القيمة</th>
-                  </tr>
-                </thead>
-                <tbody id="reports-table-body" class="divide-y divide-slate-100"></tbody>
-              </table>
-            </div>
+        <section id="tab-acc-revenues" class="tab-section hidden space-y-6">
+          <div class="card-box bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
+            <h3 class="font-bold text-sm">تسجيل الإيرادات المتنوعة</h3>
+            <form onsubmit="addRevenue(event)" class="grid grid-cols-1 md:grid-cols-4 gap-3">
+              <input id="rev-cat" placeholder="مصدر الإيراد" required class="bg-slate-950 border border-slate-800 p-2.5 rounded-xl text-xs text-white" />
+              <input id="rev-desc" placeholder="البيان" required class="bg-slate-950 border border-slate-800 p-2.5 rounded-xl text-xs text-white" />
+              <input type="number" id="rev-amount" placeholder="المبلغ" required class="bg-slate-950 border border-slate-800 p-2.5 rounded-xl text-xs text-white font-bold" />
+              <button class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs py-2.5">تحصيل إيراد</button>
+            </form>
+            <table class="w-full text-xs text-right mt-4"><thead class="bg-slate-950 text-slate-400"><tr><th class="p-2.5">المصدر</th><th class="p-2.5">البيان</th><th class="p-2.5">المبلغ</th></tr></thead><tbody id="tbl-revenues" class="divide-y divide-slate-800"></tbody></table>
           </div>
         </section>
 
-        <!-- ================= 10. إعدادات النظام ================= -->
-        <section id="tab-settings" class="tab-section hidden space-y-6">
-          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <section id="tab-acc-treasury" class="tab-section hidden space-y-6">
+          <div class="card-box bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
+            <h3 class="font-bold text-sm">حركات الخزن والصناديق النقدية</h3>
+            <p class="text-xs text-slate-400">الخزينة الرئيسية وخزينة المبيعات وأرصدتها الحالية.</p>
+          </div>
+        </section>
 
-            <!-- إعدادات الشركة والنظام -->
-            <form onsubmit="saveSystemSettings(event)" class="card-box bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-3.5">
-              <h3 class="font-extrabold text-slate-800 text-sm border-b pb-2.5">إعدادات المنشأة والضرائب والعملة</h3>
+        <section id="tab-acc-banks" class="tab-section hidden space-y-6">
+          <div class="card-box bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
+            <h3 class="font-bold text-sm">الحسابات البنكية والمعاملات</h3>
+            <p class="text-xs text-slate-400">إدارة الحسابات البنكية والتحويلات والإيداعات.</p>
+          </div>
+        </section>
 
-              <div>
-                <label class="block text-xs font-bold text-slate-700 mb-1">اسم الشركة / المؤسسة</label>
-                <input type="text" id="set-company-name" required class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-bold" />
-              </div>
+        <section id="tab-acc-coa" class="tab-section hidden space-y-6">
+          <div class="card-box bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
+            <h3 class="font-bold text-sm">دليل وشجرة الحسابات المحاسبية</h3>
+            <table class="w-full text-xs text-right"><thead class="bg-slate-950 text-slate-400"><tr><th class="p-2.5">كود الحساب</th><th class="p-2.5">اسم الحساب</th><th class="p-2.5">النوع</th><th class="p-2.5">الرصيد</th></tr></thead><tbody id="tbl-coa" class="divide-y divide-slate-800"></tbody></table>
+          </div>
+        </section>
 
-              <div class="grid grid-cols-2 gap-3">
-                <div>
-                  <label class="block text-xs font-bold text-slate-700 mb-1">الرقم الضريبي / السجل</label>
-                  <input type="text" id="set-tax-id" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs" />
-                </div>
-                <div>
-                  <label class="block text-xs font-bold text-slate-700 mb-1">العملة</label>
-                  <input type="text" id="set-currency" required class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-bold" />
-                </div>
-              </div>
+        <section id="tab-acc-journal" class="tab-section hidden space-y-6">
+          <div class="card-box bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
+            <h3 class="font-bold text-sm">دفتر القيود اليومية المحاسبية</h3>
+            <table class="w-full text-xs text-right"><thead class="bg-slate-950 text-slate-400"><tr><th class="p-2.5">رقم القيد</th><th class="p-2.5">التاريخ</th><th class="p-2.5">المدين</th><th class="p-2.5">الدائن</th><th class="p-2.5">المبلغ</th></tr></thead><tbody id="tbl-journal" class="divide-y divide-slate-800"></tbody></table>
+          </div>
+        </section>
 
-              <div class="grid grid-cols-2 gap-3">
-                <div>
-                  <label class="block text-xs font-bold text-slate-700 mb-1">نسبة الضريبة (%)</label>
-                  <input type="number" step="0.1" min="0" max="100" id="set-tax-rate" required class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-bold" />
-                </div>
-                <div>
-                  <label class="block text-xs font-bold text-slate-700 mb-1">رقم الهاتف / التواصل</label>
-                  <input type="text" id="set-phone" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs" />
-                </div>
-              </div>
-
-              <div>
-                <label class="block text-xs font-bold text-slate-700 mb-1">العنوان الرئيسي</label>
-                <input type="text" id="set-address" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs" />
-              </div>
-
-              <div>
-                <label class="block text-xs font-bold text-slate-700 mb-1">الفروع (مفصولة بفاصلة)</label>
-                <input type="text" id="set-branches" required class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs" />
-              </div>
-
-              <div>
-                <label class="block text-xs font-bold text-slate-700 mb-1">شعار الشركة (اختياري - صورة)</label>
-                <input type="file" accept="image/*" onchange="handleLogoUpload(event)" class="w-full text-xs text-slate-600" />
-              </div>
-
-              <button type="submit" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs">
-                حفظ إعدادات النظام
-              </button>
+        <!-- ================= 4. موديول المخازن ================= -->
+        <section id="tab-inv-items" class="tab-section hidden space-y-6">
+          <div class="card-box bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
+            <h3 class="font-bold text-sm">فئات الأصناف ودليل المنتجات</h3>
+            <form onsubmit="addItem(event)" class="grid grid-cols-1 md:grid-cols-4 gap-3">
+              <input id="itm-cat" placeholder="الفئة (مثال: أجهزة/قطع)" required class="bg-slate-950 border border-slate-800 p-2.5 rounded-xl text-xs text-white" />
+              <input id="itm-name" placeholder="اسم الصنف" required class="bg-slate-950 border border-slate-800 p-2.5 rounded-xl text-xs text-white" />
+              <input type="number" id="itm-price" placeholder="سعر البيع" required class="bg-slate-950 border border-slate-800 p-2.5 rounded-xl text-xs text-white font-bold" />
+              <button class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs py-2.5">إضافة صنف</button>
             </form>
+            <table class="w-full text-xs text-right mt-4"><thead class="bg-slate-950 text-slate-400"><tr><th class="p-2.5">الفئة</th><th class="p-2.5">اسم الصنف</th><th class="p-2.5">السعر</th></tr></thead><tbody id="tbl-items" class="divide-y divide-slate-800"></tbody></table>
+          </div>
+        </section>
 
-            <!-- إعدادات المستخدمين والنسخ الاحتياطي -->
-            <div class="space-y-6">
-              <form onsubmit="updateAdminCredentials(event)" class="card-box bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-3.5">
-                <h3 class="font-extrabold text-slate-800 text-sm border-b pb-2.5">تعديل بيانات الدخول للمدير</h3>
-                <div>
-                  <label class="block text-xs font-bold text-slate-700 mb-1">اسم المستخدم الجديد</label>
-                  <input type="text" id="set-admin-user" required class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs" />
-                </div>
-                <div>
-                  <label class="block text-xs font-bold text-slate-700 mb-1">كلمة المرور الجديدة</label>
-                  <input type="text" id="set-admin-pass" required class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs" />
-                </div>
-                <button type="submit" class="w-full py-2.5 rounded-xl bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs">
-                  تحديث بيانات الدخول
-                </button>
-              </form>
+        <section id="tab-inv-add-ext" class="tab-section hidden space-y-6">
+          <div class="card-box bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
+            <h3 class="font-bold text-sm">أذون الإضافة المخزنية (خارجي من مورد)</h3>
+          </div>
+        </section>
+        <section id="tab-inv-add-int" class="tab-section hidden space-y-6">
+          <div class="card-box bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
+            <h3 class="font-bold text-sm">أذون الإضافة الداخلية (تحويل بين مخازن)</h3>
+          </div>
+        </section>
+        <section id="tab-inv-issue-ext" class="tab-section hidden space-y-6">
+          <div class="card-box bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
+            <h3 class="font-bold text-sm">أذون الصرف المخزنية (صرف لعميل أو بيع)</h3>
+          </div>
+        </section>
+        <section id="tab-inv-issue-int" class="tab-section hidden space-y-6">
+          <div class="card-box bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
+            <h3 class="font-bold text-sm">أذون الصرف الداخلية (صرف للأقسام والاستهلاك)</h3>
+          </div>
+        </section>
 
-              <div class="card-box bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-3">
-                <h3 class="font-extrabold text-slate-800 text-sm border-b pb-2.5">النسخ الاحتياطي واستعادة البيانات</h3>
-                <p class="text-xs text-slate-500">يمكنك استعادة نسخة JSON محفوظة أو إعادة ضبط بيانات النظام الافتراضية.</p>
-                <div class="flex flex-wrap gap-2">
-                  <label class="px-3 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold cursor-pointer">
-                    استعادة نسخة JSON
-                    <input type="file" accept=".json" onchange="importJSONBackup(event)" class="hidden" />
-                  </label>
-                  <button type="button" onclick="resetDemoData()" class="px-3 py-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-xs font-bold">
-                    إعادة ضبط البيانات الافتراضية
-                  </button>
-                </div>
-              </div>
-            </div>
+        <!-- ================= 5. المبيعات ================= -->
+        <section id="tab-sales-inv" class="tab-section hidden space-y-6">
+          <div class="card-box bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
+            <h3 class="font-bold text-sm">إصدار فواتير المبيعات</h3>
+            <form onsubmit="addSaleInvoice(event)" class="grid grid-cols-1 md:grid-cols-4 gap-3">
+              <input id="sal-cust" placeholder="اسم العميل" required class="bg-slate-950 border border-slate-800 p-2.5 rounded-xl text-xs text-white" />
+              <input id="sal-item" placeholder="الصنف / المنتج" required class="bg-slate-950 border border-slate-800 p-2.5 rounded-xl text-xs text-white" />
+              <input type="number" id="sal-amount" placeholder="الإجمالي" required class="bg-slate-950 border border-slate-800 p-2.5 rounded-xl text-xs text-white font-bold" />
+              <button class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs py-2.5">حفظ الفاتورة</button>
+            </form>
+            <table class="w-full text-xs text-right mt-4"><thead class="bg-slate-950 text-slate-400"><tr><th class="p-2.5">الفاتورة</th><th class="p-2.5">العميل</th><th class="p-2.5">البيان</th><th class="p-2.5">المبلغ</th></tr></thead><tbody id="tbl-sales" class="divide-y divide-slate-800"></tbody></table>
+          </div>
+        </section>
 
+        <section id="tab-sales-orders" class="tab-section hidden space-y-6">
+          <div class="card-box bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
+            <h3 class="font-bold text-sm">طلبات وأوامر البيع</h3>
+          </div>
+        </section>
+
+        <section id="tab-sales-vouchers" class="tab-section hidden space-y-6">
+          <div class="card-box bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
+            <h3 class="font-bold text-sm">سندات القبض من العملاء</h3>
+          </div>
+        </section>
+
+        <section id="tab-sales-customers" class="tab-section hidden space-y-6">
+          <div class="card-box bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
+            <h3 class="font-bold text-sm">دليل وسجل العملاء</h3>
+          </div>
+        </section>
+
+        <!-- ================= 6. المشتريات ================= -->
+        <section id="tab-pur-inv" class="tab-section hidden space-y-6">
+          <div class="card-box bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
+            <h3 class="font-bold text-sm">فواتير المشتريات</h3>
+          </div>
+        </section>
+
+        <section id="tab-pur-orders" class="tab-section hidden space-y-6">
+          <div class="card-box bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
+            <h3 class="font-bold text-sm">طلبات الشراء الداخلية</h3>
+          </div>
+        </section>
+
+        <section id="tab-pur-vouchers" class="tab-section hidden space-y-6">
+          <div class="card-box bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
+            <h3 class="font-bold text-sm">سندات الصرف للموردين</h3>
+          </div>
+        </section>
+
+        <section id="tab-pur-vendors" class="tab-section hidden space-y-6">
+          <div class="card-box bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
+            <h3 class="font-bold text-sm">دليل وسجل الموردين</h3>
+          </div>
+        </section>
+
+        <!-- ================= 7. التقارير المستقلة ================= -->
+        <section id="tab-rep-cust" class="tab-section hidden space-y-6">
+          <div class="card-box bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
+            <h3 class="font-bold text-sm">تقرير كشف حساب عميل تفصيلي</h3>
+          </div>
+        </section>
+
+        <section id="tab-rep-vend" class="tab-section hidden space-y-6">
+          <div class="card-box bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
+            <h3 class="font-bold text-sm">تقرير كشف حساب مورد تفصيلي</h3>
+          </div>
+        </section>
+
+        <section id="tab-rep-treasury" class="tab-section hidden space-y-6">
+          <div class="card-box bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
+            <h3 class="font-bold text-sm">تقرير الحركة اليومية للخزينة</h3>
+          </div>
+        </section>
+
+        <section id="tab-rep-banks" class="tab-section hidden space-y-6">
+          <div class="card-box bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
+            <h3 class="font-bold text-sm">تقرير حركات وإيداعات البنوك</h3>
+          </div>
+        </section>
+
+        <section id="tab-rep-exp" class="tab-section hidden space-y-6">
+          <div class="card-box bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
+            <h3 class="font-bold text-sm">تقرير المصروفات حسب الفئات والقطاعات</h3>
+          </div>
+        </section>
+
+        <section id="tab-rep-rev" class="tab-section hidden space-y-6">
+          <div class="card-box bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
+            <h3 class="font-bold text-sm">تقرير الإيرادات والمبيعات</h3>
+          </div>
+        </section>
+
+        <!-- ================= 8. المعلومات الأساسية ================= -->
+        <section id="tab-info-company" class="tab-section hidden space-y-6">
+          <div class="card-box bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
+            <h3 class="font-bold text-sm">بيانات المنشأة والضرائب والعملة</h3>
+          </div>
+        </section>
+
+        <section id="tab-info-branches" class="tab-section hidden space-y-6">
+          <div class="card-box bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
+            <h3 class="font-bold text-sm">دليل الفروع</h3>
+          </div>
+        </section>
+
+        <section id="tab-info-regions" class="tab-section hidden space-y-6">
+          <div class="card-box bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
+            <h3 class="font-bold text-sm">دليل المناطق والقطاعات الجغرافية</h3>
+          </div>
+        </section>
+
+        <section id="tab-info-agents" class="tab-section hidden space-y-6">
+          <div class="card-box bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
+            <h3 class="font-bold text-sm">دليل المناديب ومسؤولي البيع</h3>
+          </div>
+        </section>
+
+        <section id="tab-info-system" class="tab-section hidden space-y-6">
+          <div class="card-box bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
+            <h3 class="font-bold text-sm">إدارة المستخدمين والنسخ الاحتياطي</h3>
           </div>
         </section>
 
@@ -858,117 +571,65 @@
     </div>
   </div>
 
-  <!-- ================= نافذة طباعة المستندات المخصصة ================= -->
-  <div id="print-voucher-modal" class="hidden fixed inset-0 z-50 bg-slate-900/70 flex items-center justify-center p-4">
-    <div class="bg-white w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden">
-      <div class="no-print bg-slate-100 px-5 py-3 flex items-center justify-between border-b">
-        <span class="font-bold text-sm text-slate-800">معاينة المستند قبل الطباعة</span>
-        <div class="flex gap-2">
-          <button onclick="window.print()" class="px-3.5 py-1.5 rounded-xl bg-emerald-600 text-white text-xs font-bold">
-            🖨️ طباعة الآن
-          </button>
-          <button onclick="closeVoucherModal()" class="px-3 py-1.5 rounded-xl bg-slate-300 text-slate-800 text-xs font-bold">
-            إغلاق
-          </button>
-        </div>
-      </div>
-      <div id="voucher-printable-content" class="p-6 text-xs text-slate-800 space-y-4"></div>
-    </div>
-  </div>
-
   <script>
-    const STORAGE_KEY = 'tantawe_erp_v2_data';
+    const STORAGE_KEY = 'tantawe_erp_v3_full';
 
-    const DEFAULT_DATA = {
-      sessionUser: null,
+    const INITIAL_DB = {
+      user: null,
       activeBranch: 'الفرع الرئيسي',
-      settings: {
-        companyName: 'TANTAWE ERP',
-        taxId: '300-451-892',
-        currency: 'ج.م',
-        taxRate: 14,
-        phone: '01000000000',
-        address: 'شبين الكوم - المنوفية',
-        branches: ['الفرع الرئيسي', 'فرع طنطا', 'فرع المخازن'],
-        logoDataUrl: '',
-        auth: {
-          username: 'admin',
-          password: '1234',
-          displayName: 'المدير العام',
-          role: 'مدير النظام'
-        }
-      },
-      coa: [
-        { code: '1101', name: 'الخزينة الرئيسية', type: 'أصول', balance: 85000 },
-        { code: '1102', name: 'البنك التجاري', type: 'أصول', balance: 140000 },
-        { code: '1103', name: 'المخزون السلعي', type: 'أصول', balance: 95000 },
-        { code: '2101', name: 'الموردون', type: 'خصوم', balance: 35000 },
-        { code: '3101', name: 'رأس المال', type: 'حقوق ملكية', balance: 285000 },
-        { code: '4101', name: 'إيرادات المبيعات والخدمات', type: 'إيرادات', balance: 0 },
-        { code: '5101', name: 'المصروفات العمومية والإدارية', type: 'مصروفات', balance: 0 }
+      branches: ['الفرع الرئيسي', 'فرع طنطا', 'فرع القاهرة'],
+      employees: [
+        { id: 'EMP-1', name: 'محمود طنطاوي', role: 'مدير عام', salary: 15000 },
+        { id: 'EMP-2', name: 'أحمد علي', role: 'محاسب', salary: 8500 }
       ],
-      transactions: [
-        { id: 'EXP-1001', type: 'expense', category: 'إيجار ومرافق', desc: 'إيجار المقر الشهري والكهرباء', amount: 8500, date: '2026-11-05', method: 'تحويل بنكي', branch: 'الفرع الرئيسي' },
-        { id: 'REV-1002', type: 'revenue', category: 'خدمات ودعم', desc: 'إيرادات تركيب وتدريب أنظمة', amount: 16500, date: '2026-11-12', method: 'نقدي - الخزينة', branch: 'الفرع الرئيسي' }
+      penalties: [],
+      bonuses: [],
+      assets: [
+        { name: 'سيارة توزيع', action: 'شراء / إضافة', cost: 250000, rate: 10 }
+      ],
+      expenses: [
+        { cat: 'إيجار', desc: 'إيجار المقر الشهري', amount: 8000 }
+      ],
+      revenues: [
+        { cat: 'استشارات', desc: 'إيراد دعم فني', amount: 12000 }
+      ],
+      items: [
+        { cat: 'أجهزة', name: 'طابعة حرارية POS', price: 3500 }
+      ],
+      sales: [
+        { id: 'INV-1001', cust: 'شركة النور', item: 'طابعة حرارية POS', amount: 7000 }
+      ],
+      coa: [
+        { code: '1101', name: 'الخزينة الرئيسية', type: 'أصول', balance: 50000 },
+        { code: '1102', name: 'البنك الأهلي', type: 'أصول', balance: 120000 }
       ],
       journal: [
-        { id: 'JE-101', date: '2026-11-01', debit: '1101 - الخزينة الرئيسية', credit: '3101 - رأس المال', amount: 85000, desc: 'قيد افتتاحي لرأس المال النقدي' }
-      ],
-      invoices: [
-        { id: 'INV-2001', type: 'sale', party: 'شركة الدلتا التجارية', item: 'ترخيص نظام ومعدات', qty: 2, price: 12000, taxRate: 14, total: 27360, date: '2026-11-10', branch: 'الفرع الرئيسي' }
-      ],
-      stockOrders: [
-        { id: 'SO-3001', type: 'in', item: 'أجهزة نقاط بيع POS', qty: 10, branch: 'فرع المخازن', date: '2026-11-08', notes: 'إضافة بضاعة أول المدة' }
-      ],
-      assets: [
-        { id: 'AST-401', name: 'أجهزة حاسب وخوادم', cost: 60000, rate: 20, branch: 'الفرع الرئيسي' }
-      ],
-      employees: [
-        { id: 'EMP-501', name: 'أحمد حسن', role: 'محاسب عام', salary: 9500, branch: 'الفرع الرئيسي' },
-        { id: 'EMP-502', name: 'كريم سمير', role: 'أخصائي دعم فني', salary: 10500, branch: 'الفرع الرئيسي' }
+        { id: 'JE-1', date: '2026-11-20', debit: '1101 - الخزينة', credit: 'إيرادات', amount: 12000 }
       ]
     };
 
-    let db = loadData();
+    let db = loadDb();
 
-    function loadData() {
+    function loadDb() {
       try {
         const raw = localStorage.getItem(STORAGE_KEY);
-        if (!raw) return structuredClone(DEFAULT_DATA);
-        const parsed = JSON.parse(raw);
-        return {
-          ...structuredClone(DEFAULT_DATA),
-          ...parsed,
-          settings: {
-            ...structuredClone(DEFAULT_DATA.settings),
-            ...(parsed.settings || {}),
-            auth: {
-              ...structuredClone(DEFAULT_DATA.settings.auth),
-              ...((parsed.settings && parsed.settings.auth) || {})
-            }
-          }
-        };
+        return raw ? { ...structuredClone(INITIAL_DB), ...JSON.parse(raw) } : structuredClone(INITIAL_DB);
       } catch {
-        return structuredClone(DEFAULT_DATA);
+        return structuredClone(INITIAL_DB);
       }
     }
 
-    function saveData() {
+    function saveDb() {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(db));
     }
 
     function formatMoney(num) {
-      const val = Number(num || 0);
-      return `${val.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ${db.settings.currency}`;
+      return Number(num || 0).toLocaleString('en-US', { minimumFractionDigits: 2 }) + ' ج.م';
     }
 
-    function todayISO() {
-      return new Date().toISOString().split('T')[0];
-    }
-
-    /* ================= تسجيل الدخول والخروج ================= */
-    function initAuthView() {
-      if (db.sessionUser) {
+    /* ================= تسجيل الدخول والتنقل ================= */
+    function initAuth() {
+      if (db.user) {
         document.getElementById('login-screen').classList.add('hidden');
         document.getElementById('app-shell').classList.remove('hidden');
         renderAll();
@@ -978,768 +639,222 @@
       }
     }
 
-    function toggleLoginPassword() {
-      const inp = document.getElementById('login-password');
-      inp.type = inp.type === 'password' ? 'text' : 'password';
-    }
-
     function fillDemoAdmin() {
-      document.getElementById('login-username').value = db.settings.auth.username;
-      document.getElementById('login-password').value = db.settings.auth.password;
+      document.getElementById('login-username').value = 'admin';
+      document.getElementById('login-password').value = '1234';
     }
 
-    document.getElementById('login-form').addEventListener('submit', function (e) {
+    document.getElementById('login-form').addEventListener('submit', (e) => {
       e.preventDefault();
       const u = document.getElementById('login-username').value.trim();
       const p = document.getElementById('login-password').value;
-      if (u === db.settings.auth.username && p === db.settings.auth.password) {
-        db.sessionUser = u;
-        saveData();
-        document.getElementById('login-error').classList.add('hidden');
-        initAuthView();
+      if (u === 'admin' && p === '1234') {
+        db.user = u;
+        saveDb();
+        initAuth();
       } else {
         document.getElementById('login-error').classList.remove('hidden');
       }
     });
 
     function logoutUser() {
-      db.sessionUser = null;
-      saveData();
-      initAuthView();
+      db.user = null;
+      saveDb();
+      initAuth();
     }
 
-    /* ================= التنقل بين التبويبات ================= */
-    const TAB_META = {
-      dashboard: { title: 'لوحة التحكم', sub: 'نظرة عامة فورية على الحركة المالية والمخزنية' },
-      'expenses-revenues': { title: 'المصروفات والإيرادات', sub: 'تسجيل وإدارة وطباعة سندات المصروفات والإيرادات' },
-      journal: { title: 'القيود اليومية', sub: 'إنشاء وترحيل القيود المحاسبية المزدوجة' },
-      coa: { title: 'شجرة الحسابات', sub: 'إدارة الحسابات والأرصدة المالية' },
-      invoices: { title: 'الفواتير (مبيعات / مشتريات)', sub: 'إصدار الفواتير الضريبية وطباعتها' },
-      'stock-orders': { title: 'أذون الإضافة والصرف', sub: 'متابعة حركة المخزون وطباعة الأذون المخزنية' },
-      assets: { title: 'الأصول الثابتة والإهلاك', sub: 'حساب الإهلاك السنوي وصافي القيمة الدفترية' },
-      hr: { title: 'الموارد البشرية والمرتبات', sub: 'بيانات الموظفين وكشوف الرواتب' },
-      reports: { title: 'التقارير وكشوف الحساب', sub: 'ملخص الأرباح والمصروفات والإيرادات والطباعة' },
-      settings: { title: 'إعدادات النظام', sub: 'بيانات الشركة، الفروع، الضرائب، المستخدمين والنسخ الاحتياطي' }
-    };
+    function toggleSubmenu(id) {
+      const el = document.getElementById(id);
+      if (el) el.classList.toggle('hidden');
+    }
 
-    function switchTab(tabName) {
-      document.querySelectorAll('.tab-section').forEach(el => el.classList.add('hidden'));
-      const target = document.getElementById(`tab-${tabName}`);
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-section').forEach(s => s.classList.add('hidden'));
+      const target = document.getElementById(`tab-${tabId}`);
       if (target) target.classList.remove('hidden');
 
-      document.querySelectorAll('.nav-tab').forEach(btn => {
-        btn.classList.toggle('active', btn.dataset.tab === tabName);
+      document.querySelectorAll('.sub-tab-btn').forEach(b => {
+        b.classList.toggle('active', b.dataset.tab === tabId);
       });
-
-      const meta = TAB_META[tabName] || TAB_META.dashboard;
-      document.getElementById('page-title').textContent = meta.title;
-      document.getElementById('page-subtitle').textContent = meta.sub;
     }
 
-    function toggleMobileMenu() {
-      const nav = document.getElementById('sidebar-nav');
-      nav.classList.toggle('hidden');
-    }
-
-    function changeActiveBranch(branchName) {
-      db.activeBranch = branchName;
-      saveData();
-      renderHeaderAndBranding();
+    function changeBranch(b) {
+      db.activeBranch = b;
+      saveDb();
       renderDashboard();
     }
 
-    /* ================= عرض البيانات ================= */
-    function renderHeaderAndBranding() {
-      const s = db.settings;
-      document.getElementById('sidebar-company-name').textContent = s.companyName;
-      document.getElementById('sidebar-branch-label').textContent = db.activeBranch;
-      document.getElementById('current-user-display').textContent = s.auth.displayName || s.auth.username;
-      document.getElementById('current-user-role').textContent = s.auth.role || 'مستخدم النظام';
-
-      if (s.logoDataUrl) {
-        document.getElementById('sidebar-logo-img').src = s.logoDataUrl;
-        document.getElementById('sidebar-logo-img').classList.remove('hidden');
-        document.getElementById('sidebar-logo-text').classList.add('hidden');
-      } else {
-        document.getElementById('sidebar-logo-img').classList.add('hidden');
-        document.getElementById('sidebar-logo-text').classList.remove('hidden');
-        document.getElementById('sidebar-logo-text').textContent = (s.companyName || 'TE').slice(0, 2).toUpperCase();
-      }
-
-      // تحديث قوائم الفروع
-      const headerBranch = document.getElementById('header-branch-select');
-      headerBranch.innerHTML = s.branches.map(b => `<option value="${b}" ${b === db.activeBranch ? 'selected' : ''}>${b}</option>`).join('');
-
-      document.querySelectorAll('.branch-select').forEach(sel => {
-        const currentVal = sel.value;
-        sel.innerHTML = s.branches.map(b => `<option value="${b}">${b}</option>`).join('');
-        if (currentVal && s.branches.includes(currentVal)) sel.value = currentVal;
-        else sel.value = db.activeBranch;
-      });
-
-      // تحديث قوائم شجرة الحسابات
-      const coaOptions = db.coa.map(a => `<option value="${a.code} - ${a.name}">${a.code} - ${a.name}</option>`).join('');
-      document.querySelectorAll('.coa-select').forEach(sel => {
-        sel.innerHTML = coaOptions;
-      });
-
-      // تحديث ترويسة الطباعة
-      document.getElementById('print-company-title').textContent = s.companyName;
-      document.getElementById('print-company-meta').textContent = `الرقم الضريبي: ${s.taxId || '-'} | العنوان: ${s.address || '-'} | هاتف: ${s.phone || '-'}`;
-      document.getElementById('print-date-now').textContent = `تاريخ الطباعة: ${new Date().toLocaleDateString('ar-EG')}`;
-    }
-
-    function getFinancialTotals() {
-      const revenues = db.transactions.filter(t => t.type === 'revenue').reduce((sum, t) => sum + Number(t.amount), 0)
-        + db.invoices.filter(i => i.type === 'sale').reduce((sum, i) => sum + Number(i.total), 0);
-      const expenses = db.transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + Number(t.amount), 0)
-        + db.invoices.filter(i => i.type === 'purchase').reduce((sum, i) => sum + Number(i.total), 0);
-      const salaries = db.employees.reduce((sum, e) => sum + Number(e.salary), 0);
-      const net = revenues - expenses;
-      return { revenues, expenses, salaries, net };
-    }
-
+    /* ================= التحليل اليومي ================= */
+    let chartInstance = null;
     function renderDashboard() {
-      const { revenues, expenses, salaries, net } = getFinancialTotals();
+      const totSales = db.sales.reduce((s, i) => s + Number(i.amount), 0);
+      const totExp = db.expenses.reduce((s, i) => s + Number(i.amount), 0);
+      const totRev = db.revenues.reduce((s, i) => s + Number(i.amount), 0);
+      const net = (totSales + totRev) - totExp;
+
       const kpis = [
-        { label: 'إجمالي الإيرادات والمبيعات', val: formatMoney(revenues), tone: 'text-emerald-700 bg-emerald-50 border-emerald-200' },
-        { label: 'إجمالي المصروفات والمشتريات', val: formatMoney(expenses), tone: 'text-rose-700 bg-rose-50 border-rose-200' },
-        { label: 'صافي الفائض / العجز التشغيلي', val: formatMoney(net), tone: net >= 0 ? 'text-blue-700 bg-blue-50 border-blue-200' : 'text-amber-700 bg-amber-50 border-amber-200' },
-        { label: 'الرواتب الشهرية المسجلة', val: formatMoney(salaries), tone: 'text-slate-800 bg-slate-100 border-slate-200' }
+        { label: 'مبيعات اليوم', val: formatMoney(totSales), tone: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30' },
+        { label: 'مشتريات اليوم', val: formatMoney(0), tone: 'bg-blue-500/10 text-blue-400 border-blue-500/30' },
+        { label: 'المصروفات اليومية', val: formatMoney(totExp), tone: 'bg-rose-500/10 text-rose-400 border-rose-500/30' },
+        { label: 'الإيرادات اليومية', val: formatMoney(totRev), tone: 'bg-amber-500/10 text-amber-400 border-amber-500/30' },
+        { label: 'صافي اليوم', val: formatMoney(net), tone: 'bg-indigo-500/10 text-indigo-400 border-indigo-500/30' }
       ];
 
-      document.getElementById('kpi-cards').innerHTML = kpis.map(k => `
-        <div class="card-box rounded-2xl p-4 border ${k.tone} shadow-sm">
-          <div class="text-xs font-bold opacity-80">${k.label}</div>
-          <div class="text-lg font-extrabold mt-1.5">${k.val}</div>
+      document.getElementById('daily-kpi-cards').innerHTML = kpis.map(k => `
+        <div class="card-box rounded-2xl p-4 border ${k.tone}">
+          <div class="text-xs font-bold">${k.label}</div>
+          <div class="text-base font-black mt-2">${k.val}</div>
         </div>
       `).join('');
 
-      const combined = [
-        ...db.transactions.map(t => ({
-          type: t.type === 'revenue' ? 'إيراد' : 'مصروف',
-          ref: `${t.id} - ${t.desc}`,
-          branch: t.branch,
-          date: t.date,
-          amount: t.amount,
-          pos: t.type === 'revenue'
-        })),
-        ...db.invoices.map(i => ({
-          type: i.type === 'sale' ? 'فاتورة مبيعات' : 'فاتورة مشتريات',
-          ref: `${i.id} - ${i.party}`,
-          branch: i.branch,
-          date: i.date,
-          amount: i.total,
-          pos: i.type === 'sale'
-        }))
-      ].sort((a, b) => (b.date || '').localeCompare(a.date || '')).slice(0, 8);
-
-      document.getElementById('dashboard-recent-table').innerHTML = combined.length ? combined.map(row => `
-        <tr>
-          <td class="p-2.5 font-bold">${row.type}</td>
-          <td class="p-2.5">${row.ref}</td>
-          <td class="p-2.5">${row.branch}</td>
-          <td class="p-2.5">${row.date}</td>
-          <td class="p-2.5 font-extrabold ${row.pos ? 'text-emerald-700' : 'text-rose-700'}">${formatMoney(row.amount)}</td>
-        </tr>
-      `).join('') : `<tr><td colspan="5" class="p-4 text-center text-slate-400">لا توجد حركات مسجلة بعد</td></tr>`;
-
-      const assetsCost = db.assets.reduce((s, a) => s + Number(a.cost), 0);
-      document.getElementById('dashboard-summary-list').innerHTML = `
-        <div class="flex justify-between p-3 rounded-xl bg-slate-50">
-          <span class="text-slate-600 font-semibold">عدد الحسابات بالشجرة</span>
-          <span class="font-extrabold text-slate-800">${db.coa.length} حساب</span>
-        </div>
-        <div class="flex justify-between p-3 rounded-xl bg-slate-50">
-          <span class="text-slate-600 font-semibold">أذون المخازن المسجلة</span>
-          <span class="font-extrabold text-slate-800">${db.stockOrders.length} إذن</span>
-        </div>
-        <div class="flex justify-between p-3 rounded-xl bg-slate-50">
-          <span class="text-slate-600 font-semibold">إجمالي تكلفة الأصول الثابتة</span>
-          <span class="font-extrabold text-slate-800">${formatMoney(assetsCost)}</span>
-        </div>
-        <div class="flex justify-between p-3 rounded-xl bg-slate-50">
-          <span class="text-slate-600 font-semibold">عدد الموظفين</span>
-          <span class="font-extrabold text-slate-800">${db.employees.length} موظف</span>
-        </div>
+      document.getElementById('dashboard-recent-list').innerHTML = `
+        <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 flex justify-between"><span>مبيعات: ${totSales} ج.م</span><span class="text-emerald-400 font-bold">مكتمل</span></div>
+        <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 flex justify-between"><span>مصروفات: ${totExp} ج.م</span><span class="text-rose-400 font-bold">مصروف</span></div>
       `;
-    }
 
-    /* ================= المصروفات والإيرادات ================= */
-    function addExpenseRevenue(e) {
-      e.preventDefault();
-      const tx = {
-        id: (document.getElementById('tx-type').value === 'revenue' ? 'REV-' : 'EXP-') + Math.floor(1000 + Math.random() * 9000),
-        type: document.getElementById('tx-type').value,
-        category: document.getElementById('tx-category').value.trim(),
-        desc: document.getElementById('tx-desc').value.trim(),
-        amount: Number(document.getElementById('tx-amount').value),
-        date: document.getElementById('tx-date').value,
-        method: document.getElementById('tx-method').value,
-        branch: document.getElementById('tx-branch').value
-      };
-      db.transactions.unshift(tx);
-
-      // ترحيل قيد مبسط تلقائي
-      db.journal.unshift({
-        id: 'JE-' + Math.floor(100 + Math.random() * 900),
-        date: tx.date,
-        debit: tx.type === 'expense' ? '5101 - المصروفات العمومية والإدارية' : '1101 - الخزينة الرئيسية',
-        credit: tx.type === 'expense' ? '1101 - الخزينة الرئيسية' : '4101 - إيرادات المبيعات والخدمات',
-        amount: tx.amount,
-        desc: `${tx.type === 'expense' ? 'مصروف' : 'إيراد'}: ${tx.category} - ${tx.desc}`
+      // رسم بياني
+      const ctx = document.getElementById('dailyChart').getContext('2d');
+      if (chartInstance) chartInstance.destroy();
+      chartInstance = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['المبيعات', 'الإيرادات', 'المصروفات', 'الصافي'],
+          datasets: [{
+            label: 'القيمة بالجنيه',
+            data: [totSales, totRev, totExp, net],
+            backgroundColor: ['#10b981', '#f59e0b', '#f43f5e', '#6366f1']
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            x: { ticks: { color: '#94a3b8' } },
+            y: { ticks: { color: '#94a3b8' } }
+          }
+        }
       });
-
-      saveData();
-      e.target.reset();
-      document.getElementById('tx-date').value = todayISO();
-      renderAll();
     }
 
-    function renderExpensesRevenues() {
-      const filter = document.getElementById('tx-filter-type').value;
-      const rows = db.transactions.filter(t => filter === 'all' || t.type === filter);
-      document.getElementById('tx-table-body').innerHTML = rows.length ? rows.map(t => `
-        <tr>
-          <td class="p-2.5 font-bold">${t.id}</td>
-          <td class="p-2.5">
-            <span class="px-2 py-0.5 rounded-full text-[11px] font-bold ${t.type === 'revenue' ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'}">
-              ${t.type === 'revenue' ? 'إيراد' : 'مصروف'}
-            </span>
-          </td>
-          <td class="p-2.5">
-            <div class="font-bold text-slate-800">${t.category}</div>
-            <div class="text-slate-500 text-[11px]">${t.desc} (${t.method})</div>
-          </td>
-          <td class="p-2.5">${t.date}</td>
-          <td class="p-2.5 font-extrabold ${t.type === 'revenue' ? 'text-emerald-700' : 'text-rose-700'}">${formatMoney(t.amount)}</td>
-          <td class="p-2.5 no-print">
-            <button onclick="openTransactionVoucher('${t.id}')" class="px-2.5 py-1 rounded-lg bg-slate-800 text-white text-[11px] font-bold">
-              🖨️ سند
-            </button>
-          </td>
-        </tr>
-      `).join('') : `<tr><td colspan="6" class="p-4 text-center text-slate-400">لا توجد حركات مطابقة</td></tr>`;
-    }
-
-    /* ================= القيود اليومية ================= */
-    function addJournalEntry(e) {
-      e.preventDefault();
-      db.journal.unshift({
-        id: 'JE-' + Math.floor(100 + Math.random() * 900),
-        date: document.getElementById('je-date').value,
-        debit: document.getElementById('je-debit').value,
-        credit: document.getElementById('je-credit').value,
-        amount: Number(document.getElementById('je-amount').value),
-        desc: document.getElementById('je-desc').value.trim()
-      });
-      saveData();
-      e.target.reset();
-      document.getElementById('je-date').value = todayISO();
-      renderJournal();
-    }
-
-    function renderJournal() {
-      document.getElementById('journal-table-body').innerHTML = db.journal.map(j => `
-        <tr>
-          <td class="p-2.5 font-bold">${j.id}</td>
-          <td class="p-2.5">${j.date}</td>
-          <td class="p-2.5 text-emerald-800 font-semibold">${j.debit}</td>
-          <td class="p-2.5 text-rose-800 font-semibold">${j.credit}</td>
-          <td class="p-2.5 font-extrabold">${formatMoney(j.amount)}</td>
-          <td class="p-2.5">${j.desc}</td>
-        </tr>
-      `).join('');
-    }
-
-    /* ================= شجرة الحسابات ================= */
-    function addAccount(e) {
-      e.preventDefault();
-      db.coa.push({
-        code: document.getElementById('coa-code').value.trim(),
-        name: document.getElementById('coa-name').value.trim(),
-        type: document.getElementById('coa-type').value,
-        balance: Number(document.getElementById('coa-balance').value || 0)
-      });
-      saveData();
-      e.target.reset();
-      renderCOA();
-      renderHeaderAndBranding();
-    }
-
-    function renderCOA() {
-      document.getElementById('coa-table-body').innerHTML = db.coa.map(a => `
-        <tr>
-          <td class="p-2.5 font-bold">${a.code}</td>
-          <td class="p-2.5 font-semibold">${a.name}</td>
-          <td class="p-2.5">${a.type}</td>
-          <td class="p-2.5 font-extrabold">${formatMoney(a.balance)}</td>
-        </tr>
-      `).join('');
-    }
-
-    /* ================= الفواتير ================= */
-    function addInvoice(e) {
-      e.preventDefault();
-      const qty = Number(document.getElementById('inv-qty').value);
-      const price = Number(document.getElementById('inv-price').value);
-      const subtotal = qty * price;
-      const taxRate = Number(db.settings.taxRate || 0);
-      const total = subtotal + (subtotal * taxRate / 100);
-      const type = document.getElementById('inv-type').value;
-
-      db.invoices.unshift({
-        id: (type === 'sale' ? 'SAL-' : 'PUR-') + Math.floor(1000 + Math.random() * 9000),
-        type,
-        party: document.getElementById('inv-party').value.trim(),
-        item: document.getElementById('inv-item').value.trim(),
-        qty,
-        price,
-        taxRate,
-        total,
-        date: document.getElementById('inv-date').value,
-        branch: document.getElementById('inv-branch').value
-      });
-      saveData();
-      e.target.reset();
-      document.getElementById('inv-date').value = todayISO();
-      renderAll();
-    }
-
-    function renderInvoices() {
-      document.getElementById('invoices-table-body').innerHTML = db.invoices.map(inv => `
-        <tr>
-          <td class="p-2.5 font-bold">${inv.id}</td>
-          <td class="p-2.5">${inv.type === 'sale' ? 'فاتورة مبيعات' : 'فاتورة مشتريات'}</td>
-          <td class="p-2.5">
-            <div class="font-bold">${inv.party}</div>
-            <div class="text-[11px] text-slate-500">${inv.item} (${inv.qty} × ${formatMoney(inv.price)})</div>
-          </td>
-          <td class="p-2.5 font-extrabold text-slate-800">${formatMoney(inv.total)}</td>
-          <td class="p-2.5 no-print">
-            <button onclick="openInvoiceVoucher('${inv.id}')" class="px-2.5 py-1 rounded-lg bg-emerald-600 text-white text-[11px] font-bold">
-              🖨️ طباعة فاتورة
-            </button>
-          </td>
-        </tr>
-      `).join('');
-    }
-
-    /* ================= أذون الإضافة والصرف ================= */
-    function addStockOrder(e) {
-      e.preventDefault();
-      const type = document.getElementById('so-type').value;
-      db.stockOrders.unshift({
-        id: (type === 'in' ? 'ADD-' : 'ISS-') + Math.floor(1000 + Math.random() * 9000),
-        type,
-        item: document.getElementById('so-item').value.trim(),
-        qty: Number(document.getElementById('so-qty').value),
-        branch: document.getElementById('so-branch').value,
-        date: document.getElementById('so-date').value,
-        notes: document.getElementById('so-notes').value.trim()
-      });
-      saveData();
-      e.target.reset();
-      document.getElementById('so-date').value = todayISO();
-      renderAll();
-    }
-
-    function renderStockOrders() {
-      document.getElementById('stock-orders-table-body').innerHTML = db.stockOrders.map(so => `
-        <tr>
-          <td class="p-2.5 font-bold">${so.id}</td>
-          <td class="p-2.5">
-            <span class="px-2 py-0.5 rounded-full text-[11px] font-bold ${so.type === 'in' ? 'bg-blue-100 text-blue-800' : 'bg-amber-100 text-amber-800'}">
-              ${so.type === 'in' ? 'إذن إضافة' : 'إذن صرف'}
-            </span>
-          </td>
-          <td class="p-2.5 font-semibold">${so.item}</td>
-          <td class="p-2.5 font-extrabold">${so.qty}</td>
-          <td class="p-2.5">${so.branch}</td>
-          <td class="p-2.5 no-print">
-            <button onclick="openStockVoucher('${so.id}')" class="px-2.5 py-1 rounded-lg bg-slate-800 text-white text-[11px] font-bold">
-              🖨️ طباعة إذن
-            </button>
-          </td>
-        </tr>
-      `).join('');
-    }
-
-    /* ================= الأصول والموارد البشرية ================= */
-    function addAsset(e) {
-      e.preventDefault();
-      db.assets.push({
-        id: 'AST-' + Math.floor(100 + Math.random() * 900),
-        name: document.getElementById('asset-name').value.trim(),
-        cost: Number(document.getElementById('asset-cost').value),
-        rate: Number(document.getElementById('asset-rate').value),
-        branch: document.getElementById('asset-branch').value
-      });
-      saveData();
-      e.target.reset();
-      renderAll();
-    }
-
-    function renderAssets() {
-      document.getElementById('assets-table-body').innerHTML = db.assets.map(a => {
-        const annualDep = a.cost * (a.rate / 100);
-        const bookValue = Math.max(0, a.cost - annualDep);
-        return `
-          <tr>
-            <td class="p-2.5 font-bold">${a.name} <span class="text-[11px] text-slate-400">(${a.branch})</span></td>
-            <td class="p-2.5">${formatMoney(a.cost)}</td>
-            <td class="p-2.5">${a.rate}%</td>
-            <td class="p-2.5 text-rose-700 font-bold">${formatMoney(annualDep)}</td>
-            <td class="p-2.5 text-emerald-700 font-extrabold">${formatMoney(bookValue)}</td>
-          </tr>
-        `;
-      }).join('');
-    }
-
+    /* ================= الموارد البشرية ================= */
     function addEmployee(e) {
       e.preventDefault();
       db.employees.push({
-        id: 'EMP-' + Math.floor(100 + Math.random() * 900),
-        name: document.getElementById('emp-name').value.trim(),
-        role: document.getElementById('emp-role').value.trim(),
-        salary: Number(document.getElementById('emp-salary').value),
-        branch: document.getElementById('emp-branch').value
+        id: 'EMP-' + (db.employees.length + 1),
+        name: document.getElementById('emp-name').value,
+        role: document.getElementById('emp-role').value,
+        salary: Number(document.getElementById('emp-salary').value)
       });
-      saveData();
-      e.target.reset();
-      renderAll();
+      saveDb(); e.target.reset(); renderHR();
     }
-
+    function addPenalty(e) {
+      e.preventDefault();
+      db.penalties.push({
+        emp: document.getElementById('pen-emp').value,
+        reason: document.getElementById('pen-reason').value,
+        amount: Number(document.getElementById('pen-amount').value)
+      });
+      saveDb(); e.target.reset(); renderHR();
+    }
+    function addBonus(e) {
+      e.preventDefault();
+      db.bonuses.push({
+        emp: document.getElementById('bon-emp').value,
+        reason: document.getElementById('bon-reason').value,
+        amount: Number(document.getElementById('bon-amount').value)
+      });
+      saveDb(); e.target.reset(); renderHR();
+    }
     function renderHR() {
-      document.getElementById('hr-table-body').innerHTML = db.employees.map(emp => `
-        <tr>
-          <td class="p-2.5 font-bold">${emp.name}</td>
-          <td class="p-2.5">${emp.role}</td>
-          <td class="p-2.5">${emp.branch}</td>
-          <td class="p-2.5 font-extrabold text-slate-800">${formatMoney(emp.salary)}</td>
-        </tr>
+      const opts = db.employees.map(e => `<option value="${e.name}">${e.name} (${e.role})</option>`).join('');
+      document.querySelectorAll('.emp-select').forEach(s => s.innerHTML = opts);
+
+      document.getElementById('tbl-employees').innerHTML = db.employees.map(e => `
+        <tr><td class="p-2.5">${e.id}</td><td class="p-2.5 font-bold">${e.name}</td><td class="p-2.5">${e.role}</td><td class="p-2.5 font-bold text-emerald-400">${formatMoney(e.salary)}</td></tr>
+      `).join('');
+      document.getElementById('tbl-penalties').innerHTML = db.penalties.map(p => `
+        <tr><td class="p-2.5 font-bold">${p.emp}</td><td class="p-2.5">${p.reason}</td><td class="p-2.5 font-bold text-rose-400">${formatMoney(p.amount)}</td></tr>
+      `).join('');
+      document.getElementById('tbl-bonuses').innerHTML = db.bonuses.map(b => `
+        <tr><td class="p-2.5 font-bold">${b.emp}</td><td class="p-2.5">${b.reason}</td><td class="p-2.5 font-bold text-emerald-400">${formatMoney(b.amount)}</td></tr>
       `).join('');
     }
 
-    /* ================= التقارير ================= */
-    function renderReports() {
-      const { revenues, expenses, salaries, net } = getFinancialTotals();
-      document.getElementById('reports-summary-grid').innerHTML = `
-        <div class="p-4 rounded-xl bg-emerald-50 border border-emerald-200">
-          <div class="text-xs font-bold text-emerald-800">إجمالي الإيرادات والمبيعات</div>
-          <div class="text-base font-extrabold text-emerald-950 mt-1">${formatMoney(revenues)}</div>
-        </div>
-        <div class="p-4 rounded-xl bg-rose-50 border border-rose-200">
-          <div class="text-xs font-bold text-rose-800">إجمالي المصروفات والمشتريات</div>
-          <div class="text-base font-extrabold text-rose-950 mt-1">${formatMoney(expenses)}</div>
-        </div>
-        <div class="p-4 rounded-xl bg-slate-100 border border-slate-200">
-          <div class="text-xs font-bold text-slate-700">إجمالي المرتبات الشهرية</div>
-          <div class="text-base font-extrabold text-slate-900 mt-1">${formatMoney(salaries)}</div>
-        </div>
-        <div class="p-4 rounded-xl bg-blue-50 border border-blue-200">
-          <div class="text-xs font-bold text-blue-800">صافي النتيجة</div>
-          <div class="text-base font-extrabold text-blue-950 mt-1">${formatMoney(net)}</div>
-        </div>
-      `;
+    /* ================= الحسابات والأصول والمخازن ================= */
+    function addAsset(e) {
+      e.preventDefault();
+      db.assets.push({
+        name: document.getElementById('ast-name').value,
+        action: document.getElementById('ast-action').value,
+        cost: Number(document.getElementById('ast-cost').value),
+        rate: Number(document.getElementById('ast-rate').value || 10)
+      });
+      saveDb(); e.target.reset(); renderAcc();
+    }
+    function addExpense(e) {
+      e.preventDefault();
+      db.expenses.push({ cat: document.getElementById('exp-cat').value, desc: document.getElementById('exp-desc').value, amount: Number(document.getElementById('exp-amount').value) });
+      saveDb(); e.target.reset(); renderAcc(); renderDashboard();
+    }
+    function addRevenue(e) {
+      e.preventDefault();
+      db.revenues.push({ cat: document.getElementById('rev-cat').value, desc: document.getElementById('rev-desc').value, amount: Number(document.getElementById('rev-amount').value) });
+      saveDb(); e.target.reset(); renderAcc(); renderDashboard();
+    }
+    function addItem(e) {
+      e.preventDefault();
+      db.items.push({ cat: document.getElementById('itm-cat').value, name: document.getElementById('itm-name').value, price: Number(document.getElementById('itm-price').value) });
+      saveDb(); e.target.reset(); renderInv();
+    }
+    function addSaleInvoice(e) {
+      e.preventDefault();
+      db.sales.push({ id: 'INV-' + (1000 + db.sales.length + 1), cust: document.getElementById('sal-cust').value, item: document.getElementById('sal-item').value, amount: Number(document.getElementById('sal-amount').value) });
+      saveDb(); e.target.reset(); renderSales(); renderDashboard();
+    }
 
-      const allRows = [
-        ...db.transactions.map(t => ({
-          date: t.date,
-          cat: t.type === 'revenue' ? `إيراد - ${t.category}` : `مصروف - ${t.category}`,
-          desc: t.desc,
-          branch: t.branch,
-          amount: t.amount
-        })),
-        ...db.invoices.map(i => ({
-          date: i.date,
-          cat: i.type === 'sale' ? 'فاتورة مبيعات' : 'فاتورة مشتريات',
-          desc: `${i.party} - ${i.item}`,
-          branch: i.branch,
-          amount: i.total
-        }))
-      ].sort((a, b) => (b.date || '').localeCompare(a.date || ''));
-
-      document.getElementById('reports-table-body').innerHTML = allRows.map(r => `
-        <tr>
-          <td class="p-2.5">${r.date}</td>
-          <td class="p-2.5 font-bold">${r.cat}</td>
-          <td class="p-2.5">${r.desc}</td>
-          <td class="p-2.5">${r.branch}</td>
-          <td class="p-2.5 font-extrabold">${formatMoney(r.amount)}</td>
-        </tr>
+    function renderAcc() {
+      document.getElementById('tbl-assets').innerHTML = db.assets.map(a => `
+        <tr><td class="p-2.5 font-bold">${a.name}</td><td class="p-2.5">${a.action}</td><td class="p-2.5 font-bold">${formatMoney(a.cost)}</td><td class="p-2.5 text-rose-400">${formatMoney(a.cost * (a.rate / 100))}</td></tr>
+      `).join('');
+      document.getElementById('tbl-expenses').innerHTML = db.expenses.map(x => `
+        <tr><td class="p-2.5 font-bold">${x.cat}</td><td class="p-2.5">${x.desc}</td><td class="p-2.5 font-bold text-rose-400">${formatMoney(x.amount)}</td></tr>
+      `).join('');
+      document.getElementById('tbl-revenues').innerHTML = db.revenues.map(r => `
+        <tr><td class="p-2.5 font-bold">${r.cat}</td><td class="p-2.5">${r.desc}</td><td class="p-2.5 font-bold text-emerald-400">${formatMoney(r.amount)}</td></tr>
+      `).join('');
+      document.getElementById('tbl-coa').innerHTML = db.coa.map(c => `
+        <tr><td class="p-2.5">${c.code}</td><td class="p-2.5 font-bold">${c.name}</td><td class="p-2.5">${c.type}</td><td class="p-2.5 font-bold">${formatMoney(c.balance)}</td></tr>
+      `).join('');
+      document.getElementById('tbl-journal').innerHTML = db.journal.map(j => `
+        <tr><td class="p-2.5">${j.id}</td><td class="p-2.5">${j.date}</td><td class="p-2.5 text-emerald-400">${j.debit}</td><td class="p-2.5 text-rose-400">${j.credit}</td><td class="p-2.5 font-bold">${formatMoney(j.amount)}</td></tr>
       `).join('');
     }
 
-    /* ================= الإعدادات والنسخ الاحتياطي وSQL ================= */
-    function populateSettingsForm() {
-      const s = db.settings;
-      document.getElementById('set-company-name').value = s.companyName;
-      document.getElementById('set-tax-id').value = s.taxId || '';
-      document.getElementById('set-currency').value = s.currency;
-      document.getElementById('set-tax-rate').value = s.taxRate;
-      document.getElementById('set-phone').value = s.phone || '';
-      document.getElementById('set-address').value = s.address || '';
-      document.getElementById('set-branches').value = s.branches.join(', ');
-      document.getElementById('set-admin-user').value = s.auth.username;
-      document.getElementById('set-admin-pass').value = s.auth.password;
+    function renderInv() {
+      document.getElementById('tbl-items').innerHTML = db.items.map(i => `
+        <tr><td class="p-2.5">${i.cat}</td><td class="p-2.5 font-bold">${i.name}</td><td class="p-2.5 font-bold text-emerald-400">${formatMoney(i.price)}</td></tr>
+      `).join('');
     }
 
-    function saveSystemSettings(e) {
-      e.preventDefault();
-      const branchesArr = document.getElementById('set-branches').value
-        .split(',')
-        .map(x => x.trim())
-        .filter(Boolean);
-
-      db.settings.companyName = document.getElementById('set-company-name').value.trim();
-      db.settings.taxId = document.getElementById('set-tax-id').value.trim();
-      db.settings.currency = document.getElementById('set-currency').value.trim() || 'ج.م';
-      db.settings.taxRate = Number(document.getElementById('set-tax-rate').value || 0);
-      db.settings.phone = document.getElementById('set-phone').value.trim();
-      db.settings.address = document.getElementById('set-address').value.trim();
-      if (branchesArr.length) {
-        db.settings.branches = branchesArr;
-        if (!branchesArr.includes(db.activeBranch)) db.activeBranch = branchesArr[0];
-      }
-      saveData();
-      renderAll();
-      alert('تم حفظ إعدادات النظام بنجاح.');
-    }
-
-    function updateAdminCredentials(e) {
-      e.preventDefault();
-      db.settings.auth.username = document.getElementById('set-admin-user').value.trim();
-      db.settings.auth.password = document.getElementById('set-admin-pass').value;
-      db.sessionUser = db.settings.auth.username;
-      saveData();
-      alert('تم تحديث بيانات تسجيل الدخول بنجاح.');
-    }
-
-    function handleLogoUpload(e) {
-      const file = e.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = function (ev) {
-        db.settings.logoDataUrl = ev.target.result;
-        saveData();
-        renderHeaderAndBranding();
-      };
-      reader.readAsDataURL(file);
-    }
-
-    function exportJSONBackup() {
-      const blob = new Blob([JSON.stringify(db, null, 2)], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `tantawe-erp-backup-${todayISO()}.json`;
-      a.click();
-      URL.revokeObjectURL(url);
-    }
-
-    function importJSONBackup(e) {
-      const file = e.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = function (ev) {
-        try {
-          const imported = JSON.parse(ev.target.result);
-          db = { ...structuredClone(DEFAULT_DATA), ...imported };
-          saveData();
-          renderAll();
-          populateSettingsForm();
-          alert('تمت استعادة النسخة الاحتياطية بنجاح.');
-        } catch {
-          alert('ملف JSON غير صالح.');
-        }
-      };
-      reader.readAsText(file);
-    }
-
-    function resetDemoData() {
-      if (!confirm('هل تريد إعادة ضبط البيانات إلى الحالة الافتراضية؟')) return;
-      const currentAuth = db.settings.auth;
-      db = structuredClone(DEFAULT_DATA);
-      db.settings.auth = currentAuth;
-      db.sessionUser = currentAuth.username;
-      saveData();
-      renderAll();
-      populateSettingsForm();
-    }
-
-    function exportSQLFile() {
-      const lines = [
-        '-- TANTAWE ERP SQL Export',
-        `-- Generated: ${new Date().toISOString()}`,
-        'CREATE TABLE IF NOT EXISTS transactions (id VARCHAR(30), tx_type VARCHAR(20), category VARCHAR(100), description TEXT, amount DECIMAL(12,2), tx_date DATE, branch VARCHAR(100));',
-        ...db.transactions.map(t =>
-          `INSERT INTO transactions VALUES ('${t.id}', '${t.type}', '${t.category.replace(/'/g, "''")}', '${t.desc.replace(/'/g, "''")}', ${Number(t.amount)}, '${t.date}', '${t.branch.replace(/'/g, "''")}');`
-        ),
-        'CREATE TABLE IF NOT EXISTS invoices (id VARCHAR(30), inv_type VARCHAR(20), party VARCHAR(150), item VARCHAR(150), qty INT, price DECIMAL(12,2), total DECIMAL(12,2), inv_date DATE);',
-        ...db.invoices.map(i =>
-          `INSERT INTO invoices VALUES ('${i.id}', '${i.type}', '${i.party.replace(/'/g, "''")}', '${i.item.replace(/'/g, "''")}', ${Number(i.qty)}, ${Number(i.price)}, ${Number(i.total)}, '${i.date}');`
-        )
-      ];
-      const blob = new Blob([lines.join('\n')], { type: 'text/sql;charset=utf-8' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `tantawe-erp-${todayISO()}.sql`;
-      a.click();
-      URL.revokeObjectURL(url);
-    }
-
-    /* ================= الطباعة والمستندات ================= */
-    function printCurrentView() {
-      window.print();
-    }
-
-    function openVoucherModal(htmlContent) {
-      document.getElementById('voucher-printable-content').innerHTML = `
-        <div class="border-b-2 border-slate-800 pb-3 flex justify-between items-start">
-          <div>
-            <div class="text-base font-extrabold">${db.settings.companyName}</div>
-            <div class="text-[11px] text-slate-600">${db.settings.address || ''} | ${db.settings.phone || ''}</div>
-          </div>
-          <div class="text-left text-[11px]">
-            <div>الرقم الضريبي: ${db.settings.taxId || '-'}</div>
-            <div>التاريخ: ${todayISO()}</div>
-          </div>
-        </div>
-        ${htmlContent}
-      `;
-      document.getElementById('print-voucher-modal').classList.remove('hidden');
-    }
-
-    function closeVoucherModal() {
-      document.getElementById('print-voucher-modal').classList.add('hidden');
-    }
-
-    function openTransactionVoucher(id) {
-      const t = db.transactions.find(x => x.id === id);
-      if (!t) return;
-      openVoucherModal(`
-        <div class="text-center font-extrabold text-sm py-1 bg-slate-100 rounded">
-          ${t.type === 'revenue' ? 'سند قبض / إيراد' : 'سند صرف / مصروف'} رقم (${t.id})
-        </div>
-        <div class="grid grid-cols-2 gap-2">
-          <div><strong>التاريخ:</strong> ${t.date}</div>
-          <div><strong>الفرع:</strong> ${t.branch}</div>
-          <div><strong>البند:</strong> ${t.category}</div>
-          <div><strong>طريقة الدفع:</strong> ${t.method}</div>
-        </div>
-        <div class="p-3 border rounded-xl"><strong>البيان:</strong> ${t.desc}</div>
-        <div class="text-left text-sm font-extrabold">المبلغ: ${formatMoney(t.amount)}</div>
-      `);
-    }
-
-    function openInvoiceVoucher(id) {
-      const inv = db.invoices.find(x => x.id === id);
-      if (!inv) return;
-      const subtotal = inv.qty * inv.price;
-      const taxAmount = inv.total - subtotal;
-      openVoucherModal(`
-        <div class="text-center font-extrabold text-sm py-1 bg-slate-100 rounded">
-          ${inv.type === 'sale' ? 'فاتورة مبيعات' : 'فاتورة مشتريات'} رقم (${inv.id})
-        </div>
-        <div class="grid grid-cols-2 gap-2">
-          <div><strong>العميل / المورد:</strong> ${inv.party}</div>
-          <div><strong>التاريخ:</strong> ${inv.date}</div>
-          <div><strong>الفرع:</strong> ${inv.branch}</div>
-        </div>
-        <table class="w-full border mt-2">
-          <thead>
-            <tr class="bg-slate-50">
-              <th class="p-2 border">الصنف</th>
-              <th class="p-2 border">الكمية</th>
-              <th class="p-2 border">السعر</th>
-              <th class="p-2 border">الإجمالي</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="p-2 border">${inv.item}</td>
-              <td class="p-2 border">${inv.qty}</td>
-              <td class="p-2 border">${formatMoney(inv.price)}</td>
-              <td class="p-2 border font-bold">${formatMoney(subtotal)}</td>
-            </tr>
-          </tbody>
-        </table>
-        <div class="space-y-1 text-left pt-2">
-          <div>الإجمالي الفرعي: <strong>${formatMoney(subtotal)}</strong></div>
-          <div>الضريبة (${inv.taxRate || 0}%): <strong>${formatMoney(taxAmount)}</strong></div>
-          <div class="text-sm font-extrabold">الصافي المستحق: ${formatMoney(inv.total)}</div>
-        </div>
-      `);
-    }
-
-    function openStockVoucher(id) {
-      const so = db.stockOrders.find(x => x.id === id);
-      if (!so) return;
-      openVoucherModal(`
-        <div class="text-center font-extrabold text-sm py-1 bg-slate-100 rounded">
-          ${so.type === 'in' ? 'إذن إضافة مخزني' : 'إذن صرف مخزني'} رقم (${so.id})
-        </div>
-        <div class="grid grid-cols-2 gap-2">
-          <div><strong>التاريخ:</strong> ${so.date}</div>
-          <div><strong>الفرع / المخزن:</strong> ${so.branch}</div>
-          <div><strong>الصنف:</strong> ${so.item}</div>
-          <div><strong>الكمية:</strong> ${so.qty}</div>
-        </div>
-        <div class="p-3 border rounded-xl"><strong>ملاحظات:</strong> ${so.notes || '-'}</div>
-      `);
-    }
-
-    function printVoucherList(section) {
-      if (section === 'expenses-revenues') {
-        const rowsHtml = db.transactions.map(t => `
-          <tr>
-            <td class="p-1.5 border">${t.id}</td>
-            <td class="p-1.5 border">${t.type === 'revenue' ? 'إيراد' : 'مصروف'}</td>
-            <td class="p-1.5 border">${t.category} - ${t.desc}</td>
-            <td class="p-1.5 border">${t.date}</td>
-            <td class="p-1.5 border font-bold">${formatMoney(t.amount)}</td>
-          </tr>
-        `).join('');
-        openVoucherModal(`
-          <div class="font-extrabold text-sm text-center">كشف المصروفات والإيرادات</div>
-          <table class="w-full border">
-            <thead>
-              <tr class="bg-slate-50">
-                <th class="p-1.5 border">السند</th>
-                <th class="p-1.5 border">النوع</th>
-                <th class="p-1.5 border">البيان</th>
-                <th class="p-1.5 border">التاريخ</th>
-                <th class="p-1.5 border">المبلغ</th>
-              </tr>
-            </thead>
-            <tbody>${rowsHtml}</tbody>
-          </table>
-        `);
-      }
+    function renderSales() {
+      document.getElementById('tbl-sales').innerHTML = db.sales.map(s => `
+        <tr><td class="p-2.5 font-bold">${s.id}</td><td class="p-2.5">${s.cust}</td><td class="p-2.5">${s.item}</td><td class="p-2.5 font-bold text-emerald-400">${formatMoney(s.amount)}</td></tr>
+      `).join('');
     }
 
     function renderAll() {
-      renderHeaderAndBranding();
+      const sel = document.getElementById('active-branch-select');
+      sel.innerHTML = db.branches.map(b => `<option value="${b}">${b}</option>`).join('');
+      sel.value = db.activeBranch;
       renderDashboard();
-      renderExpensesRevenues();
-      renderJournal();
-      renderCOA();
-      renderInvoices();
-      renderStockOrders();
-      renderAssets();
       renderHR();
-      renderReports();
-      populateSettingsForm();
+      renderAcc();
+      renderInv();
+      renderSales();
     }
 
-    // ضبط التواريخ الافتراضية وبدء التشغيل
-    ['tx-date', 'je-date', 'inv-date', 'so-date'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.value = todayISO();
-    });
-    initAuthView();
+    initAuth();
   </script>
 </body>
 </html>
