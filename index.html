@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TANTAWE ERP - نظام إدارة الأعمال المتكامل</title>
+  <title>TANTAWE ERP - نظام إدارة الأعمال والمتكامل</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/alasql@4"></script>
@@ -80,7 +80,6 @@
 </head>
 <body>
 
-  <!-- ================= شاشة تسجيل الدخول ================= -->
   <div id="login-screen" class="min-h-screen flex items-center justify-center p-4 bg-slate-900">
     <div class="w-full max-w-md erp-card overflow-hidden border-slate-800 bg-slate-950 text-white">
       <div class="p-8 text-center bg-blue-600">
@@ -110,10 +109,7 @@
     </div>
   </div>
 
-  <!-- ================= واجهة التطبيق الرئيسية ================= -->
   <div id="app-shell" class="hidden min-h-screen flex flex-col lg:flex-row">
-
-    <!-- القائمة الجانبية -->
     <aside class="no-print pioneer-sidebar w-full lg:w-72 flex-shrink-0 flex flex-col justify-between lg:sticky lg:top-0 lg:h-screen overflow-y-auto border-l border-slate-800">
       <div>
         <div class="p-5 border-b border-slate-800 flex items-center justify-between">
@@ -131,7 +127,6 @@
             <span class="flex items-center gap-2"><span>🏠</span> <span>الرئيسية (التحليل)</span></span>
           </button>
 
-          <!-- 1. المبيعات -->
           <div data-perm="sales">
             <button onclick="toggleMenu('m-sales')" class="sidebar-btn" data-mod="sales">
               <span class="flex items-center gap-2"><span>🛒</span> <span>المبيعات</span></span><span>▾</span>
@@ -145,7 +140,6 @@
             </div>
           </div>
 
-          <!-- 2. المشتريات -->
           <div data-perm="pur">
             <button onclick="toggleMenu('m-pur')" class="sidebar-btn" data-mod="pur">
               <span class="flex items-center gap-2"><span>🛍️</span> <span>المشتريات</span></span><span>▾</span>
@@ -159,7 +153,6 @@
             </div>
           </div>
 
-          <!-- 3. المخازن -->
           <div data-perm="inv">
             <button onclick="toggleMenu('m-inv')" class="sidebar-btn" data-mod="inv">
               <span class="flex items-center gap-2"><span>📦</span> <span>المخازن</span></span><span>▾</span>
@@ -175,7 +168,6 @@
             </div>
           </div>
 
-          <!-- 4. الحسابات والقوائم -->
           <div data-perm="acc">
             <button onclick="toggleMenu('m-acc')" class="sidebar-btn" data-mod="acc">
               <span class="flex items-center gap-2"><span>📊</span> <span>الحسابات والقوائم</span></span><span>▾</span>
@@ -198,7 +190,6 @@
             </div>
           </div>
 
-          <!-- 5. الموارد البشرية -->
           <div data-perm="hr">
             <button onclick="toggleMenu('m-hr')" class="sidebar-btn" data-mod="hr">
               <span class="flex items-center gap-2"><span>👥</span> <span>الموارد البشرية</span></span><span>▾</span>
@@ -212,7 +203,6 @@
             </div>
           </div>
 
-          <!-- 6. التقارير -->
           <div data-perm="rep">
             <button onclick="toggleMenu('m-rep')" class="sidebar-btn" data-mod="rep">
               <span class="flex items-center gap-2"><span>📑</span> <span>التقارير</span></span><span>▾</span>
@@ -229,7 +219,6 @@
             </div>
           </div>
 
-          <!-- 7. الإعدادات -->
           <div data-perm="sys">
             <button onclick="toggleMenu('m-sys')" class="sidebar-btn" data-mod="sys">
               <span class="flex items-center gap-2"><span>⚙️</span> <span>الإعدادات</span></span><span>▾</span>
@@ -242,7 +231,6 @@
               <button onclick="openTab('sys-backup')" class="sub-item-btn" data-tab="sys-backup">💾 النسخ الاحتياطي</button>
             </div>
           </div>
-
         </nav>
       </div>
 
@@ -253,14 +241,11 @@
       </div>
     </aside>
 
-    <!-- منطقة المحتوى الرئيسية -->
     <div class="flex-1 flex flex-col min-w-0">
-
-      <!-- الشريط العلوي بدون اسم مستخدم -->
       <header class="no-print top-bar-custom px-6 py-3 flex flex-wrap items-center justify-between gap-4 sticky top-0 z-30">
         <div>
           <h2 id="current-page-title" class="font-black text-base text-slate-900">الرئيسية (التحليل اليومي)</h2>
-          <div id="header-date" class="text-[11px] text-slate-500">الجمعة 20 نوفمبر 2026</div>
+          <div id="header-date" class="text-[11px] text-slate-500"></div>
         </div>
 
         <div class="flex items-center gap-3">
@@ -273,8 +258,6 @@
       </header>
 
       <main class="p-6 space-y-6 flex-1">
-
-        <!-- ================= الرئيسية ================= -->
         <section id="sec-dashboard" class="sec-view space-y-6">
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div class="erp-card p-5 text-white flex items-center justify-between shadow-md" style="background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);">
@@ -357,7 +340,6 @@
           </div>
         </section>
 
-        <!-- ================= 1. المبيعات ================= -->
         <section id="sec-sales-customers" class="sec-view hidden space-y-6">
           <div class="erp-card p-5 space-y-4">
             <h3 class="font-bold text-sm">إضافة عميل جديد</h3>
@@ -427,7 +409,6 @@
           </div>
         </section>
 
-        <!-- ================= 2. المشتريات ================= -->
         <section id="sec-pur-vendors" class="sec-view hidden space-y-6">
           <div class="erp-card p-5 space-y-4">
             <h3 class="font-bold text-sm">إضافة مورد</h3>
@@ -496,7 +477,6 @@
           </div>
         </section>
 
-        <!-- ================= 3. المخازن ================= -->
         <section id="sec-inv-cats" class="sec-view hidden space-y-6">
           <div class="erp-card p-5 space-y-4">
             <h3 class="font-bold text-sm">فئات الأصناف</h3>
@@ -582,7 +562,6 @@
           </div>
         </section>
 
-        <!-- ================= 4. الحسابات والقوائم والأصول ================= -->
         <section id="sec-fin-income" class="sec-view hidden space-y-6">
           <div class="erp-card p-6 space-y-4 max-w-3xl mx-auto text-xs">
             <h3 class="font-black text-base text-center border-b pb-3">قائمة الدخل (P&L)</h3>
@@ -630,14 +609,12 @@
         <section id="sec-acc-coa" class="sec-view hidden space-y-6"><div class="erp-card p-5 space-y-4"><h3 class="font-bold text-sm">شجرة الحسابات</h3><table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">الكود</th><th class="p-2 border">الحساب</th><th class="p-2 border">النوع</th></tr></thead><tbody id="tb-coa"></tbody></table></div></section>
         <section id="sec-acc-journal" class="sec-view hidden space-y-6"><div class="erp-card p-5 space-y-4"><h3 class="font-bold text-sm">القيود اليومية</h3><table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">القيد</th><th class="p-2 border">البيان</th><th class="p-2 border">المبلغ</th></tr></thead><tbody id="tb-je"></tbody></table></div></section>
 
-        <!-- ================= 5. الموارد البشرية ================= -->
         <section id="sec-hr-employees" class="sec-view hidden space-y-6"><div class="erp-card p-5 space-y-4"><h3 class="font-bold text-sm">سجل الموظفين</h3><form onsubmit="addEmployee(event)" class="grid grid-cols-1 md:grid-cols-4 gap-3"><input id="e-name" placeholder="اسم الموظف" required class="erp-input" /><input id="e-role" placeholder="الوظيفة" required class="erp-input" /><input type="number" id="e-sal" placeholder="الراتب" required class="erp-input font-bold" /><button class="btn-blue text-xs py-2">حفظ الموظف</button></form><table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">الاسم</th><th class="p-2 border">الوظيفة</th><th class="p-2 border">الراتب</th></tr></thead><tbody id="tb-emp"></tbody></table></div></section>
         <section id="sec-hr-penalties" class="sec-view hidden space-y-6"><div class="erp-card p-5 space-y-4"><h3 class="font-bold text-sm">العقوبات والجزاءات</h3><form onsubmit="addPenalty(event)" class="grid grid-cols-1 md:grid-cols-4 gap-3"><select class="erp-input sel-emp p-emp"></select><input placeholder="السبب" required class="erp-input p-reason" /><input type="number" placeholder="الخصم" required class="erp-input p-amt font-bold" /><button class="btn-blue text-xs py-2">تسجيل الجزاء</button></form><table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">الموظف</th><th class="p-2 border">السبب</th><th class="p-2 border">الخصم</th></tr></thead><tbody id="tb-pen"></tbody></table></div></section>
         <section id="sec-hr-bonuses" class="sec-view hidden space-y-6"><div class="erp-card p-5 space-y-4"><h3 class="font-bold text-sm">المكافآت والبدلات</h3><form onsubmit="addBonus(event)" class="grid grid-cols-1 md:grid-cols-4 gap-3"><select class="erp-input sel-emp b-emp"></select><input placeholder="السبب" required class="erp-input b-reason" /><input type="number" placeholder="المكافأة" required class="erp-input b-amt font-bold" /><button class="btn-blue text-xs py-2">إضافة مكافأة</button></form><table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">الموظف</th><th class="p-2 border">السبب</th><th class="p-2 border">المكافأة</th></tr></thead><tbody id="tb-bon"></tbody></table></div></section>
         <section id="sec-hr-attendance" class="sec-view hidden space-y-6"><div class="erp-card p-5 space-y-4"><h3 class="font-bold text-sm">الحضور والانصراف</h3><form onsubmit="addAttendance(event)" class="grid grid-cols-1 md:grid-cols-4 gap-3"><select class="erp-input sel-emp att-emp"></select><select class="erp-input att-st"><option>حاضر</option><option>متأخر</option><option>غائب</option></select><input type="date" required class="erp-input att-dt" /><button class="btn-blue text-xs py-2">تسجيل</button></form><table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">الموظف</th><th class="p-2 border">الحالة</th><th class="p-2 border">التاريخ</th></tr></thead><tbody id="tb-att"></tbody></table></div></section>
         <section id="sec-hr-advances" class="sec-view hidden space-y-6"><div class="erp-card p-5 space-y-4"><h3 class="font-bold text-sm">السلف والإجازات</h3><form onsubmit="addAdvance(event)" class="grid grid-cols-1 md:grid-cols-4 gap-3"><select class="erp-input sel-emp adv-emp"></select><input placeholder="النوع (سلفة / إجازة)" required class="erp-input adv-type" /><input type="number" placeholder="القيمة / الأيام" required class="erp-input adv-val font-bold" /><button class="btn-blue text-xs py-2">حفظ</button></form><table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">الموظف</th><th class="p-2 border">النوع</th><th class="p-2 border">القيمة / الأيام</th></tr></thead><tbody id="tb-adv"></tbody></table></div></section>
 
-        <!-- ================= 6. التقارير + SQL ================= -->
         <section id="sec-rep-cust" class="sec-view hidden space-y-4"><div class="erp-card p-5 space-y-3"><h3 class="font-bold text-sm">كشف حساب عميل</h3><select id="rcust-sel" onchange="renderReports()" class="erp-input sel-cust !max-w-xs"></select><div id="rep-cust-box" class="text-xs space-y-2"></div></div></section>
         <section id="sec-rep-vend" class="sec-view hidden space-y-4"><div class="erp-card p-5 space-y-3"><h3 class="font-bold text-sm">كشف حساب مورد</h3><select id="rvend-sel" onchange="renderReports()" class="erp-input sel-vnd !max-w-xs"></select><div id="rep-vend-box" class="text-xs space-y-2"></div></div></section>
         <section id="sec-rep-treasury" class="sec-view hidden space-y-4"><div class="erp-card p-5 space-y-3"><h3 class="font-bold text-sm">تقرير الخزينة</h3><div id="rep-tr-box" class="text-xs space-y-2"></div></div></section>
@@ -646,7 +623,6 @@
         <section id="sec-rep-rev" class="sec-view hidden space-y-4"><div class="erp-card p-5 space-y-3"><h3 class="font-bold text-sm">تقرير الإيرادات</h3><div id="rep-rev-box" class="text-xs space-y-2"></div></div></section>
         <section id="sec-rep-stock" class="sec-view hidden space-y-4"><div class="erp-card p-5 space-y-3"><h3 class="font-bold text-sm">تقرير المخزون والأرباح</h3><div id="rep-stk-box" class="text-xs space-y-2"></div></div></section>
 
-        <!-- التقارير الديناميكية SQL -->
         <section id="sec-rep-sql" class="sec-view hidden space-y-6">
           <div class="erp-card p-5 space-y-4">
             <div class="flex flex-wrap items-center justify-between gap-2">
@@ -675,13 +651,11 @@
           </div>
         </section>
 
-        <!-- ================= 7. الإعدادات والصلاحيات ================= -->
         <section id="sec-info-company" class="sec-view hidden space-y-4"><div class="erp-card p-5 space-y-3 max-w-lg"><h3 class="font-bold text-sm">بيانات الشركة</h3><input id="cmp-name" class="erp-input" placeholder="اسم الشركة" /><input id="cmp-tax" class="erp-input" placeholder="الرقم الضريبي" /><button onclick="saveCompany()" class="btn-blue text-xs px-4 py-2">حفظ البيانات</button></div></section>
         <section id="sec-info-branches" class="sec-view hidden space-y-4"><div class="erp-card p-5 space-y-4"><h3 class="font-bold text-sm">الفروع والمناطق والمناديب</h3><div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs"><div><div class="font-bold mb-1">الفروع</div><ul id="list-br" class="list-disc pr-4 space-y-1"></ul></div><div><div class="font-bold mb-1">المناطق</div><ul id="list-rg" class="list-disc pr-4 space-y-1"></ul></div><div><div class="font-bold mb-1">المناديب</div><ul id="list-ag" class="list-disc pr-4 space-y-1"></ul></div></div></div></section>
         <section id="sec-sys-groups" class="sec-view hidden space-y-4"><div class="erp-card p-5 space-y-4"><h3 class="font-bold text-sm">مجموعات الصلاحيات</h3><form onsubmit="addGroup(event)" class="space-y-3"><input id="grp-name" placeholder="اسم المجموعة (مثال: مبيعات، مخازن)" required class="erp-input !max-w-sm" /><div class="flex flex-wrap gap-4 text-xs"><label><input type="checkbox" class="grp-p" value="sales" checked /> المبيعات</label><label><input type="checkbox" class="grp-p" value="pur" checked /> المشتريات</label><label><input type="checkbox" class="grp-p" value="inv" checked /> المخازن</label><label><input type="checkbox" class="grp-p" value="acc" /> الحسابات</label><label><input type="checkbox" class="grp-p" value="hr" /> الموارد البشرية</label><label><input type="checkbox" class="grp-p" value="rep" checked /> التقارير</label><label><input type="checkbox" class="grp-p" value="sys" /> الإعدادات</label></div><button class="btn-blue text-xs px-4 py-2">إنشاء المجموعة</button></form><div id="list-groups" class="text-xs space-y-1"></div></div></section>
         <section id="sec-sys-users" class="sec-view hidden space-y-4"><div class="erp-card p-5 space-y-4"><h3 class="font-bold text-sm">إدارة المستخدمين</h3><form onsubmit="addUser(event)" class="grid grid-cols-1 md:grid-cols-4 gap-3"><input id="usr-name" placeholder="اسم المستخدم" required class="erp-input" /><input id="usr-pass" placeholder="كلمة المرور" required class="erp-input" /><select id="usr-grp" class="erp-input sel-grp"></select><button class="btn-blue text-xs py-2">إضافة مستخدم</button></form><table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">المستخدم</th><th class="p-2 border">المجموعة</th></tr></thead><tbody id="tb-users"></tbody></table></div></section>
         <section id="sec-sys-backup" class="sec-view hidden space-y-4"><div class="erp-card p-5 space-y-3"><h3 class="font-bold text-sm">النسخ الاحتياطي</h3><div class="flex gap-3"><button onclick="exportBackup()" class="btn-blue text-xs px-4 py-2">تصدير نسخة JSON</button><button onclick="resetSeed()" class="px-4 py-2 rounded-lg bg-rose-600 text-white font-bold text-xs">استعادة البيانات الافتراضية</button></div></div></section>
-
       </main>
 
       <footer class="no-print bg-white border-t border-slate-200 px-6 py-2.5 flex items-center justify-between text-xs text-slate-500">
@@ -691,7 +665,6 @@
     </div>
   </div>
 
-  <!-- نافذة الطباعة -->
   <div id="print-modal" class="hidden fixed inset-0 bg-slate-900/60 z-50 flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl max-w-sm w-full p-6 space-y-4 shadow-2xl text-center">
       <div class="text-3xl">🖨️</div>
@@ -705,7 +678,7 @@
   </div>
 
   <script>
-    const DB_KEY = 'tantawe_erp_v5_complete';
+    const DB_KEY = 'tantawe_erp_v6_fixed';
 
     const SEED = {
       sessionUser: null,
@@ -805,17 +778,416 @@
         return structuredClone(SEED);
       }
     }
-    function saveDb() { localStorage.setItem(DB_KEY, JSON.stringify(db)); }
+    function saveDb() {
+      try { localStorage.setItem(DB_KEY, JSON.stringify(db)); } catch {}
+    }
     function money(n) { return Number(n || 0).toLocaleString('en-US', { minimumFractionDigits: 2 }) + ' ج.م'; }
-    function askPrint() { document.getElementById('print-modal').classList.remove('hidden'); }
+    function askPrint() { document.getElementById('print-modal')?.classList.remove('hidden'); }
+    function setText(id, val) { const el = document.getElementById(id); if (el) el.textContent = val; }
+    function setHtml(id, val) { const el = document.getElementById(id); if (el) el.innerHTML = val; }
 
     function quickAdminLogin() {
       document.getElementById('login-user').value = 'admin';
       document.getElementById('login-pass').value = '1234';
+      document.getElementById('login-error')?.classList.add('hidden');
     }
 
-    document.getElementById('login-form').addEventListener('submit', (e) => {
+    document.addEventListener('DOMContentLoaded', () => {
+      const form = document.getElementById('login-form');
+      if (form) {
+        form.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const u = (document.getElementById('login-user').value || '').trim();
+          const p = document.getElementById('login-pass').value || '';
+          const found = db.users.find(x => x.username === u && x.password === p);
+          if (found) {
+            db.sessionUser = found.username;
+            saveDb();
+            initApp();
+          } else {
+            document.getElementById('login-error')?.classList.remove('hidden');
+          }
+        });
+      }
+      initApp();
+    });
+
+    function logout() { db.sessionUser = null; saveDb(); initApp(); }
+
+    function getUserPerms() {
+      const u = db.users.find(x => x.username === db.sessionUser);
+      if (!u) return ['sales','pur','inv','acc','hr','rep','sys'];
+      const grp = db.groups.find(g => g.name === u.group);
+      return grp ? grp.perms : ['sales','pur','inv','acc','hr','rep','sys'];
+    }
+
+    function initApp() {
+      const loginEl = document.getElementById('login-screen');
+      const shellEl = document.getElementById('app-shell');
+      if (!db.sessionUser) {
+        shellEl?.classList.add('hidden');
+        loginEl?.classList.remove('hidden');
+        return;
+      }
+      loginEl?.classList.add('hidden');
+      shellEl?.classList.remove('hidden');
+
+      const u = db.users.find(x => x.username === db.sessionUser);
+      setText('active-group-badge', u ? u.group : 'مدير عام');
+      setText('header-date', new Date().toLocaleDateString('ar-EG', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }));
+
+      const perms = getUserPerms();
+      document.querySelectorAll('[data-perm]').forEach(el => {
+        el.classList.toggle('hidden', !perms.includes(el.getAttribute('data-perm')));
+      });
+
+      bindSelects();
+      refreshAll();
+    }
+
+    function toggleMenu(id) { document.getElementById(id)?.classList.toggle('hidden'); }
+
+    function openTab(tabId) {
+      document.querySelectorAll('.sec-view').forEach(s => s.classList.add('hidden'));
+      document.getElementById(`sec-${tabId}`)?.classList.remove('hidden');
+
+      document.querySelectorAll('.sub-item-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tabId));
+      const activeBtn = document.querySelector(`.sub-item-btn[data-tab="${tabId}"]`);
+      setText('current-page-title', activeBtn ? activeBtn.textContent.trim() : 'الرئيسية (التحليل اليومي)');
+
+      renderReports();
+      renderFinancials();
+    }
+
+    function switchBranch(b) { db.activeBranch = b; saveDb(); }
+
+    function bindSelects() {
+      document.querySelectorAll('.sel-cust').forEach(s => s.innerHTML = db.customers.map(c => `<option value="${c.name}">${c.name}</option>`).join(''));
+      document.querySelectorAll('.sel-vnd').forEach(s => s.innerHTML = db.vendors.map(v => `<option value="${v.name}">${v.name}</option>`).join(''));
+      document.querySelectorAll('.sel-cat').forEach(s => s.innerHTML = db.categories.map(c => `<option value="${c}">${c}</option>`).join(''));
+      document.querySelectorAll('.sel-item').forEach(s => s.innerHTML = db.items.map(i => `<option value="${i.name}">${i.name} (متاح: ${i.qty})</option>`).join(''));
+      document.querySelectorAll('.sel-chan').forEach(s => s.innerHTML = db.channels.map(c => `<option value="${c.name}">${c.name} (${c.type})</option>`).join(''));
+      document.querySelectorAll('.sel-asset').forEach(s => s.innerHTML = db.assets.map(a => `<option value="${a.name}">${a.name}</option>`).join(''));
+      document.querySelectorAll('.sel-emp').forEach(s => s.innerHTML = db.employees.map(e => `<option value="${e.name}">${e.name}</option>`).join(''));
+      document.querySelectorAll('.sel-grp').forEach(s => s.innerHTML = db.groups.map(g => `<option value="${g.name}">${g.name}</option>`).join(''));
+
+      const brSel = document.getElementById('branch-selector');
+      if (brSel) {
+        brSel.innerHTML = db.branches.map(b => `<option value="${b}">${b}</option>`).join('');
+        brSel.value = db.activeBranch;
+      }
+
+      syncPriceFromItem('sinv-item','sinv-price','sinv-qty','sinv-total');
+      syncPriceFromItem('so-item','so-price','so-qty','so-total');
+      syncPriceFromItem('pinv-item','pinv-price','pinv-qty','pinv-total');
+      syncPriceFromItem('po-item','po-price','po-qty','po-total');
+    }
+
+    function syncPriceFromItem(itemSelId, priceId, qtyId, totalId) {
+      const itm = db.items.find(i => i.name === document.getElementById(itemSelId)?.value);
+      if (itm && document.getElementById(priceId)) {
+        document.getElementById(priceId).value = itm.price;
+        calcLine(qtyId, priceId, totalId);
+      }
+    }
+
+    function calcLine(qtyId, priceId, totalId) {
+      const q = Number(document.getElementById(qtyId)?.value || 0);
+      const p = Number(document.getElementById(priceId)?.value || 0);
+      if (document.getElementById(totalId)) document.getElementById(totalId).value = q * p;
+    }
+
+    function adjustChannel(name, delta) {
+      const ch = db.channels.find(c => c.name === name);
+      if (ch) ch.balance = Number(ch.balance || 0) + Number(delta || 0);
+    }
+
+    function adjustStock(name, delta) {
+      const itm = db.items.find(i => i.name === name);
+      if (itm) itm.qty = Number(itm.qty || 0) + Number(delta || 0);
+    }
+
+    function addCustomer(e) { e.preventDefault(); db.customers.push({ name: document.getElementById('cust-name').value, phone: document.getElementById('cust-phone').value, area: document.getElementById('cust-area').value }); saveDb(); e.target.reset(); bindSelects(); refreshAll(); }
+    function addVendor(e) { e.preventDefault(); db.vendors.push({ name: document.getElementById('vnd-name').value, phone: document.getElementById('vnd-phone').value }); saveDb(); e.target.reset(); bindSelects(); refreshAll(); }
+    function addCategory(e) { e.preventDefault(); db.categories.push(document.getElementById('cat-name').value); saveDb(); e.target.reset(); bindSelects(); refreshAll(); }
+    function addItem(e) { e.preventDefault(); db.items.push({ code: document.getElementById('itm-code').value, name: document.getElementById('itm-name').value, cat: document.getElementById('itm-cat').value, price: Number(document.getElementById('itm-price').value), qty: Number(document.getElementById('itm-qty').value) }); saveDb(); e.target.reset(); bindSelects(); refreshAll(); }
+
+    function addSalesOrder(e) {
       e.preventDefault();
-      const u = document.getElementById('login-user').value.trim();
-      const p = document.getElementById('login-pass').value;
-      const found = db.users.find(x => x.username === u
+      const qty = Number(document.getElementById('so-qty').value);
+      const price = Number(document.getElementById('so-price').value);
+      db.salesOrders.push({ id: 'SO-' + (101 + db.salesOrders.length), cust: document.getElementById('so-cust').value, item: document.getElementById('so-item').value, qty, total: qty * price });
+      saveDb(); e.target.reset(); bindSelects(); refreshAll(); askPrint();
+    }
+
+    function addSaleInvoice(e) {
+      e.preventDefault();
+      const item = document.getElementById('sinv-item').value;
+      const qty = Number(document.getElementById('sinv-qty').value);
+      const price = Number(document.getElementById('sinv-price').value);
+      adjustStock(item, -qty);
+      db.salesInvoices.push({ id: (1005 + db.salesInvoices.length).toString(), cust: document.getElementById('sinv-cust').value, item, qty, price, total: qty * price, time: new Date().toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' }) });
+      saveDb(); e.target.reset(); bindSelects(); refreshAll(); askPrint();
+    }
+
+    function addSalesReturn(e) {
+      e.preventDefault();
+      const item = document.getElementById('sr-item').value;
+      const qty = Number(document.getElementById('sr-qty').value);
+      adjustStock(item, qty);
+      db.salesReturns.push({ cust: document.getElementById('sr-cust').value, item, qty });
+      saveDb(); e.target.reset(); bindSelects(); refreshAll(); askPrint();
+    }
+
+    function addPurOrder(e) {
+      e.preventDefault();
+      const qty = Number(document.getElementById('po-qty').value);
+      const price = Number(document.getElementById('po-price').value);
+      db.purOrders.push({ id: 'PO-' + (201 + db.purOrders.length), vnd: document.getElementById('po-vnd').value, item: document.getElementById('po-item').value, qty, total: qty * price });
+      saveDb(); e.target.reset(); bindSelects(); refreshAll(); askPrint();
+    }
+
+    function addPurInvoice(e) {
+      e.preventDefault();
+      const item = document.getElementById('pinv-item').value;
+      const qty = Number(document.getElementById('pinv-qty').value);
+      const price = Number(document.getElementById('pinv-price').value);
+      adjustStock(item, qty);
+      db.purInvoices.push({ id: (2008 + db.purInvoices.length).toString(), vnd: document.getElementById('pinv-vnd').value, item, qty, price, total: qty * price, time: new Date().toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' }) });
+      saveDb(); e.target.reset(); bindSelects(); refreshAll(); askPrint();
+    }
+
+    function addPurReturn(e) {
+      e.preventDefault();
+      const item = document.getElementById('pr-item').value;
+      const qty = Number(document.getElementById('pr-qty').value);
+      adjustStock(item, -qty);
+      db.purReturns.push({ vnd: document.getElementById('pr-vnd').value, item, qty });
+      saveDb(); e.target.reset(); bindSelects(); refreshAll(); askPrint();
+    }
+
+    function addVoucher(e, type, sign) {
+      e.preventDefault();
+      const party = e.target.querySelector('.v-party').value;
+      const chan = e.target.querySelector('.v-chan').value;
+      const amount = Number(e.target.querySelector('.v-amt').value);
+      adjustChannel(chan, sign * amount);
+      db.vouchers.push({ type, party, chan, amount });
+      saveDb(); e.target.reset(); bindSelects(); refreshAll(); askPrint();
+    }
+
+    function addStockDoc(e, type, sign) {
+      e.preventDefault();
+      const item = e.target.querySelector('.doc-item').value;
+      const qty = Number(e.target.querySelector('.doc-qty').value);
+      const note = e.target.querySelector('.doc-note').value;
+      adjustStock(item, sign * qty);
+      db.stockDocs.push({ type, item, qty, note, time: new Date().toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' }) });
+      saveDb(); e.target.reset(); bindSelects(); refreshAll(); askPrint();
+    }
+
+    function addAssetOp(e, opType) {
+      e.preventDefault();
+      if (opType === 'إضافة أصل') db.assets.push({ name: document.getElementById('aadd-name').value, type: opType, value: Number(document.getElementById('aadd-val').value), note: 'إهلاك ' + (document.getElementById('aadd-rate').value || 10) + '%' });
+      else if (opType === 'شراء أصل') { const v = Number(document.getElementById('abuy-val').value); const ch = document.getElementById('abuy-chan').value; adjustChannel(ch, -v); db.assets.push({ name: document.getElementById('abuy-name').value, type: opType, value: v, note: ch }); }
+      else if (opType === 'إهلاك أصل') db.assets.push({ name: document.getElementById('adep-name').value, type: opType, value: Number(document.getElementById('adep-val').value), note: 'إهلاك مسجل' });
+      else if (opType === 'بيع أصل') { const v = Number(document.getElementById('asell-val').value); const ch = document.getElementById('asell-chan').value; adjustChannel(ch, v); db.assets.push({ name: document.getElementById('asell-name').value, type: opType, value: v, note: ch }); }
+      else if (opType === 'تخريد أصل') db.assets.push({ name: document.getElementById('ascrap-name').value, type: opType, value: 0, note: document.getElementById('ascrap-reason').value });
+      saveDb(); e.target.reset(); bindSelects(); refreshAll();
+    }
+
+    function addExpense(e) { e.preventDefault(); const amt = Number(document.getElementById('exp-amt').value); const ch = document.getElementById('exp-chan').value; adjustChannel(ch, -amt); db.expenses.push({ cat: document.getElementById('exp-cat').value, desc: document.getElementById('exp-desc').value, chan: ch, amount: amt }); saveDb(); e.target.reset(); bindSelects(); refreshAll(); }
+    function addRevenue(e) { e.preventDefault(); const amt = Number(document.getElementById('rev-amt').value); const ch = document.getElementById('rev-chan').value; adjustChannel(ch, amt); db.revenues.push({ cat: document.getElementById('rev-cat').value, desc: document.getElementById('rev-desc').value, chan: ch, amount: amt }); saveDb(); e.target.reset(); bindSelects(); refreshAll(); }
+    function addChannel(e, type, nId, bId) { e.preventDefault(); db.channels.push({ name: document.getElementById(nId).value, type, balance: Number(document.getElementById(bId).value) }); saveDb(); e.target.reset(); bindSelects(); refreshAll(); }
+
+    function addEmployee(e) { e.preventDefault(); db.employees.push({ name: document.getElementById('e-name').value, role: document.getElementById('e-role').value, salary: Number(document.getElementById('e-sal').value) }); saveDb(); e.target.reset(); bindSelects(); refreshAll(); }
+    function addPenalty(e) { e.preventDefault(); db.penalties.push({ emp: e.target.querySelector('.p-emp').value, reason: e.target.querySelector('.p-reason').value, amount: Number(e.target.querySelector('.p-amt').value) }); saveDb(); e.target.reset(); refreshAll(); }
+    function addBonus(e) { e.preventDefault(); db.bonuses.push({ emp: e.target.querySelector('.b-emp').value, reason: e.target.querySelector('.b-reason').value, amount: Number(e.target.querySelector('.b-amt').value) }); saveDb(); e.target.reset(); refreshAll(); }
+    function addAttendance(e) { e.preventDefault(); db.attendance.push({ emp: e.target.querySelector('.att-emp').value, status: e.target.querySelector('.att-st').value, date: e.target.querySelector('.att-dt').value }); saveDb(); e.target.reset(); refreshAll(); }
+    function addAdvance(e) { e.preventDefault(); db.advances.push({ emp: e.target.querySelector('.adv-emp').value, type: e.target.querySelector('.adv-type').value, val: Number(e.target.querySelector('.adv-val').value) }); saveDb(); e.target.reset(); refreshAll(); }
+
+    function saveCompany() { db.company.name = document.getElementById('cmp-name').value || 'TANTAWE ERP'; db.company.tax = document.getElementById('cmp-tax').value; saveDb(); refreshAll(); }
+    function addGroup(e) { e.preventDefault(); const perms = [...document.querySelectorAll('.grp-p:checked')].map(c => c.value); db.groups.push({ name: document.getElementById('grp-name').value.trim(), perms }); saveDb(); e.target.reset(); bindSelects(); refreshAll(); }
+    function addUser(e) { e.preventDefault(); db.users.push({ username: document.getElementById('usr-name').value.trim(), password: document.getElementById('usr-pass').value, group: document.getElementById('usr-grp').value }); saveDb(); e.target.reset(); refreshAll(); }
+    function exportBackup() { const b = new Blob([JSON.stringify(db, null, 2)], { type: 'application/json' }); const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = 'tantawe-erp-backup.json'; a.click(); }
+    function resetSeed() { localStorage.removeItem(DB_KEY); db = structuredClone(SEED); db.sessionUser = 'admin'; saveDb(); initApp(); }
+
+    function presetSql(q) { const inp = document.getElementById('sql-query-input'); if (inp) inp.value = q; runSqlReport(); }
+
+    function saveSqlReport() {
+      const title = (document.getElementById('sql-rep-title')?.value || '').trim() || ('تقرير SQL #' + (db.savedSqlReports.length + 1));
+      const sql = (document.getElementById('sql-query-input')?.value || '').trim();
+      if (!sql) return;
+      db.savedSqlReports.push({ title, sql });
+      saveDb();
+      renderSavedSqlButtons();
+    }
+
+    function renderSavedSqlButtons() {
+      setHtml('sql-saved-list', db.savedSqlReports.map(r => `
+        <button type="button" onclick="presetSql(${JSON.stringify(r.sql)})" class="px-3 py-1.5 rounded-lg bg-slate-900 text-white font-bold">
+          📌 ${r.title}
+        </button>
+      `).join(''));
+    }
+
+    function runSqlReport() {
+      const q = (document.getElementById('sql-query-input')?.value || '').trim();
+      const box = document.getElementById('sql-result-box');
+      if (!box) return;
+      try {
+        if (typeof alasql !== 'undefined') {
+          alasql.tables.salesInvoices = { data: db.salesInvoices };
+          alasql.tables.purInvoices = { data: db.purInvoices };
+          alasql.tables.items = { data: db.items };
+          alasql.tables.customers = { data: db.customers };
+          alasql.tables.vendors = { data: db.vendors };
+          alasql.tables.channels = { data: db.channels };
+          alasql.tables.expenses = { data: db.expenses };
+          alasql.tables.revenues = { data: db.revenues };
+          alasql.tables.employees = { data: db.employees };
+
+          const res = alasql(q);
+          if (!Array.isArray(res) || res.length === 0) {
+            box.innerHTML = '<div class="p-3 bg-slate-50 border rounded-lg text-slate-500">لا توجد نتائج مطابقة للاستعلام</div>';
+            return;
+          }
+          const cols = Object.keys(res[0]);
+          box.innerHTML = `
+            <table class="w-full text-right border">
+              <thead class="bg-slate-100"><tr>${cols.map(c => `<th class="p-2 border">${c}</th>`).join('')}</tr></thead>
+              <tbody>${res.map(row => `<tr>${cols.map(c => `<td class="p-2 border">${row[c]}</td>`).join('')}</tr>`).join('')}</tbody>
+            </table>
+          `;
+        }
+      } catch (err) {
+        box.innerHTML = `<div class="p-3 bg-rose-50 text-rose-700 border border-rose-200 rounded-lg font-bold">خطأ في صياغة SQL: ${err.message}</div>`;
+      }
+    }
+
+    function renderReports() {
+      const c = document.getElementById('rcust-sel')?.value;
+      const cRows = db.salesInvoices.filter(d => d.cust === c);
+      setHtml('rep-cust-box', cRows.length ? cRows.map(r => `<div class="p-2.5 border rounded-lg flex justify-between"><span>فاتورة #${r.id} - ${r.item} (كمية: ${r.qty})</span><b>${money(r.total)}</b></div>`).join('') : '<div class="text-slate-400">لا توجد فواتير مسجلة لهذا العميل</div>');
+
+      const v = document.getElementById('rvend-sel')?.value;
+      const vRows = db.purInvoices.filter(d => d.vnd === v);
+      setHtml('rep-vend-box', vRows.length ? vRows.map(r => `<div class="p-2.5 border rounded-lg flex justify-between"><span>فاتورة #${r.id} - ${r.item} (كمية: ${r.qty})</span><b>${money(r.total)}</b></div>`).join('') : '<div class="text-slate-400">لا توجد فواتير مسجلة لهذا المورد</div>');
+
+      setHtml('rep-tr-box', db.channels.filter(x => x.type === 'خزينة').map(x => `<div class="p-2.5 border rounded-lg flex justify-between"><span>${x.name}</span><b>${money(x.balance)}</b></div>`).join(''));
+      setHtml('rep-bk-box', db.channels.filter(x => x.type !== 'خزينة').map(x => `<div class="p-2.5 border rounded-lg flex justify-between"><span>${x.name} (${x.type})</span><b>${money(x.balance)}</b></div>`).join(''));
+      setHtml('rep-exp-box', db.expenses.map(x => `<div class="p-2.5 border rounded-lg flex justify-between"><span>${x.cat} - ${x.desc} (${x.chan})</span><b>${money(x.amount)}</b></div>`).join(''));
+      setHtml('rep-rev-box', db.revenues.map(r => `<div class="p-2.5 border rounded-lg flex justify-between"><span>${r.cat} - ${r.desc} (${r.chan})</span><b>${money(r.amount)}</b></div>`).join(''));
+      setHtml('rep-stk-box', db.items.map(i => `<div class="p-2.5 border rounded-lg flex justify-between"><span>${i.code} - ${i.name} (كمية: ${i.qty})</span><b>قيمة: ${money(i.qty * i.price)}</b></div>`).join(''));
+
+      renderSavedSqlButtons();
+    }
+
+    function renderFinancials() {
+      const salesSum = db.salesInvoices.reduce((s, x) => s + Number(x.total || 0), 0);
+      const revSum = db.revenues.reduce((s, x) => s + Number(x.amount || 0), 0);
+      const purSum = db.purInvoices.reduce((s, x) => s + Number(x.total || 0), 0);
+      const expSum = db.expenses.reduce((s, x) => s + Number(x.amount || 0), 0);
+      const net = (salesSum + revSum) - (purSum + expSum);
+
+      setText('pl-rev', money(salesSum + revSum));
+      setText('pl-cost', money(purSum));
+      setText('pl-exp', money(expSum));
+      setText('pl-net', money(net));
+
+      const fixed = db.assets.reduce((s, a) => s + Number(a.value || 0), 0);
+      const cash = db.channels.reduce((s, c) => s + Number(c.balance || 0), 0);
+      const stock = db.items.reduce((s, i) => s + (Number(i.qty || 0) * Number(i.price || 0)), 0);
+      const totAssets = fixed + cash + stock;
+
+      setText('bs-fixed', money(fixed));
+      setText('bs-cash', money(cash));
+      setText('bs-stock', money(stock));
+      setText('bs-tot-a', money(totAssets));
+      setText('bs-cap', money(totAssets - net));
+      setText('bs-prof', money(net));
+      setText('bs-tot-l', money(totAssets));
+    }
+
+    let chartInstance = null;
+    function refreshAll() {
+      setText('lbl-company', db.company.name);
+      const cmpN = document.getElementById('cmp-name');
+      const cmpT = document.getElementById('cmp-tax');
+      if (cmpN) cmpN.value = db.company.name;
+      if (cmpT) cmpT.value = db.company.tax || '';
+
+      const salesSum = db.salesInvoices.reduce((s, x) => s + Number(x.total || 0), 0);
+      const purSum = db.purInvoices.reduce((s, x) => s + Number(x.total || 0), 0);
+      const stockVal = db.items.reduce((s, i) => s + (Number(i.qty || 0) * Number(i.price || 0)), 0);
+
+      setText('card-sales-val', Number(salesSum).toLocaleString());
+      setText('card-pur-val', Number(purSum).toLocaleString());
+      setText('card-stock-val', Number(stockVal).toLocaleString());
+      setText('card-cust-val', db.customers.length);
+
+      setHtml('recent-activities-list', db.salesInvoices.slice(-3).reverse().map(s => `
+        <div class="flex items-center justify-between p-2.5 rounded-xl bg-blue-50 border border-blue-100">
+          <span class="font-bold">فاتورة بيع #${s.id} (${s.item} × ${s.qty})</span>
+          <span class="text-blue-600 font-bold">${s.time || ''}</span>
+        </div>
+      `).join(''));
+
+      const canvas = document.getElementById('salesMonthChart');
+      if (canvas && typeof Chart !== 'undefined') {
+        const ctx = canvas.getContext('2d');
+        if (chartInstance) chartInstance.destroy();
+        chartInstance = new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: ['الأسبوع الأول', 'الأسبوع الثاني', 'الأسبوع الثالث', 'الأسبوع الرابع'],
+            datasets: [{ label: 'المبيعات', data: [80000, 95000, 120000, salesSum || 110000], backgroundColor: '#2563eb', borderRadius: 8 }]
+          },
+          options: { responsive: true, maintainAspectRatio: false }
+        });
+      }
+
+      setHtml('tb-cust', db.customers.map(c => `<tr><td class="p-2 border font-bold">${c.name}</td><td class="p-2 border">${c.phone}</td><td class="p-2 border">${c.area || ''}</td></tr>`).join(''));
+      setHtml('tb-so', db.salesOrders.map(o => `<tr><td class="p-2 border font-bold">${o.id}</td><td class="p-2 border">${o.cust}</td><td class="p-2 border">${o.item}</td><td class="p-2 border">${o.qty}</td><td class="p-2 border font-bold text-blue-600">${money(o.total)}</td></tr>`).join(''));
+      setHtml('tb-sales', db.salesInvoices.map(s => `<tr><td class="p-2 border font-bold">#${s.id}</td><td class="p-2 border">${s.cust}</td><td class="p-2 border">${s.item}</td><td class="p-2 border">${s.qty}</td><td class="p-2 border">${money(s.price)}</td><td class="p-2 border font-bold text-blue-600">${money(s.total)}</td></tr>`).join(''));
+      setHtml('tb-sr', db.salesReturns.map(r => `<tr><td class="p-2 border">${r.cust}</td><td class="p-2 border">${r.item}</td><td class="p-2 border font-bold">${r.qty}</td></tr>`).join(''));
+      setHtml('tb-rcpt', db.vouchers.filter(v => v.type === 'سند قبض').map(v => `<tr><td class="p-2 border">${v.type}</td><td class="p-2 border font-bold">${v.party}</td><td class="p-2 border">${v.chan}</td><td class="p-2 border font-bold text-blue-600">${money(v.amount)}</td></tr>`).join(''));
+
+      setHtml('tb-vnd', db.vendors.map(v => `<tr><td class="p-2 border font-bold">${v.name}</td><td class="p-2 border">${v.phone}</td></tr>`).join(''));
+      setHtml('tb-po', db.purOrders.map(o => `<tr><td class="p-2 border font-bold">${o.id}</td><td class="p-2 border">${o.vnd}</td><td class="p-2 border">${o.item}</td><td class="p-2 border">${o.qty}</td><td class="p-2 border font-bold text-blue-600">${money(o.total)}</td></tr>`).join(''));
+      setHtml('tb-pur', db.purInvoices.map(p => `<tr><td class="p-2 border font-bold">#${p.id}</td><td class="p-2 border">${p.vnd}</td><td class="p-2 border">${p.item}</td><td class="p-2 border">${p.qty}</td><td class="p-2 border">${money(p.price)}</td><td class="p-2 border font-bold text-slate-800">${money(p.total)}</td></tr>`).join(''));
+      setHtml('tb-pr', db.purReturns.map(r => `<tr><td class="p-2 border">${r.vnd}</td><td class="p-2 border">${r.item}</td><td class="p-2 border font-bold">${r.qty}</td></tr>`).join(''));
+      setHtml('tb-pmt', db.vouchers.filter(v => v.type === 'سند صرف').map(v => `<tr><td class="p-2 border">${v.type}</td><td class="p-2 border font-bold">${v.party}</td><td class="p-2 border">${v.chan}</td><td class="p-2 border font-bold text-rose-600">${money(v.amount)}</td></tr>`).join(''));
+
+      setHtml('list-cats', db.categories.map(c => `<li>${c}</li>`).join(''));
+      setHtml('tb-itm', db.items.map(i => `<tr><td class="p-2 border font-bold">${i.code}</td><td class="p-2 border">${i.name}</td><td class="p-2 border">${i.cat}</td><td class="p-2 border">${money(i.price)}</td><td class="p-2 border font-bold text-blue-600">${i.qty}</td></tr>`).join(''));
+      document.querySelectorAll('.tb-stock-docs').forEach(tb => tb.innerHTML = db.stockDocs.map(d => `<tr><td class="p-2 border font-bold">${d.type}</td><td class="p-2 border">${d.item}</td><td class="p-2 border">${d.qty}</td><td class="p-2 border">${d.note || ''}</td></tr>`).join(''));
+      setHtml('tb-stocktake', db.items.map(i => `<tr><td class="p-2 border font-bold">${i.code}</td><td class="p-2 border">${i.name}</td><td class="p-2 border font-bold">${i.qty}</td><td class="p-2 border text-blue-600 font-bold">${money(i.qty * i.price)}</td></tr>`).join(''));
+
+      document.querySelectorAll('.tb-assets').forEach(tb => tb.innerHTML = db.assets.map(a => `<tr><td class="p-2 border font-bold">${a.name}</td><td class="p-2 border">${a.type}</td><td class="p-2 border">${money(a.value)}</td><td class="p-2 border">${a.note || ''}</td></tr>`).join(''));
+      setHtml('tb-exp', db.expenses.map(x => `<tr><td class="p-2 border font-bold">${x.cat}</td><td class="p-2 border">${x.desc}</td><td class="p-2 border">${x.chan}</td><td class="p-2 border text-rose-600 font-bold">${money(x.amount)}</td></tr>`).join(''));
+      setHtml('tb-rev', db.revenues.map(r => `<tr><td class="p-2 border font-bold">${r.cat}</td><td class="p-2 border">${r.desc}</td><td class="p-2 border">${r.chan}</td><td class="p-2 border text-blue-600 font-bold">${money(r.amount)}</td></tr>`).join(''));
+      setHtml('tb-tr', db.channels.filter(c => c.type === 'خزينة').map(c => `<tr><td class="p-2 border font-bold">${c.name}</td><td class="p-2 border font-bold">${money(c.balance)}</td></tr>`).join(''));
+      setHtml('tb-bk', db.channels.filter(c => c.type === 'بنك').map(c => `<tr><td class="p-2 border font-bold">${c.name}</td><td class="p-2 border font-bold">${money(c.balance)}</td></tr>`).join(''));
+      setHtml('tb-vs', db.channels.filter(c => c.type === 'فيزا').map(c => `<tr><td class="p-2 border font-bold">${c.name}</td><td class="p-2 border font-bold">${money(c.balance)}</td></tr>`).join(''));
+      setHtml('tb-coa', db.coa.map(c => `<tr><td class="p-2 border font-bold">${c.code}</td><td class="p-2 border">${c.name}</td><td class="p-2 border">${c.type}</td></tr>`).join(''));
+      setHtml('tb-je', db.salesInvoices.map(s => `<tr><td class="p-2 border font-bold">JE-${s.id}</td><td class="p-2 border">قيد فاتورة مبيعات #${s.id} (${s.cust})</td><td class="p-2 border font-bold">${money(s.total)}</td></tr>`).join(''));
+
+      setHtml('tb-emp', db.employees.map(e => `<tr><td class="p-2 border font-bold">${e.name}</td><td class="p-2 border">${e.role}</td><td class="p-2 border font-bold">${money(e.salary)}</td></tr>`).join(''));
+      setHtml('tb-pen', db.penalties.map(p => `<tr><td class="p-2 border font-bold">${p.emp}</td><td class="p-2 border">${p.reason}</td><td class="p-2 border text-rose-600 font-bold">${money(p.amount)}</td></tr>`).join(''));
+      setHtml('tb-bon', db.bonuses.map(b => `<tr><td class="p-2 border font-bold">${b.emp}</td><td class="p-2 border">${b.reason}</td><td class="p-2 border text-blue-600 font-bold">${money(b.amount)}</td></tr>`).join(''));
+      setHtml('tb-att', db.attendance.map(a => `<tr><td class="p-2 border font-bold">${a.emp}</td><td class="p-2 border">${a.status}</td><td class="p-2 border">${a.date}</td></tr>`).join(''));
+      setHtml('tb-adv', db.advances.map(a => `<tr><td class="p-2 border font-bold">${a.emp}</td><td class="p-2 border">${a.type}</td><td class="p-2 border font-bold">${a.val}</td></tr>`).join(''));
+
+      setHtml('list-br', db.branches.map(b => `<li>${b}</li>`).join(''));
+      setHtml('list-rg', db.regions.map(r => `<li>${r}</li>`).join(''));
+      setHtml('list-ag', db.agents.map(a => `<li>${a}</li>`).join(''));
+      setHtml('list-groups', db.groups.map(g => `<div class="p-2 border rounded bg-slate-50"><b>${g.name}</b>: ${g.perms.join('، ')}</div>`).join(''));
+      setHtml('tb-users', db.users.map(u => `<tr><td class="p-2 border font-bold">${u.username}</td><td class="p-2 border">${u.group}</td></tr>`).join(''));
+
+      renderReports();
+      renderFinancials();
+    }
+  </script>
+</body>
+</html>
