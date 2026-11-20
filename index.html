@@ -3,567 +3,814 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TANTAWE ERP - النظام الإداري والمحاسبي المتكامل</title>
+  <title>TANTAWE ERP - نظام إدارة الأعمال المتكامل</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     * { font-family: 'Cairo', sans-serif; box-sizing: border-box; }
-    body { background-color: #0f172a; color: #f8fafc; margin: 0; }
-    
+    body { background-color: #f3f4f6; color: #1f2937; margin: 0; }
+
     ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-track { background: #0f172a; }
-    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 9999px; }
-    
-    .sidebar-menu-btn {
+    ::-webkit-scrollbar-track { background: #e5e7eb; }
+    ::-webkit-scrollbar-thumb { background: #9ca3af; border-radius: 9999px; }
+
+    .odoo-sidebar {
+      background: #2c2d30;
+      color: #e5e7eb;
+    }
+    .mod-header-btn {
+      width: 100%;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      width: 100%;
       padding: 10px 14px;
-      border-radius: 12px;
-      font-size: 0.85rem;
-      font-weight: 700;
-      color: #94a3b8;
-      transition: all 0.2s ease;
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: #d1d5db;
+      border-radius: 8px;
+      transition: all 0.15s ease;
     }
-    .sidebar-menu-btn:hover { background-color: rgba(255, 255, 255, 0.05); color: #f8fafc; }
-    .sidebar-menu-btn.active-mod { background: rgba(16, 185, 129, 0.15); color: #34d399; }
+    .mod-header-btn:hover { background: #3b3d42; color: #ffffff; }
+    .mod-header-btn.active { background: #714b67; color: #ffffff; }
 
-    .sub-tab-btn {
+    .sub-item-btn {
+      width: 100%;
       display: flex;
       align-items: center;
       gap: 8px;
-      width: 100%;
-      padding: 8px 12px 8px 28px;
-      border-radius: 10px;
-      font-size: 0.8rem;
+      padding: 7px 12px 7px 26px;
+      font-size: 0.78rem;
       font-weight: 600;
-      color: #cbd5e1;
-      transition: all 0.2s ease;
+      color: #9ca3af;
+      border-radius: 6px;
       border-right: 3px solid transparent;
+      transition: all 0.15s ease;
+      text-align: right;
     }
-    .sub-tab-btn:hover { background-color: rgba(255, 255, 255, 0.08); color: #ffffff; }
-    .sub-tab-btn.active {
-      background: linear-gradient(90deg, rgba(16, 185, 129, 0.2) 0%, rgba(16, 185, 129, 0.02) 100%);
-      color: #10b981;
-      border-right-color: #10b981;
+    .sub-item-btn:hover { background: #36383d; color: #f9fafb; }
+    .sub-item-btn.active {
+      background: rgba(113, 75, 103, 0.25);
+      color: #f3e8ff;
+      border-right-color: #c084fc;
+      font-weight: 700;
+    }
+
+    .odoo-card {
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+    .odoo-btn-primary {
+      background: #714b67;
+      color: #ffffff;
+      font-weight: 700;
+      border-radius: 8px;
+      transition: background 0.15s ease;
+    }
+    .odoo-btn-primary:hover { background: #5d3d55; }
+
+    .odoo-input {
+      width: 100%;
+      background: #ffffff;
+      border: 1px solid #d1d5db;
+      color: #111827;
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 0.8rem;
+    }
+    .odoo-input:focus {
+      outline: none;
+      border-color: #714b67;
+      box-shadow: 0 0 0 2px rgba(113, 75, 103, 0.15);
     }
 
     @media print {
-      body { background: #ffffff !important; color: #000000 !important; }
       .no-print { display: none !important; }
-      .print-only { display: block !important; }
-      #main-content { padding: 0 !important; margin: 0 !important; width: 100% !important; }
-      .card-box { box-shadow: none !important; border: 1px solid #cbd5e1 !important; background: #fff !important; color: #000 !important; }
-      table { border-collapse: collapse !important; width: 100% !important; }
-      th, td { border: 1px solid #cbd5e1 !important; color: #000 !important; }
+      body { background: #ffffff !important; color: #000000 !important; }
+      .odoo-card { box-shadow: none !important; border: 1px solid #9ca3af !important; }
     }
-    .print-only { display: none; }
   </style>
 </head>
-<body class="bg-slate-950 text-slate-100">
+<body>
 
   <!-- ================= شاشة تسجيل الدخول ================= -->
-  <div id="login-screen" class="min-h-screen bg-slate-950 flex items-center justify-center p-4">
-    <div class="w-full max-w-md bg-slate-900 rounded-3xl shadow-2xl border border-slate-800 overflow-hidden">
-      <div class="bg-slate-900 p-8 text-center border-b border-slate-800">
-        <div class="w-16 h-16 mx-auto mb-3 rounded-2xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-3xl font-extrabold text-emerald-400">
-          T
-        </div>
-        <h1 class="text-2xl font-black text-white tracking-wide">TANTAWE ERP</h1>
-        <p class="text-slate-400 text-xs mt-1">نظام إداري ومحاسبي متكامل لإدارة المنشآت</p>
+  <div id="login-screen" class="min-h-screen flex items-center justify-center p-4 bg-slate-100">
+    <div class="w-full max-w-md odoo-card overflow-hidden">
+      <div class="p-7 text-center text-white" style="background:#714b67;">
+        <div class="w-14 h-14 mx-auto mb-2 rounded-2xl bg-white/15 flex items-center justify-center text-2xl font-black">T</div>
+        <h1 class="text-xl font-black">TANTAWE ERP</h1>
+        <p class="text-xs text-purple-100 mt-1">بوابة تسجيل الدخول للنظام الإداري والمحاسبي</p>
       </div>
 
       <form id="login-form" class="p-6 space-y-4">
-        <div id="login-error" class="hidden bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs font-semibold px-4 py-3 rounded-xl text-center">
-          اسم المستخدم أو كلمة المرور غير صحيحة.
+        <div id="login-error" class="hidden bg-rose-50 border border-rose-200 text-rose-700 text-xs font-bold p-3 rounded-lg text-center">
+          بيانات الدخول غير صحيحة
         </div>
-
         <div>
-          <label class="block text-xs font-bold text-slate-300 mb-1.5">اسم المستخدم</label>
-          <input type="text" id="login-username" required placeholder="أدخل اسم المستخدم"
-            class="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-white focus:outline-none focus:border-emerald-500 text-sm transition" />
+          <label class="block text-xs font-bold text-gray-700 mb-1">اسم المستخدم</label>
+          <input type="text" id="login-user" required class="odoo-input" placeholder="مثال: admin" />
         </div>
-
         <div>
-          <label class="block text-xs font-bold text-slate-300 mb-1.5">كلمة المرور</label>
-          <input type="password" id="login-password" required placeholder="أدخل كلمة المرور"
-            class="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-white focus:outline-none focus:border-emerald-500 text-sm transition" />
+          <label class="block text-xs font-bold text-gray-700 mb-1">كلمة المرور</label>
+          <input type="password" id="login-pass" required class="odoo-input" placeholder="••••••••" />
         </div>
-
-        <div class="flex items-center justify-between text-xs text-slate-400 bg-slate-950 p-3 rounded-xl border border-slate-800">
-          <div>افتراضي: <code class="text-emerald-400">admin</code> / <code class="text-emerald-400">1234</code></div>
-          <button type="button" onclick="fillDemoAdmin()" class="text-emerald-400 font-bold hover:underline">تعبئة سريعة</button>
+        <div class="flex items-center justify-between text-xs bg-gray-50 p-3 rounded-lg border border-gray-200">
+          <span>الافتراضي: <b>admin</b> / <b>1234</b></span>
+          <button type="button" onclick="quickAdminLogin()" class="font-bold text-purple-800 hover:underline">تعبئة</button>
         </div>
-
-        <button type="submit" class="w-full py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm shadow-lg shadow-emerald-600/20 transition">
-          تسجيل الدخول للنظام
-        </button>
+        <button type="submit" class="w-full py-2.5 odoo-btn-primary text-sm">دخول للنظام</button>
       </form>
     </div>
   </div>
 
-  <!-- ================= التطبيق الرئيسي ================= -->
+  <!-- ================= واجهة النظام الرئيسية ================= -->
   <div id="app-shell" class="hidden min-h-screen flex flex-col lg:flex-row">
 
-    <!-- القائمة الجانبية الموديلية -->
-    <aside id="sidebar" class="no-print w-full lg:w-72 bg-slate-900 border-l border-slate-800 flex-shrink-0 flex flex-col justify-between lg:sticky lg:top-0 lg:h-screen overflow-y-auto">
+    <!-- القائمة الجانبية (Odoo Style) -->
+    <aside class="no-print odoo-sidebar w-full lg:w-72 flex-shrink-0 flex flex-col justify-between lg:sticky lg:top-0 lg:h-screen overflow-y-auto">
       <div>
-        <div class="p-5 border-b border-slate-800 flex items-center justify-between">
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-emerald-500 text-slate-950 font-black flex items-center justify-center text-lg">
-              TE
-            </div>
+        <div class="p-4 border-b border-gray-700 flex items-center justify-between">
+          <div class="flex items-center gap-2.5">
+            <div class="w-9 h-9 rounded-lg flex items-center justify-center font-black text-white" style="background:#714b67;">TE</div>
             <div>
-              <div id="sidebar-company-name" class="font-black text-sm text-white">TANTAWE ERP</div>
-              <div id="sidebar-branch-label" class="text-[11px] text-emerald-400 font-bold">الفرع الرئيسي</div>
+              <div id="lbl-company" class="font-black text-sm text-white">TANTAWE ERP</div>
+              <div id="lbl-branch" class="text-[11px] text-purple-300 font-bold">الفرع الرئيسي</div>
             </div>
           </div>
         </div>
 
-        <!-- الموديولات والقوائم المنسدلة -->
-        <nav class="p-3 space-y-1">
-          
-          <!-- 1. الشاشة الرئيسية والتحليل -->
-          <div>
-            <button onclick="switchTab('dashboard')" class="sidebar-menu-btn active-mod" data-mod="dashboard">
-              <span class="flex items-center gap-2"><span>📊</span> <span>التحليل اليومي (الرئيسية)</span></span>
-            </button>
-          </div>
+        <nav class="p-2.5 space-y-1" id="sidebar-nav">
 
-          <!-- 2. موديول الموارد البشرية -->
-          <div class="space-y-1">
-            <button onclick="toggleSubmenu('menu-hr')" class="sidebar-menu-btn">
-              <span class="flex items-center gap-2"><span>👥</span> <span>الموارد البشرية</span></span>
-              <span class="text-xs">▾</span>
+          <!-- الرئيسية -->
+          <button onclick="openTab('dashboard')" class="mod-header-btn active" data-mod="dashboard">
+            <span>📊 التحليل اليومي (الرئيسية)</span>
+          </button>
+
+          <!-- 1. الموارد البشرية -->
+          <div data-perm="hr">
+            <button onclick="toggleMenu('m-hr')" class="mod-header-btn" data-mod="hr">
+              <span>👥 الموارد البشرية</span><span>▾</span>
             </button>
-            <div id="menu-hr" class="hidden space-y-1 pr-2">
-              <button onclick="switchTab('hr-employees')" class="sub-tab-btn" data-tab="hr-employees"><span>👤</span> الموظفين</button>
-              <button onclick="switchTab('hr-penalties')" class="sub-tab-btn" data-tab="hr-penalties"><span>⚠️</span> العقوبات والجزاءات</button>
-              <button onclick="switchTab('hr-bonuses')" class="sub-tab-btn" data-tab="hr-bonuses"><span>🎁</span> المكافآت والبدلات</button>
-              <button onclick="switchTab('hr-attendance')" class="sub-tab-btn" data-tab="hr-attendance"><span>📅</span> الحضور والإجازات</button>
+            <div id="m-hr" class="hidden space-y-0.5 mt-1">
+              <button onclick="openTab('hr-employees')" class="sub-item-btn" data-tab="hr-employees">👤 الموظفين والرواتب</button>
+              <button onclick="openTab('hr-penalties')" class="sub-item-btn" data-tab="hr-penalties">⚠️ العقوبات والجزاءات</button>
+              <button onclick="openTab('hr-bonuses')" class="sub-item-btn" data-tab="hr-bonuses">🎁 المكافآت والبدلات</button>
+              <button onclick="openTab('hr-attendance')" class="sub-item-btn" data-tab="hr-attendance">🕒 الحضور والانصراف</button>
+              <button onclick="openTab('hr-leaves')" class="sub-item-btn" data-tab="hr-leaves">🏖️ الإجازات</button>
             </div>
           </div>
 
-          <!-- 3. موديول الحسابات -->
-          <div class="space-y-1">
-            <button onclick="toggleSubmenu('menu-acc')" class="sidebar-menu-btn">
-              <span class="flex items-center gap-2"><span>💰</span> <span>موديول الحسابات</span></span>
-              <span class="text-xs">▾</span>
+          <!-- 2. الحسابات -->
+          <div data-perm="acc">
+            <button onclick="toggleMenu('m-acc')" class="mod-header-btn" data-mod="acc">
+              <span>💰 الحسابات والأصول</span><span>▾</span>
             </button>
-            <div id="menu-acc" class="hidden space-y-1 pr-2">
-              <button onclick="switchTab('acc-assets')" class="sub-tab-btn" data-tab="acc-assets"><span>🏢</span> الأصول الثابتة والإهلاك</button>
-              <button onclick="switchTab('acc-expenses')" class="sub-tab-btn" data-tab="acc-expenses"><span>💸</span> المصروفات</button>
-              <button onclick="switchTab('acc-revenues')" class="sub-tab-btn" data-tab="acc-revenues"><span>📈</span> الإيرادات</button>
-              <button onclick="switchTab('acc-treasury')" class="sub-tab-btn" data-tab="acc-treasury"><span>💵</span> الخزن والصناديق</button>
-              <button onclick="switchTab('acc-banks')" class="sub-tab-btn" data-tab="acc-banks"><span>🏦</span> البنوك والحسابات</button>
-              <button onclick="switchTab('acc-coa')" class="sub-tab-btn" data-tab="acc-coa"><span>🌳</span> شجرة الحسابات</button>
-              <button onclick="switchTab('acc-journal')" class="sub-tab-btn" data-tab="acc-journal"><span>📒</span> القيود اليومية</button>
+            <div id="m-acc" class="hidden space-y-0.5 mt-1">
+              <button onclick="openTab('asset-add')" class="sub-item-btn" data-tab="asset-add">➕ إضافة أصل</button>
+              <button onclick="openTab('asset-buy')" class="sub-item-btn" data-tab="asset-buy">🛒 شراء أصل</button>
+              <button onclick="openTab('asset-dep')" class="sub-item-btn" data-tab="asset-dep">📉 إهلاك أصل</button>
+              <button onclick="openTab('asset-sell')" class="sub-item-btn" data-tab="asset-sell">💵 بيع أصل</button>
+              <button onclick="openTab('asset-scrap')" class="sub-item-btn" data-tab="asset-scrap">🗑️ تخريد أصل</button>
+              <button onclick="openTab('acc-expenses')" class="sub-item-btn" data-tab="acc-expenses">💸 المصروفات</button>
+              <button onclick="openTab('acc-revenues')" class="sub-item-btn" data-tab="acc-revenues">📈 الإيرادات</button>
+              <button onclick="openTab('acc-treasury')" class="sub-item-btn" data-tab="acc-treasury">🏦 الخزن والصناديق</button>
+              <button onclick="openTab('acc-banks')" class="sub-item-btn" data-tab="acc-banks">🏛️ الحسابات البنكية</button>
+              <button onclick="openTab('acc-visa')" class="sub-item-btn" data-tab="acc-visa">💳 محافظ وفيزا وبطاقات</button>
+              <button onclick="openTab('acc-coa')" class="sub-item-btn" data-tab="acc-coa">🌳 شجرة الحسابات</button>
+              <button onclick="openTab('acc-journal')" class="sub-item-btn" data-tab="acc-journal">📒 القيود اليومية</button>
             </div>
           </div>
 
-          <!-- 4. موديول المخازن -->
-          <div class="space-y-1">
-            <button onclick="toggleSubmenu('menu-inv')" class="sidebar-menu-btn">
-              <span class="flex items-center gap-2"><span>📦</span> <span>موديول المخازن</span></span>
-              <span class="text-xs">▾</span>
+          <!-- 3. المخازن -->
+          <div data-perm="inv">
+            <button onclick="toggleMenu('m-inv')" class="mod-header-btn" data-mod="inv">
+              <span>📦 المخازن والأصناف</span><span>▾</span>
             </button>
-            <div id="menu-inv" class="hidden space-y-1 pr-2">
-              <button onclick="switchTab('inv-items')" class="sub-tab-btn" data-tab="inv-items"><span>🏷️</span> الفئات والأصناف</button>
-              <button onclick="switchTab('inv-add-ext')" class="sub-tab-btn" data-tab="inv-add-ext"><span>📥</span> إذن إضافة مخزني</button>
-              <button onclick="switchTab('inv-add-int')" class="sub-tab-btn" data-tab="inv-add-int"><span>🔄</span> إذن إضافة داخلي</button>
-              <button onclick="switchTab('inv-issue-ext')" class="sub-tab-btn" data-tab="inv-issue-ext"><span>📤</span> إذن صرف مخزني</button>
-              <button onclick="switchTab('inv-issue-int')" class="sub-tab-btn" data-tab="inv-issue-int"><span>🔀</span> إذن صرف داخلي</button>
+            <div id="m-inv" class="hidden space-y-0.5 mt-1">
+              <button onclick="openTab('inv-cats')" class="sub-item-btn" data-tab="inv-cats">🗂️ فئات الأصناف</button>
+              <button onclick="openTab('inv-items')" class="sub-item-btn" data-tab="inv-items">🏷️ الأصناف والأسعار</button>
+              <button onclick="openTab('inv-add-ext')" class="sub-item-btn" data-tab="inv-add-ext">📥 إذن إضافة مخزني</button>
+              <button onclick="openTab('inv-add-int')" class="sub-item-btn" data-tab="inv-add-int">🔄 إذن إضافة داخلي</button>
+              <button onclick="openTab('inv-out-ext')" class="sub-item-btn" data-tab="inv-out-ext">📤 إذن صرف مخزني</button>
+              <button onclick="openTab('inv-out-int')" class="sub-item-btn" data-tab="inv-out-int">🔀 إذن صرف داخلي</button>
             </div>
           </div>
 
-          <!-- 5. موديول المبيعات -->
-          <div class="space-y-1">
-            <button onclick="toggleSubmenu('menu-sales')" class="sidebar-menu-btn">
-              <span class="flex items-center gap-2"><span>🛍️</span> <span>موديول المبيعات</span></span>
-              <span class="text-xs">▾</span>
+          <!-- 4. المبيعات -->
+          <div data-perm="sales">
+            <button onclick="toggleMenu('m-sales')" class="mod-header-btn" data-mod="sales">
+              <span>🛍️ المبيعات والعملاء</span><span>▾</span>
             </button>
-            <div id="menu-sales" class="hidden space-y-1 pr-2">
-              <button onclick="switchTab('sales-inv')" class="sub-tab-btn" data-tab="sales-inv"><span>🧾</span> فواتير المبيعات</button>
-              <button onclick="switchTab('sales-orders')" class="sub-tab-btn" data-tab="sales-orders"><span>📋</span> طلبات البيع</button>
-              <button onclick="switchTab('sales-vouchers')" class="sub-tab-btn" data-tab="sales-vouchers"><span>💵</span> سندات القبض</button>
-              <button onclick="switchTab('sales-customers')" class="sub-tab-btn" data-tab="sales-customers"><span>👥</span> دليل العملاء</button>
+            <div id="m-sales" class="hidden space-y-0.5 mt-1">
+              <button onclick="openTab('sales-customers')" class="sub-item-btn" data-tab="sales-customers">👥 العملاء</button>
+              <button onclick="openTab('sales-orders')" class="sub-item-btn" data-tab="sales-orders">📋 طلبات البيع</button>
+              <button onclick="openTab('sales-invoices')" class="sub-item-btn" data-tab="sales-invoices">🧾 فواتير المبيعات</button>
+              <button onclick="openTab('sales-receipts')" class="sub-item-btn" data-tab="sales-receipts">💵 سندات القبض</button>
             </div>
           </div>
 
-          <!-- 6. موديول المشتريات -->
-          <div class="space-y-1">
-            <button onclick="toggleSubmenu('menu-pur')" class="sidebar-menu-btn">
-              <span class="flex items-center gap-2"><span>🛒</span> <span>موديول المشتريات</span></span>
-              <span class="text-xs">▾</span>
+          <!-- 5. المشتريات -->
+          <div data-perm="pur">
+            <button onclick="toggleMenu('m-pur')" class="mod-header-btn" data-mod="pur">
+              <span>🛒 المشتريات والموردين</span><span>▾</span>
             </button>
-            <div id="menu-pur" class="hidden space-y-1 pr-2">
-              <button onclick="switchTab('pur-inv')" class="sub-tab-btn" data-tab="pur-inv"><span>🧾</span> فواتير المشتريات</button>
-              <button onclick="switchTab('pur-orders')" class="sub-tab-btn" data-tab="pur-orders"><span>📝</span> طلبات الشراء</button>
-              <button onclick="switchTab('pur-vouchers')" class="sub-tab-btn" data-tab="pur-vouchers"><span>💸</span> سندات الصرف للموردين</button>
-              <button onclick="switchTab('pur-vendors')" class="sub-tab-btn" data-tab="pur-vendors"><span>🏭</span> دليل الموردين</button>
+            <div id="m-pur" class="hidden space-y-0.5 mt-1">
+              <button onclick="openTab('pur-vendors')" class="sub-item-btn" data-tab="pur-vendors">🏭 الموردين</button>
+              <button onclick="openTab('pur-orders')" class="sub-item-btn" data-tab="pur-orders">📝 طلبات الشراء</button>
+              <button onclick="openTab('pur-invoices')" class="sub-item-btn" data-tab="pur-invoices">🧾 فواتير المشتريات</button>
+              <button onclick="openTab('pur-payments')" class="sub-item-btn" data-tab="pur-payments">💸 سندات الصرف</button>
             </div>
           </div>
 
-          <!-- 7. موديول التقارير -->
-          <div class="space-y-1">
-            <button onclick="toggleSubmenu('menu-rep')" class="sidebar-menu-btn">
-              <span class="flex items-center gap-2"><span>📑</span> <span>موديول التقارير</span></span>
-              <span class="text-xs">▾</span>
+          <!-- 6. التقارير -->
+          <div data-perm="rep">
+            <button onclick="toggleMenu('m-rep')" class="mod-header-btn" data-mod="rep">
+              <span>📑 التقارير التفصيلية</span><span>▾</span>
             </button>
-            <div id="menu-rep" class="hidden space-y-1 pr-2">
-              <button onclick="switchTab('rep-cust')" class="sub-tab-btn" data-tab="rep-cust"><span>👤</span> كشف حساب عميل</button>
-              <button onclick="switchTab('rep-vend')" class="sub-tab-btn" data-tab="rep-vend"><span>🏭</span> كشف حساب مورد</button>
-              <button onclick="switchTab('rep-treasury')" class="sub-tab-btn" data-tab="rep-treasury"><span>💵</span> تقرير الخزينة</button>
-              <button onclick="switchTab('rep-banks')" class="sub-tab-btn" data-tab="rep-banks"><span>🏦</span> تقرير البنوك</button>
-              <button onclick="switchTab('rep-exp')" class="sub-tab-btn" data-tab="rep-exp"><span>💸</span> تقرير المصروفات</button>
-              <button onclick="switchTab('rep-rev')" class="sub-tab-btn" data-tab="rep-rev"><span>📈</span> تقرير الإيرادات</button>
+            <div id="m-rep" class="hidden space-y-0.5 mt-1">
+              <button onclick="openTab('rep-cust')" class="sub-item-btn" data-tab="rep-cust">👤 كشف حساب عميل</button>
+              <button onclick="openTab('rep-vend')" class="sub-item-btn" data-tab="rep-vend">🏭 كشف حساب مورد</button>
+              <button onclick="openTab('rep-treasury')" class="sub-item-btn" data-tab="rep-treasury">🏦 تقرير الخزينة</button>
+              <button onclick="openTab('rep-banks')" class="sub-item-btn" data-tab="rep-banks">🏛️ تقرير البنوك</button>
+              <button onclick="openTab('rep-visa')" class="sub-item-btn" data-tab="rep-visa">💳 تقرير الفيزا والمحافظ</button>
+              <button onclick="openTab('rep-exp')" class="sub-item-btn" data-tab="rep-exp">💸 تقرير المصروفات</button>
+              <button onclick="openTab('rep-rev')" class="sub-item-btn" data-tab="rep-rev">📈 تقرير الإيرادات</button>
+              <button onclick="openTab('rep-assets')" class="sub-item-btn" data-tab="rep-assets">📉 تقرير الأصول والإهلاك</button>
+              <button onclick="openTab('rep-stock')" class="sub-item-btn" data-tab="rep-stock">📦 تقرير المخزون والأرباح</button>
             </div>
           </div>
 
-          <!-- 8. المعلومات الأساسية والإعدادات -->
-          <div class="space-y-1">
-            <button onclick="toggleSubmenu('menu-info')" class="sidebar-menu-btn">
-              <span class="flex items-center gap-2"><span>⚙️</span> <span>المعلومات الأساسية</span></span>
-              <span class="text-xs">▾</span>
+          <!-- 7. المعلومات الأساسية والمستخدمين -->
+          <div data-perm="sys">
+            <button onclick="toggleMenu('m-sys')" class="mod-header-btn" data-mod="sys">
+              <span>⚙️ المعلومات والصلاحيات</span><span>▾</span>
             </button>
-            <div id="menu-info" class="hidden space-y-1 pr-2">
-              <button onclick="switchTab('info-company')" class="sub-tab-btn" data-tab="info-company"><span>🏢</span> اسم الشركة والبيانات</button>
-              <button onclick="switchTab('info-branches')" class="sub-tab-btn" data-tab="info-branches"><span>🏛️</span> الفروع</button>
-              <button onclick="switchTab('info-regions')" class="sub-tab-btn" data-tab="info-regions"><span>📍</span> المناطق والقطاعات</button>
-              <button onclick="switchTab('info-agents')" class="sub-tab-btn" data-tab="info-agents"><span>💼</span> المناديب والمندوبين</button>
-              <button onclick="switchTab('info-system')" class="sub-tab-btn" data-tab="info-system"><span>🔒</span> المستخدمين والنسخ الاحتياطي</button>
+            <div id="m-sys" class="hidden space-y-0.5 mt-1">
+              <button onclick="openTab('info-company')" class="sub-item-btn" data-tab="info-company">🏢 اسم الشركة والبيانات</button>
+              <button onclick="openTab('info-branches')" class="sub-item-btn" data-tab="info-branches">🏛️ الفروع</button>
+              <button onclick="openTab('info-regions')" class="sub-item-btn" data-tab="info-regions">📍 المناطق والقطاعات</button>
+              <button onclick="openTab('info-agents')" class="sub-item-btn" data-tab="info-agents">💼 المناديب</button>
+              <button onclick="openTab('sys-groups')" class="sub-item-btn" data-tab="sys-groups">🛡️ مجموعات الصلاحيات</button>
+              <button onclick="openTab('sys-users')" class="sub-item-btn" data-tab="sys-users">👥 المستخدمين</button>
+              <button onclick="openTab('sys-backup')" class="sub-item-btn" data-tab="sys-backup">💾 النسخ الاحتياطي</button>
             </div>
           </div>
 
         </nav>
       </div>
 
-      <div class="p-4 border-t border-slate-800 bg-slate-950/80 flex items-center justify-between">
+      <div class="p-3 border-t border-gray-700 bg-gray-900 flex items-center justify-between text-xs">
         <div>
-          <div id="user-display-name" class="font-bold text-xs text-white">المدير العام</div>
-          <div class="text-[10px] text-slate-400">صلاحية كاملة</div>
+          <div id="active-user-lbl" class="font-bold text-white">admin</div>
+          <div id="active-group-lbl" class="text-[10px] text-purple-300">مدير عام</div>
         </div>
-        <button onclick="logoutUser()" class="px-2.5 py-1.5 rounded-lg bg-rose-500/20 text-rose-300 font-bold text-xs hover:bg-rose-500/30">خروج</button>
+        <button onclick="logout()" class="px-2.5 py-1 rounded bg-rose-600 text-white font-bold">خروج</button>
       </div>
     </aside>
 
-    <!-- المحتوى الرئيسي -->
-    <div id="main-content" class="flex-1 flex flex-col min-w-0 bg-slate-950">
-      
-      <header class="no-print bg-slate-900 border-b border-slate-800 px-6 py-4 flex flex-wrap items-center justify-between gap-4 sticky top-0 z-30">
+    <!-- منطقة العمل -->
+    <div class="flex-1 flex flex-col min-w-0">
+      <header class="no-print bg-white border-b border-gray-200 px-6 py-3.5 flex flex-wrap items-center justify-between gap-3 sticky top-0 z-20">
         <div>
-          <h2 id="page-title" class="text-xl font-black text-white">لوحة التحليل اليومي</h2>
-          <p id="page-subtitle" class="text-xs text-slate-400">ملخص وحركة العمليات اليومية في المنشأة</p>
+          <h2 id="view-title" class="text-lg font-black text-gray-900">التحليل اليومي (الرئيسية)</h2>
+          <p id="view-sub" class="text-xs text-gray-500">متابعة الأداء والمبيعات والحسابات اليومية</p>
         </div>
-        <div class="flex items-center gap-3">
-          <select id="active-branch-select" onchange="changeBranch(this.value)" class="bg-slate-950 border border-slate-700 text-slate-200 rounded-xl px-3 py-2 text-xs font-bold focus:outline-none">
-          </select>
-          <button onclick="window.print()" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs border border-slate-700">🖨️ طباعة</button>
+        <div class="flex items-center gap-2">
+          <select id="branch-selector" onchange="switchBranch(this.value)" class="odoo-input !w-auto font-bold"></select>
+          <button onclick="window.print()" class="px-3 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold text-xs border border-gray-300">🖨️ طباعة</button>
         </div>
       </header>
 
       <main class="p-6 space-y-6 flex-1">
-        
-        <!-- ================= 1. التحليل اليومي (الرئيسية) ================= -->
-        <section id="tab-dashboard" class="tab-section space-y-6">
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4" id="daily-kpi-cards"></div>
 
+        <!-- ================= الرئيسية ================= -->
+        <section id="sec-dashboard" class="sec-view space-y-6">
+          <div id="kpi-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4"></div>
           <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div class="card-box lg:col-span-2 bg-slate-900 rounded-2xl p-5 border border-slate-800 space-y-4">
-              <h3 class="font-bold text-sm text-white">مقارنة الإيرادات بالمصروفات والمبيعات</h3>
-              <div class="h-64"><canvas id="dailyChart"></canvas></div>
+            <div class="odoo-card lg:col-span-2 p-5">
+              <h3 class="font-bold text-sm mb-3">تحليل الإيرادات والمبيعات والمصروفات</h3>
+              <div class="h-64"><canvas id="mainChart"></canvas></div>
             </div>
-
-            <div class="card-box bg-slate-900 rounded-2xl p-5 border border-slate-800 space-y-4">
-              <h3 class="font-bold text-sm text-white">آخر الحركات اليومية المسجلة</h3>
-              <div id="dashboard-recent-list" class="space-y-3 text-xs"></div>
+            <div class="odoo-card p-5 space-y-3">
+              <h3 class="font-bold text-sm">أرصدة القنوات المالية الحالية</h3>
+              <div id="channels-summary" class="space-y-2 text-xs"></div>
             </div>
           </div>
         </section>
 
-        <!-- ================= 2. الموارد البشرية ================= -->
-        <section id="tab-hr-employees" class="tab-section hidden space-y-6">
+        <!-- ================= الموارد البشرية ================= -->
+        <section id="sec-hr-employees" class="sec-view hidden space-y-6">
           <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <form onsubmit="addEmployee(event)" class="card-box bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-3">
-              <h3 class="font-bold text-sm border-b border-slate-800 pb-2">إضافة موظف جديد</h3>
-              <div><label class="text-xs font-bold text-slate-400">اسم الموظف</label><input id="emp-name" required class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-xs text-white" /></div>
-              <div><label class="text-xs font-bold text-slate-400">الوظيفة / القسم</label><input id="emp-role" required class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-xs text-white" /></div>
-              <div><label class="text-xs font-bold text-slate-400">الراتب الأساسي</label><input type="number" id="emp-salary" required class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-xs text-white font-bold" /></div>
-              <button class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 font-bold text-xs text-white">حفظ الموظف</button>
+            <form onsubmit="addEmployee(event)" class="odoo-card p-5 space-y-3">
+              <h3 class="font-bold text-sm border-b pb-2">إضافة موظف</h3>
+              <div><label class="text-xs font-bold">اسم الموظف</label><input id="e-name" required class="odoo-input" /></div>
+              <div><label class="text-xs font-bold">القسم / الوظيفة</label><input id="e-role" required class="odoo-input" /></div>
+              <div><label class="text-xs font-bold">الراتب الشهري</label><input type="number" id="e-sal" required class="odoo-input" /></div>
+              <button class="w-full py-2 odoo-btn-primary text-xs">حفظ الموظف</button>
             </form>
-            <div class="card-box lg:col-span-2 bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
-              <h3 class="font-bold text-sm">قائمة الموظفين</h3>
-              <table class="w-full text-xs text-right"><thead class="bg-slate-950 text-slate-400"><tr><th class="p-2.5">الكود</th><th class="p-2.5">الاسم</th><th class="p-2.5">الوظيفة</th><th class="p-2.5">الراتب</th></tr></thead><tbody id="tbl-employees" class="divide-y divide-slate-800"></tbody></table>
+            <div class="odoo-card lg:col-span-2 p-5">
+              <h3 class="font-bold text-sm mb-3">سجل الموظفين</h3>
+              <table class="w-full text-xs text-right border"><thead class="bg-gray-50"><tr><th class="p-2 border">الكود</th><th class="p-2 border">الاسم</th><th class="p-2 border">الوظيفة</th><th class="p-2 border">الراتب</th></tr></thead><tbody id="tb-emp"></tbody></table>
             </div>
           </div>
         </section>
 
-        <section id="tab-hr-penalties" class="tab-section hidden space-y-6">
-          <div class="card-box bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
-            <h3 class="font-bold text-sm">تسجيل العقوبات والجزاءات</h3>
+        <section id="sec-hr-penalties" class="sec-view hidden space-y-6">
+          <div class="odoo-card p-5 space-y-4">
+            <h3 class="font-bold text-sm">تسجيل عقوبة / جزاء</h3>
             <form onsubmit="addPenalty(event)" class="grid grid-cols-1 md:grid-cols-4 gap-3">
-              <select id="pen-emp" class="bg-slate-950 border border-slate-800 p-2.5 rounded-xl text-xs emp-select text-white"></select>
-              <input id="pen-reason" placeholder="سبب العقوبة / الجزاء" required class="bg-slate-950 border border-slate-800 p-2.5 rounded-xl text-xs text-white" />
-              <input type="number" id="pen-amount" placeholder="مبلغ الخصم" required class="bg-slate-950 border border-slate-800 p-2.5 rounded-xl text-xs text-white font-bold" />
-              <button class="bg-rose-600 hover:bg-rose-500 text-white font-bold rounded-xl text-xs py-2.5">تسجيل الجزاء</button>
+              <select id="p-emp" class="odoo-input sel-emp"></select>
+              <input id="p-reason" placeholder="سبب الجزاء" required class="odoo-input" />
+              <input type="number" id="p-amt" placeholder="مبلغ الخصم" required class="odoo-input" />
+              <button class="odoo-btn-primary text-xs py-2">اعتماد الجزاء</button>
             </form>
-            <table class="w-full text-xs text-right mt-4"><thead class="bg-slate-950 text-slate-400"><tr><th class="p-2.5">الموظف</th><th class="p-2.5">السبب</th><th class="p-2.5">المبلغ المخصوم</th></tr></thead><tbody id="tbl-penalties" class="divide-y divide-slate-800"></tbody></table>
+            <table class="w-full text-xs text-right border"><thead class="bg-gray-50"><tr><th class="p-2 border">الموظف</th><th class="p-2 border">السبب</th><th class="p-2 border">الخصم</th></tr></thead><tbody id="tb-pen"></tbody></table>
           </div>
         </section>
 
-        <section id="tab-hr-bonuses" class="tab-section hidden space-y-6">
-          <div class="card-box bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
-            <h3 class="font-bold text-sm">تسجيل المكافآت والبدلات</h3>
+        <section id="sec-hr-bonuses" class="sec-view hidden space-y-6">
+          <div class="odoo-card p-5 space-y-4">
+            <h3 class="font-bold text-sm">تسجيل مكافأة / بدل</h3>
             <form onsubmit="addBonus(event)" class="grid grid-cols-1 md:grid-cols-4 gap-3">
-              <select id="bon-emp" class="bg-slate-950 border border-slate-800 p-2.5 rounded-xl text-xs emp-select text-white"></select>
-              <input id="bon-reason" placeholder="سبب المكافأة / بدل" required class="bg-slate-950 border border-slate-800 p-2.5 rounded-xl text-xs text-white" />
-              <input type="number" id="bon-amount" placeholder="قيمة المكافأة" required class="bg-slate-950 border border-slate-800 p-2.5 rounded-xl text-xs text-white font-bold" />
-              <button class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs py-2.5">صرف المكافأة</button>
+              <select id="b-emp" class="odoo-input sel-emp"></select>
+              <input id="b-reason" placeholder="سبب المكافأة" required class="odoo-input" />
+              <input type="number" id="b-amt" placeholder="قيمة المكافأة" required class="odoo-input" />
+              <button class="odoo-btn-primary text-xs py-2">إضافة مكافأة</button>
             </form>
-            <table class="w-full text-xs text-right mt-4"><thead class="bg-slate-950 text-slate-400"><tr><th class="p-2.5">الموظف</th><th class="p-2.5">السبب</th><th class="p-2.5">المبلغ</th></tr></thead><tbody id="tbl-bonuses" class="divide-y divide-slate-800"></tbody></table>
+            <table class="w-full text-xs text-right border"><thead class="bg-gray-50"><tr><th class="p-2 border">الموظف</th><th class="p-2 border">السبب</th><th class="p-2 border">المكافأة</th></tr></thead><tbody id="tb-bon"></tbody></table>
           </div>
         </section>
 
-        <section id="tab-hr-attendance" class="tab-section hidden space-y-6">
-          <div class="card-box bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
-            <h3 class="font-bold text-sm">سجل الحضور والغياب والإجازات</h3>
-            <p class="text-xs text-slate-400">متابعة الحضور اليومي ورصيد الإجازات لكل موظف.</p>
-          </div>
-        </section>
-
-        <!-- ================= 3. موديول الحسابات ================= -->
-        <section id="tab-acc-assets" class="tab-section hidden space-y-6">
-          <div class="card-box bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
-            <h3 class="font-bold text-sm">إدارة الأصول الثابتة (إضافة / شراء / إهلاك / بيع / تخريد)</h3>
-            <form onsubmit="addAsset(event)" class="grid grid-cols-1 md:grid-cols-5 gap-3">
-              <input id="ast-name" placeholder="اسم الأصل" required class="bg-slate-950 border border-slate-800 p-2.5 rounded-xl text-xs text-white" />
-              <select id="ast-action" class="bg-slate-950 border border-slate-800 p-2.5 rounded-xl text-xs text-white">
-                <option value="شراء / إضافة">شراء / إضافة أصل</option>
-                <option value="إهلاك">حساب إهلاك</option>
-                <option value="بيع">بيع أصل</option>
-                <option value="تخريد">تخريد أصل</option>
-              </select>
-              <input type="number" id="ast-cost" placeholder="التكلفة / القيمة" required class="bg-slate-950 border border-slate-800 p-2.5 rounded-xl text-xs text-white font-bold" />
-              <input type="number" id="ast-rate" placeholder="نسبة الإهلاك %" value="10" class="bg-slate-950 border border-slate-800 p-2.5 rounded-xl text-xs text-white" />
-              <button class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs py-2.5">تسجيل الحركة</button>
+        <section id="sec-hr-attendance" class="sec-view hidden space-y-6">
+          <div class="odoo-card p-5 space-y-4">
+            <h3 class="font-bold text-sm">تسجيل الحضور والانصراف</h3>
+            <form onsubmit="addAttendance(event)" class="grid grid-cols-1 md:grid-cols-4 gap-3">
+              <select id="att-emp" class="odoo-input sel-emp"></select>
+              <select id="att-status" class="odoo-input"><option value="حاضر">حاضر</option><option value="متأخر">متأخر</option><option value="غائب">غائب</option></select>
+              <input type="date" id="att-date" required class="odoo-input" />
+              <button class="odoo-btn-primary text-xs py-2">تسجيل</button>
             </form>
-            <table class="w-full text-xs text-right mt-4"><thead class="bg-slate-950 text-slate-400"><tr><th class="p-2.5">الأصل</th><th class="p-2.5">نوع الحركة</th><th class="p-2.5">القيمة</th><th class="p-2.5">الإهلاك السنوي</th></tr></thead><tbody id="tbl-assets" class="divide-y divide-slate-800"></tbody></table>
+            <table class="w-full text-xs text-right border"><thead class="bg-gray-50"><tr><th class="p-2 border">الموظف</th><th class="p-2 border">الحالة</th><th class="p-2 border">التاريخ</th></tr></thead><tbody id="tb-att"></tbody></table>
           </div>
         </section>
 
-        <section id="tab-acc-expenses" class="tab-section hidden space-y-6">
-          <div class="card-box bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
-            <h3 class="font-bold text-sm">تسجيل المصروفات</h3>
-            <form onsubmit="addExpense(event)" class="grid grid-cols-1 md:grid-cols-4 gap-3">
-              <input id="exp-cat" placeholder="بند المصروف (إيجار/كهرباء/صيانة)" required class="bg-slate-950 border border-slate-800 p-2.5 rounded-xl text-xs text-white" />
-              <input id="exp-desc" placeholder="البيان" required class="bg-slate-950 border border-slate-800 p-2.5 rounded-xl text-xs text-white" />
-              <input type="number" id="exp-amount" placeholder="المبلغ" required class="bg-slate-950 border border-slate-800 p-2.5 rounded-xl text-xs text-white font-bold" />
-              <button class="bg-rose-600 hover:bg-rose-500 text-white font-bold rounded-xl text-xs py-2.5">صرف مصروف</button>
+        <section id="sec-hr-leaves" class="sec-view hidden space-y-6">
+          <div class="odoo-card p-5 space-y-4">
+            <h3 class="font-bold text-sm">طلبات الإجازات</h3>
+            <form onsubmit="addLeave(event)" class="grid grid-cols-1 md:grid-cols-4 gap-3">
+              <select id="lv-emp" class="odoo-input sel-emp"></select>
+              <input id="lv-type" placeholder="نوع الإجازة (عارضة/اعتيادية)" required class="odoo-input" />
+              <input type="number" id="lv-days" placeholder="عدد الأيام" required class="odoo-input" />
+              <button class="odoo-btn-primary text-xs py-2">حفظ الإجازة</button>
             </form>
-            <table class="w-full text-xs text-right mt-4"><thead class="bg-slate-950 text-slate-400"><tr><th class="p-2.5">البند</th><th class="p-2.5">البيان</th><th class="p-2.5">المبلغ</th></tr></thead><tbody id="tbl-expenses" class="divide-y divide-slate-800"></tbody></table>
+            <table class="w-full text-xs text-right border"><thead class="bg-gray-50"><tr><th class="p-2 border">الموظف</th><th class="p-2 border">النوع</th><th class="p-2 border">الأيام</th></tr></thead><tbody id="tb-lv"></tbody></table>
           </div>
         </section>
 
-        <section id="tab-acc-revenues" class="tab-section hidden space-y-6">
-          <div class="card-box bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
-            <h3 class="font-bold text-sm">تسجيل الإيرادات المتنوعة</h3>
-            <form onsubmit="addRevenue(event)" class="grid grid-cols-1 md:grid-cols-4 gap-3">
-              <input id="rev-cat" placeholder="مصدر الإيراد" required class="bg-slate-950 border border-slate-800 p-2.5 rounded-xl text-xs text-white" />
-              <input id="rev-desc" placeholder="البيان" required class="bg-slate-950 border border-slate-800 p-2.5 rounded-xl text-xs text-white" />
-              <input type="number" id="rev-amount" placeholder="المبلغ" required class="bg-slate-950 border border-slate-800 p-2.5 rounded-xl text-xs text-white font-bold" />
-              <button class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs py-2.5">تحصيل إيراد</button>
+        <!-- ================= الأصول الثابتة (منفصلة) ================= -->
+        <section id="sec-asset-add" class="sec-view hidden space-y-6">
+          <div class="odoo-card p-5 space-y-4">
+            <h3 class="font-bold text-sm">إضافة أصل جديد</h3>
+            <form onsubmit="addAssetOp(event, 'إضافة أصل')" class="grid grid-cols-1 md:grid-cols-4 gap-3">
+              <input id="aadd-name" placeholder="اسم الأصل" required class="odoo-input" />
+              <input type="number" id="aadd-val" placeholder="قيمة الأصل" required class="odoo-input" />
+              <input type="number" id="aadd-rate" placeholder="نسبة الإهلاك %" value="10" class="odoo-input" />
+              <button class="odoo-btn-primary text-xs py-2">إضافة الأصل</button>
             </form>
-            <table class="w-full text-xs text-right mt-4"><thead class="bg-slate-950 text-slate-400"><tr><th class="p-2.5">المصدر</th><th class="p-2.5">البيان</th><th class="p-2.5">المبلغ</th></tr></thead><tbody id="tbl-revenues" class="divide-y divide-slate-800"></tbody></table>
           </div>
         </section>
 
-        <section id="tab-acc-treasury" class="tab-section hidden space-y-6">
-          <div class="card-box bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
-            <h3 class="font-bold text-sm">حركات الخزن والصناديق النقدية</h3>
-            <p class="text-xs text-slate-400">الخزينة الرئيسية وخزينة المبيعات وأرصدتها الحالية.</p>
-          </div>
-        </section>
-
-        <section id="tab-acc-banks" class="tab-section hidden space-y-6">
-          <div class="card-box bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
-            <h3 class="font-bold text-sm">الحسابات البنكية والمعاملات</h3>
-            <p class="text-xs text-slate-400">إدارة الحسابات البنكية والتحويلات والإيداعات.</p>
-          </div>
-        </section>
-
-        <section id="tab-acc-coa" class="tab-section hidden space-y-6">
-          <div class="card-box bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
-            <h3 class="font-bold text-sm">دليل وشجرة الحسابات المحاسبية</h3>
-            <table class="w-full text-xs text-right"><thead class="bg-slate-950 text-slate-400"><tr><th class="p-2.5">كود الحساب</th><th class="p-2.5">اسم الحساب</th><th class="p-2.5">النوع</th><th class="p-2.5">الرصيد</th></tr></thead><tbody id="tbl-coa" class="divide-y divide-slate-800"></tbody></table>
-          </div>
-        </section>
-
-        <section id="tab-acc-journal" class="tab-section hidden space-y-6">
-          <div class="card-box bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
-            <h3 class="font-bold text-sm">دفتر القيود اليومية المحاسبية</h3>
-            <table class="w-full text-xs text-right"><thead class="bg-slate-950 text-slate-400"><tr><th class="p-2.5">رقم القيد</th><th class="p-2.5">التاريخ</th><th class="p-2.5">المدين</th><th class="p-2.5">الدائن</th><th class="p-2.5">المبلغ</th></tr></thead><tbody id="tbl-journal" class="divide-y divide-slate-800"></tbody></table>
-          </div>
-        </section>
-
-        <!-- ================= 4. موديول المخازن ================= -->
-        <section id="tab-inv-items" class="tab-section hidden space-y-6">
-          <div class="card-box bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
-            <h3 class="font-bold text-sm">فئات الأصناف ودليل المنتجات</h3>
-            <form onsubmit="addItem(event)" class="grid grid-cols-1 md:grid-cols-4 gap-3">
-              <input id="itm-cat" placeholder="الفئة (مثال: أجهزة/قطع)" required class="bg-slate-950 border border-slate-800 p-2.5 rounded-xl text-xs text-white" />
-              <input id="itm-name" placeholder="اسم الصنف" required class="bg-slate-950 border border-slate-800 p-2.5 rounded-xl text-xs text-white" />
-              <input type="number" id="itm-price" placeholder="سعر البيع" required class="bg-slate-950 border border-slate-800 p-2.5 rounded-xl text-xs text-white font-bold" />
-              <button class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs py-2.5">إضافة صنف</button>
+        <section id="sec-asset-buy" class="sec-view hidden space-y-6">
+          <div class="odoo-card p-5 space-y-4">
+            <h3 class="font-bold text-sm">شراء أصل ثابت</h3>
+            <form onsubmit="addAssetOp(event, 'شراء أصل')" class="grid grid-cols-1 md:grid-cols-4 gap-3">
+              <input id="abuy-name" placeholder="اسم الأصل المشترى" required class="odoo-input" />
+              <input type="number" id="abuy-val" placeholder="تكلفة الشراء" required class="odoo-input" />
+              <select id="abuy-chan" class="odoo-input sel-chan"></select>
+              <button class="odoo-btn-primary text-xs py-2">تأكيد الشراء</button>
             </form>
-            <table class="w-full text-xs text-right mt-4"><thead class="bg-slate-950 text-slate-400"><tr><th class="p-2.5">الفئة</th><th class="p-2.5">اسم الصنف</th><th class="p-2.5">السعر</th></tr></thead><tbody id="tbl-items" class="divide-y divide-slate-800"></tbody></table>
           </div>
         </section>
 
-        <section id="tab-inv-add-ext" class="tab-section hidden space-y-6">
-          <div class="card-box bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
-            <h3 class="font-bold text-sm">أذون الإضافة المخزنية (خارجي من مورد)</h3>
-          </div>
-        </section>
-        <section id="tab-inv-add-int" class="tab-section hidden space-y-6">
-          <div class="card-box bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
-            <h3 class="font-bold text-sm">أذون الإضافة الداخلية (تحويل بين مخازن)</h3>
-          </div>
-        </section>
-        <section id="tab-inv-issue-ext" class="tab-section hidden space-y-6">
-          <div class="card-box bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
-            <h3 class="font-bold text-sm">أذون الصرف المخزنية (صرف لعميل أو بيع)</h3>
-          </div>
-        </section>
-        <section id="tab-inv-issue-int" class="tab-section hidden space-y-6">
-          <div class="card-box bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
-            <h3 class="font-bold text-sm">أذون الصرف الداخلية (صرف للأقسام والاستهلاك)</h3>
-          </div>
-        </section>
-
-        <!-- ================= 5. المبيعات ================= -->
-        <section id="tab-sales-inv" class="tab-section hidden space-y-6">
-          <div class="card-box bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
-            <h3 class="font-bold text-sm">إصدار فواتير المبيعات</h3>
-            <form onsubmit="addSaleInvoice(event)" class="grid grid-cols-1 md:grid-cols-4 gap-3">
-              <input id="sal-cust" placeholder="اسم العميل" required class="bg-slate-950 border border-slate-800 p-2.5 rounded-xl text-xs text-white" />
-              <input id="sal-item" placeholder="الصنف / المنتج" required class="bg-slate-950 border border-slate-800 p-2.5 rounded-xl text-xs text-white" />
-              <input type="number" id="sal-amount" placeholder="الإجمالي" required class="bg-slate-950 border border-slate-800 p-2.5 rounded-xl text-xs text-white font-bold" />
-              <button class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs py-2.5">حفظ الفاتورة</button>
+        <section id="sec-asset-dep" class="sec-view hidden space-y-6">
+          <div class="odoo-card p-5 space-y-4">
+            <h3 class="font-bold text-sm">إهلاك أصل ثابت</h3>
+            <form onsubmit="addAssetOp(event, 'إهلاك أصل')" class="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <select id="adep-name" class="odoo-input sel-asset"></select>
+              <input type="number" id="adep-val" placeholder="قيمة الإهلاك" required class="odoo-input" />
+              <button class="odoo-btn-primary text-xs py-2">ترحيل الإهلاك</button>
             </form>
-            <table class="w-full text-xs text-right mt-4"><thead class="bg-slate-950 text-slate-400"><tr><th class="p-2.5">الفاتورة</th><th class="p-2.5">العميل</th><th class="p-2.5">البيان</th><th class="p-2.5">المبلغ</th></tr></thead><tbody id="tbl-sales" class="divide-y divide-slate-800"></tbody></table>
           </div>
         </section>
 
-        <section id="tab-sales-orders" class="tab-section hidden space-y-6">
-          <div class="card-box bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
-            <h3 class="font-bold text-sm">طلبات وأوامر البيع</h3>
+        <section id="sec-asset-sell" class="sec-view hidden space-y-6">
+          <div class="odoo-card p-5 space-y-4">
+            <h3 class="font-bold text-sm">بيع أصل ثابت</h3>
+            <form onsubmit="addAssetOp(event, 'بيع أصل')" class="grid grid-cols-1 md:grid-cols-4 gap-3">
+              <select id="asell-name" class="odoo-input sel-asset"></select>
+              <input type="number" id="asell-val" placeholder="سعر البيع" required class="odoo-input" />
+              <select id="asell-chan" class="odoo-input sel-chan"></select>
+              <button class="odoo-btn-primary text-xs py-2">تنفيذ البيع</button>
+            </form>
           </div>
         </section>
 
-        <section id="tab-sales-vouchers" class="tab-section hidden space-y-6">
-          <div class="card-box bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
-            <h3 class="font-bold text-sm">سندات القبض من العملاء</h3>
+        <section id="sec-asset-scrap" class="sec-view hidden space-y-6">
+          <div class="odoo-card p-5 space-y-4">
+            <h3 class="font-bold text-sm">تخريد أصل ثابت</h3>
+            <form onsubmit="addAssetOp(event, 'تخريد أصل')" class="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <select id="ascrap-name" class="odoo-input sel-asset"></select>
+              <input id="ascrap-reason" placeholder="سبب التخريد" required class="odoo-input" />
+              <button class="odoo-btn-primary text-xs py-2">تخريد الأصل</button>
+            </form>
           </div>
         </section>
 
-        <section id="tab-sales-customers" class="tab-section hidden space-y-6">
-          <div class="card-box bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
-            <h3 class="font-bold text-sm">دليل وسجل العملاء</h3>
+        <!-- ================= المصروفات، الإيرادات، الخزن، البنوك، الفيزا ================= -->
+        <section id="sec-acc-expenses" class="sec-view hidden space-y-6">
+          <div class="odoo-card p-5 space-y-4">
+            <h3 class="font-bold text-sm">إضافة مصروف</h3>
+            <form onsubmit="addExpense(event)" class="grid grid-cols-1 md:grid-cols-5 gap-3">
+              <input id="exp-cat" placeholder="بند المصروف" required class="odoo-input" />
+              <input id="exp-desc" placeholder="البيان" required class="odoo-input" />
+              <select id="exp-chan" class="odoo-input sel-chan"></select>
+              <input type="number" id="exp-amt" placeholder="المبلغ" required class="odoo-input" />
+              <button class="odoo-btn-primary text-xs py-2">حفظ المصروف</button>
+            </form>
+            <table class="w-full text-xs text-right border"><thead class="bg-gray-50"><tr><th class="p-2 border">البند</th><th class="p-2 border">البيان</th><th class="p-2 border">الخزينة/البنك</th><th class="p-2 border">المبلغ</th></tr></thead><tbody id="tb-exp"></tbody></table>
           </div>
         </section>
 
-        <!-- ================= 6. المشتريات ================= -->
-        <section id="tab-pur-inv" class="tab-section hidden space-y-6">
-          <div class="card-box bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
-            <h3 class="font-bold text-sm">فواتير المشتريات</h3>
+        <section id="sec-acc-revenues" class="sec-view hidden space-y-6">
+          <div class="odoo-card p-5 space-y-4">
+            <h3 class="font-bold text-sm">إضافة إيراد</h3>
+            <form onsubmit="addRevenue(event)" class="grid grid-cols-1 md:grid-cols-5 gap-3">
+              <input id="rev-cat" placeholder="نوع الإيراد" required class="odoo-input" />
+              <input id="rev-desc" placeholder="البيان" required class="odoo-input" />
+              <select id="rev-chan" class="odoo-input sel-chan"></select>
+              <input type="number" id="rev-amt" placeholder="المبلغ" required class="odoo-input" />
+              <button class="odoo-btn-primary text-xs py-2">حفظ الإيراد</button>
+            </form>
+            <table class="w-full text-xs text-right border"><thead class="bg-gray-50"><tr><th class="p-2 border">النوع</th><th class="p-2 border">البيان</th><th class="p-2 border">الخزينة/البنك</th><th class="p-2 border">المبلغ</th></tr></thead><tbody id="tb-rev"></tbody></table>
           </div>
         </section>
 
-        <section id="tab-pur-orders" class="tab-section hidden space-y-6">
-          <div class="card-box bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
-            <h3 class="font-bold text-sm">طلبات الشراء الداخلية</h3>
+        <section id="sec-acc-treasury" class="sec-view hidden space-y-6">
+          <div class="odoo-card p-5 space-y-4">
+            <h3 class="font-bold text-sm">إضافة خزينة جديدة</h3>
+            <form onsubmit="addChannel(event, 'خزينة')" class="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <input id="ch-tr-name" placeholder="اسم الخزينة (مثال: خزينة الفرع)" required class="odoo-input" />
+              <input type="number" id="ch-tr-bal" placeholder="رصيد افتتاحي" required class="odoo-input" />
+              <button class="odoo-btn-primary text-xs py-2">إضافة خزينة</button>
+            </form>
+            <table class="w-full text-xs text-right border"><thead class="bg-gray-50"><tr><th class="p-2 border">اسم الخزينة</th><th class="p-2 border">الرصيد الحالي</th></tr></thead><tbody id="tb-tr"></tbody></table>
           </div>
         </section>
 
-        <section id="tab-pur-vouchers" class="tab-section hidden space-y-6">
-          <div class="card-box bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
-            <h3 class="font-bold text-sm">سندات الصرف للموردين</h3>
+        <section id="sec-acc-banks" class="sec-view hidden space-y-6">
+          <div class="odoo-card p-5 space-y-4">
+            <h3 class="font-bold text-sm">إضافة حساب بنكي</h3>
+            <form onsubmit="addChannel(event, 'بنك')" class="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <input id="ch-bk-name" placeholder="اسم البنك ورقم الحساب" required class="odoo-input" />
+              <input type="number" id="ch-bk-bal" placeholder="رصيد افتتاحي" required class="odoo-input" />
+              <button class="odoo-btn-primary text-xs py-2">إضافة بنك</button>
+            </form>
+            <table class="w-full text-xs text-right border"><thead class="bg-gray-50"><tr><th class="p-2 border">الحساب البنكي</th><th class="p-2 border">الرصيد الحالي</th></tr></thead><tbody id="tb-bk"></tbody></table>
           </div>
         </section>
 
-        <section id="tab-pur-vendors" class="tab-section hidden space-y-6">
-          <div class="card-box bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
-            <h3 class="font-bold text-sm">دليل وسجل الموردين</h3>
+        <section id="sec-acc-visa" class="sec-view hidden space-y-6">
+          <div class="odoo-card p-5 space-y-4">
+            <h3 class="font-bold text-sm">إضافة فيزا / محفظة إلكترونية</h3>
+            <form onsubmit="addChannel(event, 'فيزا')" class="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <input id="ch-vs-name" placeholder="اسم البطاقة أو المحفظة" required class="odoo-input" />
+              <input type="number" id="ch-vs-bal" placeholder="رصيد افتتاحي" required class="odoo-input" />
+              <button class="odoo-btn-primary text-xs py-2">إضافة فيزا</button>
+            </form>
+            <table class="w-full text-xs text-right border"><thead class="bg-gray-50"><tr><th class="p-2 border">البطاقة / المحفظة</th><th class="p-2 border">الرصيد الحالي</th></tr></thead><tbody id="tb-vs"></tbody></table>
           </div>
         </section>
 
-        <!-- ================= 7. التقارير المستقلة ================= -->
-        <section id="tab-rep-cust" class="tab-section hidden space-y-6">
-          <div class="card-box bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
-            <h3 class="font-bold text-sm">تقرير كشف حساب عميل تفصيلي</h3>
+        <section id="sec-acc-coa" class="sec-view hidden space-y-6">
+          <div class="odoo-card p-5 space-y-4">
+            <h3 class="font-bold text-sm">شجرة الحسابات</h3>
+            <table class="w-full text-xs text-right border"><thead class="bg-gray-50"><tr><th class="p-2 border">الكود</th><th class="p-2 border">اسم الحساب</th><th class="p-2 border">النوع</th></tr></thead><tbody id="tb-coa"></tbody></table>
           </div>
         </section>
 
-        <section id="tab-rep-vend" class="tab-section hidden space-y-6">
-          <div class="card-box bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
-            <h3 class="font-bold text-sm">تقرير كشف حساب مورد تفصيلي</h3>
+        <section id="sec-acc-journal" class="sec-view hidden space-y-6">
+          <div class="odoo-card p-5 space-y-4">
+            <h3 class="font-bold text-sm">دفتر القيود اليومية</h3>
+            <table class="w-full text-xs text-right border"><thead class="bg-gray-50"><tr><th class="p-2 border">القيد</th><th class="p-2 border">البيان</th><th class="p-2 border">المبلغ</th></tr></thead><tbody id="tb-je"></tbody></table>
           </div>
         </section>
 
-        <section id="tab-rep-treasury" class="tab-section hidden space-y-6">
-          <div class="card-box bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
-            <h3 class="font-bold text-sm">تقرير الحركة اليومية للخزينة</h3>
+        <!-- ================= المخازن ================= -->
+        <section id="sec-inv-cats" class="sec-view hidden space-y-6">
+          <div class="odoo-card p-5 space-y-4">
+            <h3 class="font-bold text-sm">فئات الأصناف</h3>
+            <form onsubmit="addCategory(event)" class="flex gap-3">
+              <input id="cat-name" placeholder="اسم الفئة" required class="odoo-input" />
+              <button class="odoo-btn-primary text-xs px-5">إضافة فئة</button>
+            </form>
+            <ul id="list-cats" class="list-disc pr-5 text-xs space-y-1"></ul>
           </div>
         </section>
 
-        <section id="tab-rep-banks" class="tab-section hidden space-y-6">
-          <div class="card-box bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
-            <h3 class="font-bold text-sm">تقرير حركات وإيداعات البنوك</h3>
+        <section id="sec-inv-items" class="sec-view hidden space-y-6">
+          <div class="odoo-card p-5 space-y-4">
+            <h3 class="font-bold text-sm">إضافة صنف</h3>
+            <form onsubmit="addItem(event)" class="grid grid-cols-1 md:grid-cols-5 gap-3">
+              <input id="itm-code" placeholder="كود الصنف" required class="odoo-input" />
+              <input id="itm-name" placeholder="اسم الصنف" required class="odoo-input" />
+              <select id="itm-cat" class="odoo-input sel-cat"></select>
+              <input type="number" id="itm-price" placeholder="سعر البيع" required class="odoo-input" />
+              <button class="odoo-btn-primary text-xs py-2">حفظ الصنف</button>
+            </form>
+            <table class="w-full text-xs text-right border"><thead class="bg-gray-50"><tr><th class="p-2 border">الكود</th><th class="p-2 border">الصنف</th><th class="p-2 border">الفئة</th><th class="p-2 border">السعر</th><th class="p-2 border">الرصيد</th></tr></thead><tbody id="tb-itm"></tbody></table>
           </div>
         </section>
 
-        <section id="tab-rep-exp" class="tab-section hidden space-y-6">
-          <div class="card-box bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
-            <h3 class="font-bold text-sm">تقرير المصروفات حسب الفئات والقطاعات</h3>
+        <section id="sec-inv-add-ext" class="sec-view hidden space-y-6">
+          <div class="odoo-card p-5 space-y-4">
+            <h3 class="font-bold text-sm">إذن إضافة مخزني (وارد خارجي)</h3>
+            <form onsubmit="addStockMove(event, 'إذن إضافة مخزني', 1)" class="grid grid-cols-1 md:grid-cols-4 gap-3">
+              <select class="odoo-input sel-item mv-item"></select>
+              <input type="number" placeholder="الكمية" required class="odoo-input mv-qty" />
+              <input placeholder="ملاحظات / مورد" class="odoo-input mv-note" />
+              <button class="odoo-btn-primary text-xs py-2">ترحيل الإذن</button>
+            </form>
           </div>
         </section>
 
-        <section id="tab-rep-rev" class="tab-section hidden space-y-6">
-          <div class="card-box bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
-            <h3 class="font-bold text-sm">تقرير الإيرادات والمبيعات</h3>
+        <section id="sec-inv-add-int" class="sec-view hidden space-y-6">
+          <div class="odoo-card p-5 space-y-4">
+            <h3 class="font-bold text-sm">إذن إضافة داخلي</h3>
+            <form onsubmit="addStockMove(event, 'إذن إضافة داخلي', 1)" class="grid grid-cols-1 md:grid-cols-4 gap-3">
+              <select class="odoo-input sel-item mv-item"></select>
+              <input type="number" placeholder="الكمية" required class="odoo-input mv-qty" />
+              <input placeholder="جهة التحويل" class="odoo-input mv-note" />
+              <button class="odoo-btn-primary text-xs py-2">ترحيل الإذن</button>
+            </form>
           </div>
         </section>
 
-        <!-- ================= 8. المعلومات الأساسية ================= -->
-        <section id="tab-info-company" class="tab-section hidden space-y-6">
-          <div class="card-box bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
-            <h3 class="font-bold text-sm">بيانات المنشأة والضرائب والعملة</h3>
+        <section id="sec-inv-out-ext" class="sec-view hidden space-y-6">
+          <div class="odoo-card p-5 space-y-4">
+            <h3 class="font-bold text-sm">إذن صرف مخزني (منصرف خارجي)</h3>
+            <form onsubmit="addStockMove(event, 'إذن صرف مخزني', -1)" class="grid grid-cols-1 md:grid-cols-4 gap-3">
+              <select class="odoo-input sel-item mv-item"></select>
+              <input type="number" placeholder="الكمية" required class="odoo-input mv-qty" />
+              <input placeholder="العميل / جهة الصرف" class="odoo-input mv-note" />
+              <button class="odoo-btn-primary text-xs py-2">ترحيل الصرف</button>
+            </form>
           </div>
         </section>
 
-        <section id="tab-info-branches" class="tab-section hidden space-y-6">
-          <div class="card-box bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
-            <h3 class="font-bold text-sm">دليل الفروع</h3>
+        <section id="sec-inv-out-int" class="sec-view hidden space-y-6">
+          <div class="odoo-card p-5 space-y-4">
+            <h3 class="font-bold text-sm">إذن صرف داخلي</h3>
+            <form onsubmit="addStockMove(event, 'إذن صرف داخلي', -1)" class="grid grid-cols-1 md:grid-cols-4 gap-3">
+              <select class="odoo-input sel-item mv-item"></select>
+              <input type="number" placeholder="الكمية" required class="odoo-input mv-qty" />
+              <input placeholder="القسم الداخلي" class="odoo-input mv-note" />
+              <button class="odoo-btn-primary text-xs py-2">ترحيل الصرف</button>
+            </form>
           </div>
         </section>
 
-        <section id="tab-info-regions" class="tab-section hidden space-y-6">
-          <div class="card-box bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
-            <h3 class="font-bold text-sm">دليل المناطق والقطاعات الجغرافية</h3>
+        <!-- ================= المبيعات ================= -->
+        <section id="sec-sales-customers" class="sec-view hidden space-y-6">
+          <div class="odoo-card p-5 space-y-4">
+            <h3 class="font-bold text-sm">إضافة عميل</h3>
+            <form onsubmit="addCustomer(event)" class="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <input id="cust-name" placeholder="اسم العميل" required class="odoo-input" />
+              <input id="cust-phone" placeholder="رقم الهاتف" class="odoo-input" />
+              <button class="odoo-btn-primary text-xs py-2">إضافة عميل</button>
+            </form>
+            <table class="w-full text-xs text-right border"><thead class="bg-gray-50"><tr><th class="p-2 border">العميل</th><th class="p-2 border">الهاتف</th></tr></thead><tbody id="tb-cust"></tbody></table>
           </div>
         </section>
 
-        <section id="tab-info-agents" class="tab-section hidden space-y-6">
-          <div class="card-box bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
-            <h3 class="font-bold text-sm">دليل المناديب ومسؤولي البيع</h3>
+        <section id="sec-sales-orders" class="sec-view hidden space-y-6">
+          <div class="odoo-card p-5 space-y-4">
+            <h3 class="font-bold text-sm">طلب بيع</h3>
+            <form onsubmit="addSaleDoc(event, 'طلب بيع')" class="grid grid-cols-1 md:grid-cols-4 gap-3">
+              <select class="odoo-input sel-cust s-cust"></select>
+              <select class="odoo-input sel-item s-item"></select>
+              <input type="number" placeholder="المبلغ" required class="odoo-input s-amt" />
+              <button class="odoo-btn-primary text-xs py-2">حفظ طلب البيع</button>
+            </form>
           </div>
         </section>
 
-        <section id="tab-info-system" class="tab-section hidden space-y-6">
-          <div class="card-box bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
-            <h3 class="font-bold text-sm">إدارة المستخدمين والنسخ الاحتياطي</h3>
+        <section id="sec-sales-invoices" class="sec-view hidden space-y-6">
+          <div class="odoo-card p-5 space-y-4">
+            <h3 class="font-bold text-sm">إصدار فاتورة مبيعات</h3>
+            <form onsubmit="addSaleDoc(event, 'فاتورة مبيعات')" class="grid grid-cols-1 md:grid-cols-5 gap-3">
+              <input placeholder="كود الفاتورة (تلقائي إذا ترك فارغاً)" class="odoo-input s-code" />
+              <select class="odoo-input sel-cust s-cust"></select>
+              <select class="odoo-input sel-item s-item"></select>
+              <input type="number" placeholder="الإجمالي" required class="odoo-input s-amt" />
+              <button class="odoo-btn-primary text-xs py-2">إصدار الفاتورة</button>
+            </form>
+            <table class="w-full text-xs text-right border"><thead class="bg-gray-50"><tr><th class="p-2 border">الكود</th><th class="p-2 border">النوع</th><th class="p-2 border">العميل</th><th class="p-2 border">الصنف</th><th class="p-2 border">الإجمالي</th></tr></thead><tbody id="tb-sales"></tbody></table>
+          </div>
+        </section>
+
+        <section id="sec-sales-receipts" class="sec-view hidden space-y-6">
+          <div class="odoo-card p-5 space-y-4">
+            <h3 class="font-bold text-sm">سند قبض من عميل</h3>
+            <form onsubmit="addVoucher(event, 'سند قبض')" class="grid grid-cols-1 md:grid-cols-4 gap-3">
+              <select class="odoo-input sel-cust v-party"></select>
+              <select class="odoo-input sel-chan v-chan"></select>
+              <input type="number" placeholder="المبلغ المقبوض" required class="odoo-input v-amt" />
+              <button class="odoo-btn-primary text-xs py-2">إصدار سند قبض</button>
+            </form>
+          </div>
+        </section>
+
+        <!-- ================= المشتريات ================= -->
+        <section id="sec-pur-vendors" class="sec-view hidden space-y-6">
+          <div class="odoo-card p-5 space-y-4">
+            <h3 class="font-bold text-sm">إضافة مورد</h3>
+            <form onsubmit="addVendor(event)" class="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <input id="vnd-name" placeholder="اسم المورد" required class="odoo-input" />
+              <input id="vnd-phone" placeholder="رقم الهاتف" class="odoo-input" />
+              <button class="odoo-btn-primary text-xs py-2">إضافة مورد</button>
+            </form>
+            <table class="w-full text-xs text-right border"><thead class="bg-gray-50"><tr><th class="p-2 border">المورد</th><th class="p-2 border">الهاتف</th></tr></thead><tbody id="tb-vnd"></tbody></table>
+          </div>
+        </section>
+
+        <section id="sec-pur-orders" class="sec-view hidden space-y-6">
+          <div class="odoo-card p-5 space-y-4">
+            <h3 class="font-bold text-sm">طلب شراء</h3>
+            <form onsubmit="addPurDoc(event, 'طلب شراء')" class="grid grid-cols-1 md:grid-cols-4 gap-3">
+              <select class="odoo-input sel-vnd p-vnd"></select>
+              <select class="odoo-input sel-item p-item"></select>
+              <input type="number" placeholder="القيمة" required class="odoo-input p-amt" />
+              <button class="odoo-btn-primary text-xs py-2">حفظ طلب الشراء</button>
+            </form>
+          </div>
+        </section>
+
+        <section id="sec-pur-invoices" class="sec-view hidden space-y-6">
+          <div class="odoo-card p-5 space-y-4">
+            <h3 class="font-bold text-sm">فاتورة مشتريات</h3>
+            <form onsubmit="addPurDoc(event, 'فاتورة مشتريات')" class="grid grid-cols-1 md:grid-cols-5 gap-3">
+              <input placeholder="كود الفاتورة" class="odoo-input p-code" />
+              <select class="odoo-input sel-vnd p-vnd"></select>
+              <select class="odoo-input sel-item p-item"></select>
+              <input type="number" placeholder="الإجمالي" required class="odoo-input p-amt" />
+              <button class="odoo-btn-primary text-xs py-2">حفظ الفاتورة</button>
+            </form>
+            <table class="w-full text-xs text-right border"><thead class="bg-gray-50"><tr><th class="p-2 border">الكود</th><th class="p-2 border">النوع</th><th class="p-2 border">المورد</th><th class="p-2 border">الصنف</th><th class="p-2 border">الإجمالي</th></tr></thead><tbody id="tb-pur"></tbody></table>
+          </div>
+        </section>
+
+        <section id="sec-pur-payments" class="sec-view hidden space-y-6">
+          <div class="odoo-card p-5 space-y-4">
+            <h3 class="font-bold text-sm">سند صرف لمورد</h3>
+            <form onsubmit="addVoucher(event, 'سند صرف')" class="grid grid-cols-1 md:grid-cols-4 gap-3">
+              <select class="odoo-input sel-vnd v-party"></select>
+              <select class="odoo-input sel-chan v-chan"></select>
+              <input type="number" placeholder="المبلغ المنصرف" required class="odoo-input v-amt" />
+              <button class="odoo-btn-primary text-xs py-2">إصدار سند صرف</button>
+            </form>
+          </div>
+        </section>
+
+        <!-- ================= التقارير المستقلة ================= -->
+        <section id="sec-rep-cust" class="sec-view hidden space-y-4">
+          <div class="odoo-card p-5 space-y-3">
+            <h3 class="font-bold text-sm">تقرير كشف حساب عميل</h3>
+            <select id="rcust-sel" onchange="renderRepCust()" class="odoo-input sel-cust !max-w-xs"></select>
+            <div id="rep-cust-box" class="text-xs space-y-2 pt-2"></div>
+          </div>
+        </section>
+
+        <section id="sec-rep-vend" class="sec-view hidden space-y-4">
+          <div class="odoo-card p-5 space-y-3">
+            <h3 class="font-bold text-sm">تقرير كشف حساب مورد</h3>
+            <select id="rvend-sel" onchange="renderRepVend()" class="odoo-input sel-vnd !max-w-xs"></select>
+            <div id="rep-vend-box" class="text-xs space-y-2 pt-2"></div>
+          </div>
+        </section>
+
+        <section id="sec-rep-treasury" class="sec-view hidden space-y-4">
+          <div class="odoo-card p-5"><h3 class="font-bold text-sm mb-3">تقرير الخزينة</h3><div id="rep-tr-box" class="text-xs"></div></div>
+        </section>
+
+        <section id="sec-rep-banks" class="sec-view hidden space-y-4">
+          <div class="odoo-card p-5"><h3 class="font-bold text-sm mb-3">تقرير البنوك</h3><div id="rep-bk-box" class="text-xs"></div></div>
+        </section>
+
+        <section id="sec-rep-visa" class="sec-view hidden space-y-4">
+          <div class="odoo-card p-5"><h3 class="font-bold text-sm mb-3">تقرير الفيزا والمحافظ</h3><div id="rep-vs-box" class="text-xs"></div></div>
+        </section>
+
+        <section id="sec-rep-exp" class="sec-view hidden space-y-4">
+          <div class="odoo-card p-5"><h3 class="font-bold text-sm mb-3">تقرير المصروفات</h3><div id="rep-exp-box" class="text-xs"></div></div>
+        </section>
+
+        <section id="sec-rep-rev" class="sec-view hidden space-y-4">
+          <div class="odoo-card p-5"><h3 class="font-bold text-sm mb-3">تقرير الإيرادات</h3><div id="rep-rev-box" class="text-xs"></div></div>
+        </section>
+
+        <section id="sec-rep-assets" class="sec-view hidden space-y-4">
+          <div class="odoo-card p-5"><h3 class="font-bold text-sm mb-3">تقرير الأصول والإهلاك</h3><div id="rep-ast-box" class="text-xs"></div></div>
+        </section>
+
+        <section id="sec-rep-stock" class="sec-view hidden space-y-4">
+          <div class="odoo-card p-5"><h3 class="font-bold text-sm mb-3">تقرير المخزون والأرباح</h3><div id="rep-stk-box" class="text-xs"></div></div>
+        </section>
+
+        <!-- ================= المعلومات الأساسية والمستخدمين ================= -->
+        <section id="sec-info-company" class="sec-view hidden space-y-4">
+          <div class="odoo-card p-5 space-y-3 max-w-lg">
+            <h3 class="font-bold text-sm">اسم الشركة والبيانات الأساسية</h3>
+            <input id="cmp-name" class="odoo-input" placeholder="اسم الشركة" />
+            <input id="cmp-tax" class="odoo-input" placeholder="الرقم الضريبي" />
+            <button onclick="saveCompany()" class="odoo-btn-primary text-xs px-4 py-2">حفظ البيانات</button>
+          </div>
+        </section>
+
+        <section id="sec-info-branches" class="sec-view hidden space-y-4">
+          <div class="odoo-card p-5 space-y-3 max-w-lg">
+            <h3 class="font-bold text-sm">الفروع</h3>
+            <form onsubmit="addBranch(event)" class="flex gap-2">
+              <input id="br-name" placeholder="اسم الفرع الجديد" required class="odoo-input" />
+              <button class="odoo-btn-primary text-xs px-4">إضافة</button>
+            </form>
+            <ul id="list-branches" class="list-disc pr-5 text-xs space-y-1"></ul>
+          </div>
+        </section>
+
+        <section id="sec-info-regions" class="sec-view hidden space-y-4">
+          <div class="odoo-card p-5 space-y-3 max-w-lg">
+            <h3 class="font-bold text-sm">المناطق</h3>
+            <form onsubmit="addRegion(event)" class="flex gap-2">
+              <input id="reg-name" placeholder="اسم المنطقة" required class="odoo-input" />
+              <button class="odoo-btn-primary text-xs px-4">إضافة</button>
+            </form>
+            <ul id="list-regions" class="list-disc pr-5 text-xs space-y-1"></ul>
+          </div>
+        </section>
+
+        <section id="sec-info-agents" class="sec-view hidden space-y-4">
+          <div class="odoo-card p-5 space-y-3 max-w-lg">
+            <h3 class="font-bold text-sm">المناديب</h3>
+            <form onsubmit="addAgent(event)" class="flex gap-2">
+              <input id="ag-name" placeholder="اسم المندوب" required class="odoo-input" />
+              <button class="odoo-btn-primary text-xs px-4">إضافة</button>
+            </form>
+            <ul id="list-agents" class="list-disc pr-5 text-xs space-y-1"></ul>
+          </div>
+        </section>
+
+        <section id="sec-sys-groups" class="sec-view hidden space-y-4">
+          <div class="odoo-card p-5 space-y-4">
+            <h3 class="font-bold text-sm">مجموعات الصلاحيات</h3>
+            <form onsubmit="addGroup(event)" class="space-y-3">
+              <input id="grp-name" placeholder="اسم المجموعة (مثال: محاسبين، مبيعات)" required class="odoo-input !max-w-sm" />
+              <div class="flex flex-wrap gap-4 text-xs">
+                <label><input type="checkbox" class="grp-perm" value="hr" checked /> الموارد البشرية</label>
+                <label><input type="checkbox" class="grp-perm" value="acc" checked /> الحسابات</label>
+                <label><input type="checkbox" class="grp-perm" value="inv" checked /> المخازن</label>
+                <label><input type="checkbox" class="grp-perm" value="sales" checked /> المبيعات</label>
+                <label><input type="checkbox" class="grp-perm" value="pur" checked /> المشتريات</label>
+                <label><input type="checkbox" class="grp-perm" value="rep" checked /> التقارير</label>
+                <label><input type="checkbox" class="grp-perm" value="sys" /> المعلومات والصلاحيات</label>
+              </div>
+              <button class="odoo-btn-primary text-xs px-4 py-2">إنشاء المجموعة</button>
+            </form>
+            <div id="list-groups" class="text-xs space-y-1 pt-2"></div>
+          </div>
+        </section>
+
+        <section id="sec-sys-users" class="sec-view hidden space-y-4">
+          <div class="odoo-card p-5 space-y-4">
+            <h3 class="font-bold text-sm">إدارة المستخدمين</h3>
+            <form onsubmit="addUser(event)" class="grid grid-cols-1 md:grid-cols-4 gap-3">
+              <input id="usr-name" placeholder="اسم المستخدم" required class="odoo-input" />
+              <input id="usr-pass" placeholder="كلمة المرور" required class="odoo-input" />
+              <select id="usr-grp" class="odoo-input sel-grp"></select>
+              <button class="odoo-btn-primary text-xs py-2">إضافة مستخدم</button>
+            </form>
+            <table class="w-full text-xs text-right border"><thead class="bg-gray-50"><tr><th class="p-2 border">المستخدم</th><th class="p-2 border">المجموعة</th></tr></thead><tbody id="tb-users"></tbody></table>
+          </div>
+        </section>
+
+        <section id="sec-sys-backup" class="sec-view hidden space-y-4">
+          <div class="odoo-card p-5 space-y-3">
+            <h3 class="font-bold text-sm">النسخ الاحتياطي وإعادة الضبط</h3>
+            <div class="flex gap-3">
+              <button onclick="exportJson()" class="odoo-btn-primary text-xs px-4 py-2">تصدير نسخة JSON</button>
+              <button onclick="resetDemo()" class="px-4 py-2 rounded-lg bg-rose-600 text-white font-bold text-xs">استعادة بيانات تجريبية</button>
+            </div>
           </div>
         </section>
 
@@ -572,289 +819,472 @@
   </div>
 
   <script>
-    const STORAGE_KEY = 'tantawe_erp_v3_full';
+    const DB_KEY = 'tantawe_odoo_v1';
 
-    const INITIAL_DB = {
-      user: null,
+    const SEED = {
+      sessionUser: null,
+      company: { name: 'TANTAWE ERP', tax: '300-450-900' },
       activeBranch: 'الفرع الرئيسي',
-      branches: ['الفرع الرئيسي', 'فرع طنطا', 'فرع القاهرة'],
+      branches: ['الفرع الرئيسي', 'فرع طنطا'],
+      regions: ['الدلتا', 'القاهرة الكبرى'],
+      agents: ['مندوب 1', 'مندوب 2'],
+      groups: [
+        { name: 'مدير عام', perms: ['hr','acc','inv','sales','pur','rep','sys'] },
+        { name: 'محاسب', perms: ['acc','sales','pur','rep'] }
+      ],
+      users: [
+        { username: 'admin', password: '1234', group: 'مدير عام' }
+      ],
       employees: [
-        { id: 'EMP-1', name: 'محمود طنطاوي', role: 'مدير عام', salary: 15000 },
-        { id: 'EMP-2', name: 'أحمد علي', role: 'محاسب', salary: 8500 }
+        { code: 'EMP-1', name: 'محمود طنطاوي', role: 'مدير النظام', salary: 15000 }
       ],
       penalties: [],
       bonuses: [],
+      attendance: [],
+      leaves: [],
+      channels: [
+        { name: 'الخزينة الرئيسية', type: 'خزينة', balance: 50000 },
+        { name: 'البنك الأهلي', type: 'بنك', balance: 120000 },
+        { name: 'فيزا المبيعات', type: 'فيزا', balance: 25000 }
+      ],
       assets: [
-        { name: 'سيارة توزيع', action: 'شراء / إضافة', cost: 250000, rate: 10 }
+        { name: 'سيارة نقل', type: 'إضافة أصل', value: 250000, rate: 10, note: 'أصل تشغيلي' }
       ],
-      expenses: [
-        { cat: 'إيجار', desc: 'إيجار المقر الشهري', amount: 8000 }
-      ],
-      revenues: [
-        { cat: 'استشارات', desc: 'إيراد دعم فني', amount: 12000 }
-      ],
+      expenses: [],
+      revenues: [],
+      categories: ['إلكترونيات', 'مستلزمات'],
       items: [
-        { cat: 'أجهزة', name: 'طابعة حرارية POS', price: 3500 }
+        { code: 'ITM-1', name: 'لابتوب أعمال', cat: 'إلكترونيات', price: 24000, qty: 10 },
+        { code: 'ITM-2', name: 'طابعة ليزر', cat: 'مستلزمات', price: 6500, qty: 15 }
       ],
-      sales: [
-        { id: 'INV-1001', cust: 'شركة النور', item: 'طابعة حرارية POS', amount: 7000 }
+      customers: [
+        { name: 'شركة الأمل للتجارة', phone: '01000000001' }
       ],
-      coa: [
-        { code: '1101', name: 'الخزينة الرئيسية', type: 'أصول', balance: 50000 },
-        { code: '1102', name: 'البنك الأهلي', type: 'أصول', balance: 120000 }
+      vendors: [
+        { name: 'مؤسسة النور للتوريدات', phone: '01000000002' }
       ],
-      journal: [
-        { id: 'JE-1', date: '2026-11-20', debit: '1101 - الخزينة', credit: 'إيرادات', amount: 12000 }
-      ]
+      salesDocs: [],
+      purDocs: [],
+      vouchers: []
     };
 
     let db = loadDb();
 
     function loadDb() {
       try {
-        const raw = localStorage.getItem(STORAGE_KEY);
-        return raw ? { ...structuredClone(INITIAL_DB), ...JSON.parse(raw) } : structuredClone(INITIAL_DB);
+        const raw = localStorage.getItem(DB_KEY);
+        return raw ? { ...structuredClone(SEED), ...JSON.parse(raw) } : structuredClone(SEED);
       } catch {
-        return structuredClone(INITIAL_DB);
+        return structuredClone(SEED);
       }
     }
 
     function saveDb() {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(db));
+      localStorage.setItem(DB_KEY, JSON.stringify(db));
     }
 
-    function formatMoney(num) {
-      return Number(num || 0).toLocaleString('en-US', { minimumFractionDigits: 2 }) + ' ج.م';
+    function money(n) {
+      return Number(n || 0).toLocaleString('en-US', { minimumFractionDigits: 2 }) + ' ج.م';
     }
 
-    /* ================= تسجيل الدخول والتنقل ================= */
-    function initAuth() {
-      if (db.user) {
-        document.getElementById('login-screen').classList.add('hidden');
-        document.getElementById('app-shell').classList.remove('hidden');
-        renderAll();
-      } else {
-        document.getElementById('app-shell').classList.add('hidden');
-        document.getElementById('login-screen').classList.remove('hidden');
-      }
-    }
-
-    function fillDemoAdmin() {
-      document.getElementById('login-username').value = 'admin';
-      document.getElementById('login-password').value = '1234';
+    /* ================= الدخول والصلاحيات ================= */
+    function quickAdminLogin() {
+      document.getElementById('login-user').value = 'admin';
+      document.getElementById('login-pass').value = '1234';
     }
 
     document.getElementById('login-form').addEventListener('submit', (e) => {
       e.preventDefault();
-      const u = document.getElementById('login-username').value.trim();
-      const p = document.getElementById('login-password').value;
-      if (u === 'admin' && p === '1234') {
-        db.user = u;
+      const u = document.getElementById('login-user').value.trim();
+      const p = document.getElementById('login-pass').value;
+      const found = db.users.find(x => x.username === u && x.password === p);
+      if (found) {
+        db.sessionUser = found.username;
         saveDb();
-        initAuth();
+        initApp();
       } else {
         document.getElementById('login-error').classList.remove('hidden');
       }
     });
 
-    function logoutUser() {
-      db.user = null;
+    function logout() {
+      db.sessionUser = null;
       saveDb();
-      initAuth();
+      initApp();
     }
 
-    function toggleSubmenu(id) {
-      const el = document.getElementById(id);
-      if (el) el.classList.toggle('hidden');
+    function getUserPerms() {
+      const u = db.users.find(x => x.username === db.sessionUser);
+      if (!u) return [];
+      const grp = db.groups.find(g => g.name === u.group);
+      return grp ? grp.perms : [];
     }
 
-    function switchTab(tabId) {
-      document.querySelectorAll('.tab-section').forEach(s => s.classList.add('hidden'));
-      const target = document.getElementById(`tab-${tabId}`);
+    function initApp() {
+      if (!db.sessionUser) {
+        document.getElementById('app-shell').classList.add('hidden');
+        document.getElementById('login-screen').classList.remove('hidden');
+        return;
+      }
+      document.getElementById('login-screen').classList.add('hidden');
+      document.getElementById('app-shell').classList.remove('hidden');
+
+      const u = db.users.find(x => x.username === db.sessionUser);
+      document.getElementById('active-user-lbl').textContent = u ? u.username : 'admin';
+      document.getElementById('active-group-lbl').textContent = u ? u.group : 'مدير عام';
+
+      const perms = getUserPerms();
+      document.querySelectorAll('[data-perm]').forEach(el => {
+        const key = el.getAttribute('data-perm');
+        el.classList.toggle('hidden', !perms.includes(key));
+      });
+
+      refreshAll();
+    }
+
+    function toggleMenu(id) {
+      document.getElementById(id).classList.toggle('hidden');
+    }
+
+    function openTab(tabId) {
+      document.querySelectorAll('.sec-view').forEach(s => s.classList.add('hidden'));
+      const target = document.getElementById(`sec-${tabId}`);
       if (target) target.classList.remove('hidden');
 
-      document.querySelectorAll('.sub-tab-btn').forEach(b => {
+      document.querySelectorAll('.sub-item-btn').forEach(b => {
         b.classList.toggle('active', b.dataset.tab === tabId);
       });
+
+      const activeBtn = document.querySelector(`.sub-item-btn[data-tab="${tabId}"]`);
+      document.getElementById('view-title').textContent = activeBtn ? activeBtn.textContent.trim() : 'التحليل اليومي (الرئيسية)';
+
+      renderReports();
     }
 
-    function changeBranch(b) {
-      db.activeBranch = b;
+    function switchBranch(val) {
+      db.activeBranch = val;
       saveDb();
-      renderDashboard();
+      document.getElementById('lbl-branch').textContent = val;
     }
 
-    /* ================= التحليل اليومي ================= */
-    let chartInstance = null;
-    function renderDashboard() {
-      const totSales = db.sales.reduce((s, i) => s + Number(i.amount), 0);
-      const totExp = db.expenses.reduce((s, i) => s + Number(i.amount), 0);
-      const totRev = db.revenues.reduce((s, i) => s + Number(i.amount), 0);
-      const net = (totSales + totRev) - totExp;
+    /* ================= التحديث العام وربط القوائم ================= */
+    function bindSelects() {
+      document.querySelectorAll('.sel-emp').forEach(s => s.innerHTML = db.employees.map(e => `<option value="${e.name}">${e.name}</option>`).join(''));
+      document.querySelectorAll('.sel-chan').forEach(s => s.innerHTML = db.channels.map(c => `<option value="${c.name}">${c.name} (${c.type})</option>`).join(''));
+      document.querySelectorAll('.sel-cat').forEach(s => s.innerHTML = db.categories.map(c => `<option value="${c}">${c}</option>`).join(''));
+      document.querySelectorAll('.sel-item').forEach(s => s.innerHTML = db.items.map(i => `<option value="${i.name}">${i.name} (${money(i.price)})</option>`).join(''));
+      document.querySelectorAll('.sel-cust').forEach(s => s.innerHTML = db.customers.map(c => `<option value="${c.name}">${c.name}</option>`).join(''));
+      document.querySelectorAll('.sel-vnd').forEach(s => s.innerHTML = db.vendors.map(v => `<option value="${v.name}">${v.name}</option>`).join(''));
+      document.querySelectorAll('.sel-asset').forEach(s => s.innerHTML = db.assets.map(a => `<option value="${a.name}">${a.name}</option>`).join(''));
+      document.querySelectorAll('.sel-grp').forEach(s => s.innerHTML = db.groups.map(g => `<option value="${g.name}">${g.name}</option>`).join(''));
+    }
 
-      const kpis = [
-        { label: 'مبيعات اليوم', val: formatMoney(totSales), tone: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30' },
-        { label: 'مشتريات اليوم', val: formatMoney(0), tone: 'bg-blue-500/10 text-blue-400 border-blue-500/30' },
-        { label: 'المصروفات اليومية', val: formatMoney(totExp), tone: 'bg-rose-500/10 text-rose-400 border-rose-500/30' },
-        { label: 'الإيرادات اليومية', val: formatMoney(totRev), tone: 'bg-amber-500/10 text-amber-400 border-amber-500/30' },
-        { label: 'صافي اليوم', val: formatMoney(net), tone: 'bg-indigo-500/10 text-indigo-400 border-indigo-500/30' }
+    /* ================= الرئيسية ================= */
+    let chartObj = null;
+    function renderDashboard() {
+      const salesSum = db.salesDocs.filter(d => d.type === 'فاتورة مبيعات').reduce((s, x) => s + Number(x.amount), 0);
+      const purSum = db.purDocs.filter(d => d.type === 'فاتورة مشتريات').reduce((s, x) => s + Number(x.amount), 0);
+      const expSum = db.expenses.reduce((s, x) => s + Number(x.amount), 0);
+      const revSum = db.revenues.reduce((s, x) => s + Number(x.amount), 0);
+      const net = (salesSum + revSum) - (purSum + expSum);
+
+      const cards = [
+        { l: 'فواتير المبيعات', v: money(salesSum), c: 'border-emerald-200 bg-emerald-50 text-emerald-900' },
+        { l: 'فواتير المشتريات', v: money(purSum), c: 'border-blue-200 bg-blue-50 text-blue-900' },
+        { l: 'المصروفات', v: money(expSum), c: 'border-rose-200 bg-rose-50 text-rose-900' },
+        { l: 'الإيرادات', v: money(revSum), c: 'border-amber-200 bg-amber-50 text-amber-900' },
+        { l: 'صافي الحركة', v: money(net), c: 'border-purple-200 bg-purple-50 text-purple-900' }
       ];
 
-      document.getElementById('daily-kpi-cards').innerHTML = kpis.map(k => `
-        <div class="card-box rounded-2xl p-4 border ${k.tone}">
-          <div class="text-xs font-bold">${k.label}</div>
-          <div class="text-base font-black mt-2">${k.val}</div>
+      document.getElementById('kpi-grid').innerHTML = cards.map(k => `
+        <div class="odoo-card p-4 border ${k.c}">
+          <div class="text-xs font-bold">${k.l}</div>
+          <div class="text-sm font-black mt-1.5">${k.v}</div>
         </div>
       `).join('');
 
-      document.getElementById('dashboard-recent-list').innerHTML = `
-        <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 flex justify-between"><span>مبيعات: ${totSales} ج.م</span><span class="text-emerald-400 font-bold">مكتمل</span></div>
-        <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 flex justify-between"><span>مصروفات: ${totExp} ج.م</span><span class="text-rose-400 font-bold">مصروف</span></div>
-      `;
+      document.getElementById('channels-summary').innerHTML = db.channels.map(ch => `
+        <div class="flex justify-between p-2.5 rounded-lg bg-gray-50 border">
+          <span class="font-bold">${ch.name} (${ch.type})</span>
+          <span class="font-black text-purple-800">${money(ch.balance)}</span>
+        </div>
+      `).join('');
 
-      // رسم بياني
-      const ctx = document.getElementById('dailyChart').getContext('2d');
-      if (chartInstance) chartInstance.destroy();
-      chartInstance = new Chart(ctx, {
+      const ctx = document.getElementById('mainChart').getContext('2d');
+      if (chartObj) chartObj.destroy();
+      chartObj = new Chart(ctx, {
         type: 'bar',
         data: {
-          labels: ['المبيعات', 'الإيرادات', 'المصروفات', 'الصافي'],
+          labels: ['مبيعات', 'مشتريات', 'مصروفات', 'إيرادات', 'الصافي'],
           datasets: [{
-            label: 'القيمة بالجنيه',
-            data: [totSales, totRev, totExp, net],
-            backgroundColor: ['#10b981', '#f59e0b', '#f43f5e', '#6366f1']
+            data: [salesSum, purSum, expSum, revSum, net],
+            backgroundColor: ['#10b981', '#3b82f6', '#ef4444', '#f59e0b', '#714b67']
           }]
         },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: { legend: { display: false } },
-          scales: {
-            x: { ticks: { color: '#94a3b8' } },
-            y: { ticks: { color: '#94a3b8' } }
-          }
-        }
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
       });
     }
 
-    /* ================= الموارد البشرية ================= */
+    /* ================= عمليات الإضافة ================= */
     function addEmployee(e) {
       e.preventDefault();
-      db.employees.push({
-        id: 'EMP-' + (db.employees.length + 1),
-        name: document.getElementById('emp-name').value,
-        role: document.getElementById('emp-role').value,
-        salary: Number(document.getElementById('emp-salary').value)
-      });
-      saveDb(); e.target.reset(); renderHR();
+      db.employees.push({ code: 'EMP-' + (db.employees.length + 1), name: document.getElementById('e-name').value, role: document.getElementById('e-role').value, salary: Number(document.getElementById('e-sal').value) });
+      saveDb(); e.target.reset(); refreshAll();
     }
     function addPenalty(e) {
       e.preventDefault();
-      db.penalties.push({
-        emp: document.getElementById('pen-emp').value,
-        reason: document.getElementById('pen-reason').value,
-        amount: Number(document.getElementById('pen-amount').value)
-      });
-      saveDb(); e.target.reset(); renderHR();
+      db.penalties.push({ emp: document.getElementById('p-emp').value, reason: document.getElementById('p-reason').value, amount: Number(document.getElementById('p-amt').value) });
+      saveDb(); e.target.reset(); refreshAll();
     }
     function addBonus(e) {
       e.preventDefault();
-      db.bonuses.push({
-        emp: document.getElementById('bon-emp').value,
-        reason: document.getElementById('bon-reason').value,
-        amount: Number(document.getElementById('bon-amount').value)
-      });
-      saveDb(); e.target.reset(); renderHR();
+      db.bonuses.push({ emp: document.getElementById('b-emp').value, reason: document.getElementById('b-reason').value, amount: Number(document.getElementById('b-amt').value) });
+      saveDb(); e.target.reset(); refreshAll();
     }
-    function renderHR() {
-      const opts = db.employees.map(e => `<option value="${e.name}">${e.name} (${e.role})</option>`).join('');
-      document.querySelectorAll('.emp-select').forEach(s => s.innerHTML = opts);
-
-      document.getElementById('tbl-employees').innerHTML = db.employees.map(e => `
-        <tr><td class="p-2.5">${e.id}</td><td class="p-2.5 font-bold">${e.name}</td><td class="p-2.5">${e.role}</td><td class="p-2.5 font-bold text-emerald-400">${formatMoney(e.salary)}</td></tr>
-      `).join('');
-      document.getElementById('tbl-penalties').innerHTML = db.penalties.map(p => `
-        <tr><td class="p-2.5 font-bold">${p.emp}</td><td class="p-2.5">${p.reason}</td><td class="p-2.5 font-bold text-rose-400">${formatMoney(p.amount)}</td></tr>
-      `).join('');
-      document.getElementById('tbl-bonuses').innerHTML = db.bonuses.map(b => `
-        <tr><td class="p-2.5 font-bold">${b.emp}</td><td class="p-2.5">${b.reason}</td><td class="p-2.5 font-bold text-emerald-400">${formatMoney(b.amount)}</td></tr>
-      `).join('');
-    }
-
-    /* ================= الحسابات والأصول والمخازن ================= */
-    function addAsset(e) {
+    function addAttendance(e) {
       e.preventDefault();
-      db.assets.push({
-        name: document.getElementById('ast-name').value,
-        action: document.getElementById('ast-action').value,
-        cost: Number(document.getElementById('ast-cost').value),
-        rate: Number(document.getElementById('ast-rate').value || 10)
-      });
-      saveDb(); e.target.reset(); renderAcc();
+      db.attendance.push({ emp: document.getElementById('att-emp').value, status: document.getElementById('att-status').value, date: document.getElementById('att-date').value });
+      saveDb(); e.target.reset(); refreshAll();
     }
+    function addLeave(e) {
+      e.preventDefault();
+      db.leaves.push({ emp: document.getElementById('lv-emp').value, type: document.getElementById('lv-type').value, days: Number(document.getElementById('lv-days').value) });
+      saveDb(); e.target.reset(); refreshAll();
+    }
+
+    function adjustChannel(name, delta) {
+      const ch = db.channels.find(c => c.name === name);
+      if (ch) ch.balance = Number(ch.balance || 0) + Number(delta || 0);
+    }
+
+    function addChannel(e, type) {
+      e.preventDefault();
+      const map = { 'خزينة': ['ch-tr-name', 'ch-tr-bal'], 'بنك': ['ch-bk-name', 'ch-bk-bal'], 'فيزا': ['ch-vs-name', 'ch-vs-bal'] };
+      const [nId, bId] = map[type];
+      db.channels.push({ name: document.getElementById(nId).value, type, balance: Number(document.getElementById(bId).value) });
+      saveDb(); e.target.reset(); refreshAll();
+    }
+
+    function addAssetOp(e, opType) {
+      e.preventDefault();
+      if (opType === 'إضافة أصل') {
+        db.assets.push({ name: document.getElementById('aadd-name').value, type: opType, value: Number(document.getElementById('aadd-val').value), rate: Number(document.getElementById('aadd-rate').value || 10), note: '' });
+      } else if (opType === 'شراء أصل') {
+        const val = Number(document.getElementById('abuy-val').value);
+        const ch = document.getElementById('abuy-chan').value;
+        db.assets.push({ name: document.getElementById('abuy-name').value, type: opType, value: val, rate: 10, note: ch });
+        adjustChannel(ch, -val);
+      } else if (opType === 'إهلاك أصل') {
+        db.assets.push({ name: document.getElementById('adep-name').value, type: opType, value: Number(document.getElementById('adep-val').value), rate: 0, note: 'إهلاك مسجل' });
+      } else if (opType === 'بيع أصل') {
+        const val = Number(document.getElementById('asell-val').value);
+        const ch = document.getElementById('asell-chan').value;
+        db.assets.push({ name: document.getElementById('asell-name').value, type: opType, value: val, rate: 0, note: ch });
+        adjustChannel(ch, val);
+      } else if (opType === 'تخريد أصل') {
+        db.assets.push({ name: document.getElementById('ascrap-name').value, type: opType, value: 0, rate: 0, note: document.getElementById('ascrap-reason').value });
+      }
+      saveDb(); e.target.reset(); refreshAll(); alert('تم تسجيل عملية الأصل بنجاح');
+    }
+
     function addExpense(e) {
       e.preventDefault();
-      db.expenses.push({ cat: document.getElementById('exp-cat').value, desc: document.getElementById('exp-desc').value, amount: Number(document.getElementById('exp-amount').value) });
-      saveDb(); e.target.reset(); renderAcc(); renderDashboard();
+      const amt = Number(document.getElementById('exp-amt').value);
+      const ch = document.getElementById('exp-chan').value;
+      db.expenses.push({ cat: document.getElementById('exp-cat').value, desc: document.getElementById('exp-desc').value, chan: ch, amount: amt });
+      adjustChannel(ch, -amt);
+      saveDb(); e.target.reset(); refreshAll();
     }
+
     function addRevenue(e) {
       e.preventDefault();
-      db.revenues.push({ cat: document.getElementById('rev-cat').value, desc: document.getElementById('rev-desc').value, amount: Number(document.getElementById('rev-amount').value) });
-      saveDb(); e.target.reset(); renderAcc(); renderDashboard();
+      const amt = Number(document.getElementById('rev-amt').value);
+      const ch = document.getElementById('rev-chan').value;
+      db.revenues.push({ cat: document.getElementById('rev-cat').value, desc: document.getElementById('rev-desc').value, chan: ch, amount: amt });
+      adjustChannel(ch, amt);
+      saveDb(); e.target.reset(); refreshAll();
     }
+
+    function addCategory(e) {
+      e.preventDefault();
+      db.categories.push(document.getElementById('cat-name').value);
+      saveDb(); e.target.reset(); refreshAll();
+    }
+
     function addItem(e) {
       e.preventDefault();
-      db.items.push({ cat: document.getElementById('itm-cat').value, name: document.getElementById('itm-name').value, price: Number(document.getElementById('itm-price').value) });
-      saveDb(); e.target.reset(); renderInv();
+      db.items.push({ code: document.getElementById('itm-code').value, name: document.getElementById('itm-name').value, cat: document.getElementById('itm-cat').value, price: Number(document.getElementById('itm-price').value), qty: 0 });
+      saveDb(); e.target.reset(); refreshAll();
     }
-    function addSaleInvoice(e) {
+
+    function addStockMove(e, moveType, sign) {
       e.preventDefault();
-      db.sales.push({ id: 'INV-' + (1000 + db.sales.length + 1), cust: document.getElementById('sal-cust').value, item: document.getElementById('sal-item').value, amount: Number(document.getElementById('sal-amount').value) });
-      saveDb(); e.target.reset(); renderSales(); renderDashboard();
+      const itemName = e.target.querySelector('.mv-item').value;
+      const qty = Number(e.target.querySelector('.mv-qty').value);
+      const note = e.target.querySelector('.mv-note').value;
+      const itm = db.items.find(i => i.name === itemName);
+      if (itm) itm.qty = Number(itm.qty || 0) + (sign * qty);
+      saveDb(); e.target.reset(); refreshAll(); alert(`تم ترحيل ${moveType} (${note || 'بدون ملاحظات'})`);
     }
 
-    function renderAcc() {
-      document.getElementById('tbl-assets').innerHTML = db.assets.map(a => `
-        <tr><td class="p-2.5 font-bold">${a.name}</td><td class="p-2.5">${a.action}</td><td class="p-2.5 font-bold">${formatMoney(a.cost)}</td><td class="p-2.5 text-rose-400">${formatMoney(a.cost * (a.rate / 100))}</td></tr>
-      `).join('');
-      document.getElementById('tbl-expenses').innerHTML = db.expenses.map(x => `
-        <tr><td class="p-2.5 font-bold">${x.cat}</td><td class="p-2.5">${x.desc}</td><td class="p-2.5 font-bold text-rose-400">${formatMoney(x.amount)}</td></tr>
-      `).join('');
-      document.getElementById('tbl-revenues').innerHTML = db.revenues.map(r => `
-        <tr><td class="p-2.5 font-bold">${r.cat}</td><td class="p-2.5">${r.desc}</td><td class="p-2.5 font-bold text-emerald-400">${formatMoney(r.amount)}</td></tr>
-      `).join('');
-      document.getElementById('tbl-coa').innerHTML = db.coa.map(c => `
-        <tr><td class="p-2.5">${c.code}</td><td class="p-2.5 font-bold">${c.name}</td><td class="p-2.5">${c.type}</td><td class="p-2.5 font-bold">${formatMoney(c.balance)}</td></tr>
-      `).join('');
-      document.getElementById('tbl-journal').innerHTML = db.journal.map(j => `
-        <tr><td class="p-2.5">${j.id}</td><td class="p-2.5">${j.date}</td><td class="p-2.5 text-emerald-400">${j.debit}</td><td class="p-2.5 text-rose-400">${j.credit}</td><td class="p-2.5 font-bold">${formatMoney(j.amount)}</td></tr>
-      `).join('');
+    function addCustomer(e) {
+      e.preventDefault();
+      db.customers.push({ name: document.getElementById('cust-name').value, phone: document.getElementById('cust-phone').value });
+      saveDb(); e.target.reset(); refreshAll();
     }
 
-    function renderInv() {
-      document.getElementById('tbl-items').innerHTML = db.items.map(i => `
-        <tr><td class="p-2.5">${i.cat}</td><td class="p-2.5 font-bold">${i.name}</td><td class="p-2.5 font-bold text-emerald-400">${formatMoney(i.price)}</td></tr>
-      `).join('');
+    function addSaleDoc(e, docType) {
+      e.preventDefault();
+      const codeInput = e.target.querySelector('.s-code');
+      const code = (codeInput && codeInput.value.trim()) ? codeInput.value.trim() : ('SL-' + (1000 + db.salesDocs.length + 1));
+      const cust = e.target.querySelector('.s-cust').value;
+      const item = e.target.querySelector('.s-item').value;
+      const amount = Number(e.target.querySelector('.s-amt').value);
+      db.salesDocs.push({ code, type: docType, cust, item, amount });
+      saveDb(); e.target.reset(); refreshAll();
     }
 
-    function renderSales() {
-      document.getElementById('tbl-sales').innerHTML = db.sales.map(s => `
-        <tr><td class="p-2.5 font-bold">${s.id}</td><td class="p-2.5">${s.cust}</td><td class="p-2.5">${s.item}</td><td class="p-2.5 font-bold text-emerald-400">${formatMoney(s.amount)}</td></tr>
-      `).join('');
+    function addVendor(e) {
+      e.preventDefault();
+      db.vendors.push({ name: document.getElementById('vnd-name').value, phone: document.getElementById('vnd-phone').value });
+      saveDb(); e.target.reset(); refreshAll();
     }
 
-    function renderAll() {
-      const sel = document.getElementById('active-branch-select');
-      sel.innerHTML = db.branches.map(b => `<option value="${b}">${b}</option>`).join('');
-      sel.value = db.activeBranch;
+    function addPurDoc(e, docType) {
+      e.preventDefault();
+      const codeInput = e.target.querySelector('.p-code');
+      const code = (codeInput && codeInput.value.trim()) ? codeInput.value.trim() : ('PR-' + (1000 + db.purDocs.length + 1));
+      const vnd = e.target.querySelector('.p-vnd').value;
+      const item = e.target.querySelector('.p-item').value;
+      const amount = Number(e.target.querySelector('.p-amt').value);
+      db.purDocs.push({ code, type: docType, vnd, item, amount });
+      saveDb(); e.target.reset(); refreshAll();
+    }
+
+    function addVoucher(e, vType) {
+      e.preventDefault();
+      const party = e.target.querySelector('.v-party').value;
+      const chan = e.target.querySelector('.v-chan').value;
+      const amount = Number(e.target.querySelector('.v-amt').value);
+      db.vouchers.push({ type: vType, party, chan, amount });
+      adjustChannel(chan, vType === 'سند قبض' ? amount : -amount);
+      saveDb(); e.target.reset(); refreshAll(); alert(`تم إصدار ${vType} بنجاح`);
+    }
+
+    function saveCompany() {
+      db.company.name = document.getElementById('cmp-name').value || 'TANTAWE ERP';
+      db.company.tax = document.getElementById('cmp-tax').value || '';
+      saveDb(); refreshAll(); alert('تم حفظ بيانات الشركة');
+    }
+    function addBranch(e) { e.preventDefault(); db.branches.push(document.getElementById('br-name').value); saveDb(); e.target.reset(); refreshAll(); }
+    function addRegion(e) { e.preventDefault(); db.regions.push(document.getElementById('reg-name').value); saveDb(); e.target.reset(); refreshAll(); }
+    function addAgent(e) { e.preventDefault(); db.agents.push(document.getElementById('ag-name').value); saveDb(); e.target.reset(); refreshAll(); }
+
+    function addGroup(e) {
+      e.preventDefault();
+      const name = document.getElementById('grp-name').value.trim();
+      const perms = [...document.querySelectorAll('.grp-perm:checked')].map(c => c.value);
+      db.groups.push({ name, perms });
+      saveDb(); e.target.reset(); refreshAll();
+    }
+
+    function addUser(e) {
+      e.preventDefault();
+      db.users.push({ username: document.getElementById('usr-name').value.trim(), password: document.getElementById('usr-pass').value, group: document.getElementById('usr-grp').value });
+      saveDb(); e.target.reset(); refreshAll();
+    }
+
+    function exportJson() {
+      const blob = new Blob([JSON.stringify(db, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'tantawe-erp-backup.json';
+      a.click();
+    }
+
+    function resetDemo() {
+      localStorage.removeItem(DB_KEY);
+      db = structuredClone(SEED);
+      db.sessionUser = 'admin';
+      saveDb();
+      refreshAll();
+    }
+
+    /* ================= التقارير المستقلة ================= */
+    function renderRepCust() {
+      const c = document.getElementById('rcust-sel').value;
+      const rows = db.salesDocs.filter(d => d.cust === c);
+      document.getElementById('rep-cust-box').innerHTML = rows.length
+        ? rows.map(r => `<div class="p-2 border rounded flex justify-between"><span>${r.code} - ${r.type} (${r.item})</span><b>${money(r.amount)}</b></div>`).join('')
+        : '<div class="text-gray-400">لا توجد حركات مسجلة لهذا العميل</div>';
+    }
+
+    function renderRepVend() {
+      const v = document.getElementById('rvend-sel').value;
+      const rows = db.purDocs.filter(d => d.vnd === v);
+      document.getElementById('rep-vend-box').innerHTML = rows.length
+        ? rows.map(r => `<div class="p-2 border rounded flex justify-between"><span>${r.code} - ${r.type} (${r.item})</span><b>${money(r.amount)}</b></div>`).join('')
+        : '<div class="text-gray-400">لا توجد حركات مسجلة لهذا المورد</div>';
+    }
+
+    function renderReports() {
+      renderRepCust();
+      renderRepVend();
+      document.getElementById('rep-tr-box').innerHTML = db.channels.filter(c => c.type === 'خزينة').map(c => `<div class="p-2 border rounded mb-1 flex justify-between"><span>${c.name}</span><b>${money(c.balance)}</b></div>`).join('');
+      document.getElementById('rep-bk-box').innerHTML = db.channels.filter(c => c.type === 'بنك').map(c => `<div class="p-2 border rounded mb-1 flex justify-between"><span>${c.name}</span><b>${money(c.balance)}</b></div>`).join('');
+      document.getElementById('rep-vs-box').innerHTML = db.channels.filter(c => c.type === 'فيزا').map(c => `<div class="p-2 border rounded mb-1 flex justify-between"><span>${c.name}</span><b>${money(c.balance)}</b></div>`).join('');
+      document.getElementById('rep-exp-box').innerHTML = db.expenses.map(x => `<div class="p-2 border rounded mb-1 flex justify-between"><span>${x.cat} - ${x.desc}</span><b>${money(x.amount)}</b></div>`).join('') || 'لا توجد مصروفات';
+      document.getElementById('rep-rev-box').innerHTML = db.revenues.map(r => `<div class="p-2 border rounded mb-1 flex justify-between"><span>${r.cat} - ${r.desc}</span><b>${money(r.amount)}</b></div>`).join('') || 'لا توجد إيرادات';
+      document.getElementById('rep-ast-box').innerHTML = db.assets.map(a => `<div class="p-2 border rounded mb-1 flex justify-between"><span>${a.name} (${a.type})</span><b>${money(a.value)}</b></div>`).join('');
+      document.getElementById('rep-stk-box').innerHTML = db.items.map(i => `<div class="p-2 border rounded mb-1 flex justify-between"><span>${i.name} - رصيد: ${i.qty}</span><b>سعر البيع: ${money(i.price)}</b></div>`).join('');
+    }
+
+    function refreshAll() {
+      document.getElementById('lbl-company').textContent = db.company.name;
+      document.getElementById('lbl-branch').textContent = db.activeBranch;
+      document.getElementById('cmp-name').value = db.company.name;
+      document.getElementById('cmp-tax').value = db.company.tax;
+
+      const brSel = document.getElementById('branch-selector');
+      brSel.innerHTML = db.branches.map(b => `<option value="${b}">${b}</option>`).join('');
+      brSel.value = db.activeBranch;
+
+      bindSelects();
       renderDashboard();
-      renderHR();
-      renderAcc();
-      renderInv();
-      renderSales();
+
+      document.getElementById('tb-emp').innerHTML = db.employees.map(e => `<tr><td class="p-2 border">${e.code}</td><td class="p-2 border font-bold">${e.name}</td><td class="p-2 border">${e.role}</td><td class="p-2 border">${money(e.salary)}</td></tr>`).join('');
+      document.getElementById('tb-pen').innerHTML = db.penalties.map(p => `<tr><td class="p-2 border">${p.emp}</td><td class="p-2 border">${p.reason}</td><td class="p-2 border">${money(p.amount)}</td></tr>`).join('');
+      document.getElementById('tb-bon').innerHTML = db.bonuses.map(b => `<tr><td class="p-2 border">${b.emp}</td><td class="p-2 border">${b.reason}</td><td class="p-2 border">${money(b.amount)}</td></tr>`).join('');
+      document.getElementById('tb-att').innerHTML = db.attendance.map(a => `<tr><td class="p-2 border">${a.emp}</td><td class="p-2 border">${a.status}</td><td class="p-2 border">${a.date}</td></tr>`).join('');
+      document.getElementById('tb-lv').innerHTML = db.leaves.map(l => `<tr><td class="p-2 border">${l.emp}</td><td class="p-2 border">${l.type}</td><td class="p-2 border">${l.days}</td></tr>`).join('');
+
+      document.getElementById('tb-exp').innerHTML = db.expenses.map(x => `<tr><td class="p-2 border">${x.cat}</td><td class="p-2 border">${x.desc}</td><td class="p-2 border">${x.chan}</td><td class="p-2 border">${money(x.amount)}</td></tr>`).join('');
+      document.getElementById('tb-rev').innerHTML = db.revenues.map(r => `<tr><td class="p-2 border">${r.cat}</td><td class="p-2 border">${r.desc}</td><td class="p-2 border">${r.chan}</td><td class="p-2 border">${money(r.amount)}</td></tr>`).join('');
+
+      document.getElementById('tb-tr').innerHTML = db.channels.filter(c => c.type === 'خزينة').map(c => `<tr><td class="p-2 border font-bold">${c.name}</td><td class="p-2 border">${money(c.balance)}</td></tr>`).join('');
+      document.getElementById('tb-bk').innerHTML = db.channels.filter(c => c.type === 'بنك').map(c => `<tr><td class="p-2 border font-bold">${c.name}</td><td class="p-2 border">${money(c.balance)}</td></tr>`).join('');
+      document.getElementById('tb-vs').innerHTML = db.channels.filter(c => c.type === 'فيزا').map(c => `<tr><td class="p-2 border font-bold">${c.name}</td><td class="p-2 border">${money(c.balance)}</td></tr>`).join('');
+
+      document.getElementById('list-cats').innerHTML = db.categories.map(c => `<li>${c}</li>`).join('');
+      document.getElementById('tb-itm').innerHTML = db.items.map(i => `<tr><td class="p-2 border">${i.code}</td><td class="p-2 border font-bold">${i.name}</td><td class="p-2 border">${i.cat}</td><td class="p-2 border">${money(i.price)}</td><td class="p-2 border">${i.qty}</td></tr>`).join('');
+
+      document.getElementById('tb-cust').innerHTML = db.customers.map(c => `<tr><td class="p-2 border font-bold">${c.name}</td><td class="p-2 border">${c.phone}</td></tr>`).join('');
+      document.getElementById('tb-sales').innerHTML = db.salesDocs.map(s => `<tr><td class="p-2 border font-bold">${s.code}</td><td class="p-2 border">${s.type}</td><td class="p-2 border">${s.cust}</td><td class="p-2 border">${s.item}</td><td class="p-2 border">${money(s.amount)}</td></tr>`).join('');
+
+      document.getElementById('tb-vnd').innerHTML = db.vendors.map(v => `<tr><td class="p-2 border font-bold">${v.name}</td><td class="p-2 border">${v.phone}</td></tr>`).join('');
+      document.getElementById('tb-pur').innerHTML = db.purDocs.map(p => `<tr><td class="p-2 border font-bold">${p.code}</td><td class="p-2 border">${p.type}</td><td class="p-2 border">${p.vnd}</td><td class="p-2 border">${p.item}</td><td class="p-2 border">${money(p.amount)}</td></tr>`).join('');
+
+      document.getElementById('list-branches').innerHTML = db.branches.map(b => `<li>${b}</li>`).join('');
+      document.getElementById('list-regions').innerHTML = db.regions.map(r => `<li>${r}</li>`).join('');
+      document.getElementById('list-agents').innerHTML = db.agents.map(a => `<li>${a}</li>`).join('');
+
+      document.getElementById('list-groups').innerHTML = db.groups.map(g => `<div class="p-2 border rounded bg-gray-50"><b>${g.name}</b>: ${g.perms.join('، ')}</div>`).join('');
+      document.getElementById('tb-users').innerHTML = db.users.map(u => `<tr><td class="p-2 border font-bold">${u.username}</td><td class="p-2 border">${u.group}</td></tr>`).join('');
+
+      renderReports();
     }
 
-    initAuth();
+    initApp();
   </script>
 </body>
 </html>
