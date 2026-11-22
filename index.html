@@ -2216,6 +2216,26 @@ aside button[onclick*="sys"]::before,
       renderReports();
       renderStatements();
     }
+    (function () {
+  function collapseAllMenus() {
+    document.querySelectorAll('[id^="menu-"]').forEach((menu) => {
+      menu.classList.add('hidden');
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    collapseAllMenus();
+  });
+
+  if (typeof window.initApp === 'function') {
+    const origInitApp = window.initApp;
+    window.initApp = function (...args) {
+      const res = origInitApp.apply(this, args);
+      collapseAllMenus();
+      return res;
+    };
+  }
+})();
   </script>
 </body>
 </html>
