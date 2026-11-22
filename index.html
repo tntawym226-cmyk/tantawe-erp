@@ -138,6 +138,95 @@
       flex-shrink: 0;
     }
     @media print { .no-print { display: none !important; } body { background: #fff !important; } }
+    /* ===== تعديل الواجهة والقائمة الجانبية وإضافة أيقونات للموديولات ===== */
+#app-shell {
+  background: linear-gradient(135deg, #f8fafc 0%, #eef2ff 100%);
+}
+
+aside,
+nav[class*="side"],
+[class*="sidebar"] {
+  background: linear-gradient(180deg, #070d1a 0%, #0d1b36 55%, #091326 100%) !important;
+  border-left: 1px solid rgba(59, 130, 246, 0.22) !important;
+  box-shadow: 0 12px 32px rgba(2, 6, 23, 0.28);
+}
+
+/* أزرار الموديولات الرئيسية في القائمة الجانبية */
+aside button,
+aside a,
+[class*="sidebar"] button,
+[class*="sidebar"] a {
+  position: relative;
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  border-radius: 10px !important;
+  margin-bottom: 4px;
+  transition: all 0.2s ease;
+}
+
+aside button:hover,
+aside a:hover,
+[class*="sidebar"] button:hover,
+[class*="sidebar"] a:hover {
+  background: rgba(37, 99, 235, 0.18) !important;
+  transform: translateX(-3px);
+}
+
+/* أيقونات شكلية مرتبة جنب كل موديول حسب ترتيبه أو نصه */
+aside button::before,
+aside a::before,
+[class*="sidebar"] button::before,
+[class*="sidebar"] a::before {
+  content: "▪️";
+  font-size: 13px;
+  line-height: 1;
+  flex-shrink: 0;
+  opacity: 0.9;
+}
+
+aside button[onclick*="acc"]::before,
+[class*="sidebar"] button[onclick*="acc"]::before { content: "🧮"; }
+
+aside button[onclick*="sales"]::before,
+[class*="sidebar"] button[onclick*="sales"]::before { content: "🛒"; }
+
+aside button[onclick*="pur"]::before,
+[class*="sidebar"] button[onclick*="pur"]::before { content: "📦"; }
+
+aside button[onclick*="inv"]::before,
+[class*="sidebar"] button[onclick*="inv"]::before { content: "🏬"; }
+
+aside button[onclick*="hr"]::before,
+[class*="sidebar"] button[onclick*="hr"]::before { content: "👥"; }
+
+aside button[onclick*="cmp"]::before,
+[class*="sidebar"] button[onclick*="cmp"]::before { content: "🏢"; }
+
+aside button[onclick*="rep"]::before,
+[class*="sidebar"] button[onclick*="rep"]::before { content: "📑"; }
+
+aside button[onclick*="sys"]::before,
+[class*="sidebar"] button[onclick*="sys"]::before { content: "⚙️"; }
+
+/* تحسين كروت الواجهة الرئيسية والعناوين */
+.erp-card {
+  border-radius: 16px !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 6px 20px rgba(15, 23, 42, 0.05) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.erp-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 26px rgba(15, 23, 42, 0.08) !important;
+}
+
+.sub-item-btn.active {
+  background: linear-gradient(90deg, #1d4ed8 0%, #2563eb 100%) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+}
   </style>
 </head>
 <body class="min-h-screen">
