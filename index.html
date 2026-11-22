@@ -3,1191 +3,807 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TANTAWE ERP - نظام إدارة الأعمال والمتكامل</title>
+  <title>TANTAWE ERP - نظام إدارة الأعمال المتكامل</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/alasql@4"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/alasql@4.4.0/dist/alasql.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
   <style>
     * { font-family: 'Cairo', sans-serif; box-sizing: border-box; }
     body { background-color: #f1f5f9; color: #0f172a; margin: 0; }
-
-    ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-track { background: #e2e8f0; }
-    ::-webkit-scrollbar-thumb { background: #64748b; border-radius: 9999px; }
-
-    .pioneer-sidebar { background: linear-gradient(180deg, #0b1329 0%, #030712 100%); color: #ffffff; }
-    .top-bar-custom { background: #ffffff; border-bottom: 1px solid #e2e8f0; }
-
-    .sidebar-btn {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 10px 14px;
-      font-size: 0.84rem;
-      font-weight: 700;
-      color: #94a3b8;
-      border-radius: 8px;
-      transition: all 0.15s ease;
-    }
-    .sidebar-btn:hover { background: #1e293b; color: #ffffff; }
-    .sidebar-btn.active { background: #2563eb; color: #ffffff; }
-
-    .sub-item-btn {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 7px 12px 7px 22px;
-      font-size: 0.77rem;
-      font-weight: 600;
-      color: #cbd5e1;
-      border-radius: 6px;
-      border-right: 3px solid transparent;
-      transition: all 0.15s ease;
-      text-align: right;
-    }
-    .sub-item-btn:hover { background: rgba(255, 255, 255, 0.08); color: #ffffff; }
-    .sub-item-btn.active {
-      background: rgba(37, 99, 235, 0.25);
-      color: #60a5fa;
-      border-right-color: #3b82f6;
-      font-weight: 700;
-    }
-
-    .erp-card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
-    .erp-input {
-      width: 100%;
-      background: #ffffff;
-      border: 1px solid #cbd5e1;
-      color: #0f172a;
-      border-radius: 8px;
-      padding: 8px 12px;
-      font-size: 0.8rem;
-    }
-    .erp-input:focus { outline: none; border-color: #2563eb; box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15); }
-
-    .btn-blue { background: #2563eb; color: #ffffff; font-weight: 700; border-radius: 8px; transition: background 0.15s ease; }
-    .btn-blue:hover { background: #1d4ed8; }
-
-    @media print {
-      .no-print { display: none !important; }
-      body { background: #ffffff !important; color: #000000 !important; }
-      .erp-card { box-shadow: none !important; border: 1px solid #cbd5e1 !important; }
-    }
+    .sidebar-shell { background: linear-gradient(180deg, #07132a 0%, #0b1f44 55%, #061024 100%); }
+    .sub-item-btn { width: 100%; text-align: right; padding: 7px 12px; border-radius: 8px; font-size: 12px; font-weight: 700; color: #cbd5e1; transition: all 0.15s ease; display: block; }
+    .sub-item-btn:hover { background: rgba(37, 99, 235, 0.25); color: #ffffff; }
+    .sub-item-btn.active { background: #2563eb; color: #ffffff; box-shadow: 0 2px 8px rgba(37, 99, 235, 0.45); }
+    .erp-card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04); }
+    .erp-input { width: 100%; padding: 8px 11px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 13px; background: #ffffff; color: #0f172a; }
+    .erp-input:focus { outline: none; border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14); }
+    .btn-blue { background: #1d4ed8; color: #ffffff; font-weight: 800; border-radius: 8px; transition: 0.15s; cursor: pointer; }
+    .btn-blue:hover { background: #1e40af; }
+    .quick-add-btn { padding: 0 10px; border-radius: 8px; background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; font-weight: 900; font-size: 15px; cursor: pointer; flex-shrink: 0; }
+    .quick-add-btn:hover { background: #dbeafe; }
+    @media print { .no-print { display: none !important; } body { background: #fff !important; } }
   </style>
 </head>
-<body>
+<body class="min-h-screen">
 
-  <div id="login-screen" class="min-h-screen flex items-center justify-center p-4 bg-slate-900">
-    <div class="w-full max-w-md erp-card overflow-hidden border-slate-800 bg-slate-950 text-white">
-      <div class="p-8 text-center bg-blue-600">
-        <div class="w-16 h-16 mx-auto mb-2 rounded-2xl bg-white/20 flex items-center justify-center text-3xl font-black">T</div>
+  <!-- شاشة تسجيل الدخول -->
+  <div id="login-screen" class="min-h-screen flex items-center justify-center p-4 bg-slate-950">
+    <div class="w-full max-w-md bg-slate-900 border border-blue-900/60 rounded-2xl p-7 text-white shadow-2xl space-y-5">
+      <div class="text-center space-y-1">
+        <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-blue-600 font-black text-2xl shadow-lg mb-2">T</div>
         <h1 class="text-2xl font-black tracking-wide">TANTAWE ERP</h1>
-        <p class="text-xs text-blue-100 mt-1">نظام إدارة الأعمال والحسابات المتكامل</p>
+        <p class="text-xs text-slate-400">نظام إدارة موارد المؤسسات المتكامل</p>
       </div>
 
-      <form id="login-form" class="p-6 space-y-4">
-        <div id="login-error" class="hidden bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs font-bold p-3 rounded-lg text-center">
-          اسم المستخدم أو كلمة المرور غير صحيحة
-        </div>
+      <form id="login-form" class="space-y-4">
         <div>
           <label class="block text-xs font-bold text-slate-300 mb-1">اسم المستخدم</label>
-          <input type="text" id="login-user" required class="erp-input bg-slate-900 border-slate-800 text-white" placeholder="admin" />
+          <input id="login-user" type="text" required placeholder="admin" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-white text-sm focus:outline-none focus:border-blue-500" />
         </div>
         <div>
           <label class="block text-xs font-bold text-slate-300 mb-1">كلمة المرور</label>
-          <input type="password" id="login-pass" required class="erp-input bg-slate-900 border-slate-800 text-white" placeholder="••••••••" />
+          <input id="login-pass" type="password" required placeholder="••••" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-white text-sm focus:outline-none focus:border-blue-500" />
         </div>
-        <div class="flex items-center justify-between text-xs bg-slate-900 p-3 rounded-lg border border-slate-800">
-          <span>الافتراضي: <b class="text-blue-400">admin</b> / <b class="text-blue-400">1234</b></span>
-          <button type="button" onclick="quickAdminLogin()" class="font-bold text-blue-400 hover:underline">تعبئة سريعة</button>
-        </div>
-        <button type="submit" class="w-full py-3 btn-blue text-sm">تسجيل الدخول للنظام</button>
+        <p id="login-error" class="hidden text-xs text-rose-400 font-bold">بيانات الدخول غير صحيحة</p>
+        <button type="submit" class="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-500 font-black text-sm shadow-lg transition cursor-pointer">دخول النظام</button>
       </form>
+
+      <div class="pt-3 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400">
+        <span>حساب المدير: <b class="text-blue-400">admin</b> / <b class="text-blue-400">1234</b></span>
+        <button type="button" onclick="quickAdminLogin()" class="text-blue-400 hover:underline font-bold cursor-pointer">ملء تلقائي</button>
+      </div>
     </div>
   </div>
 
-  <div id="app-shell" class="hidden min-h-screen flex flex-col lg:flex-row">
-    <aside class="no-print pioneer-sidebar w-full lg:w-72 flex-shrink-0 flex flex-col justify-between lg:sticky lg:top-0 lg:h-screen overflow-y-auto border-l border-slate-800">
-      <div>
-        <div class="p-5 border-b border-slate-800 flex items-center justify-between">
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-xl font-black text-white">T</div>
+  <!-- الهيكل الرئيسي للنظام -->
+  <div id="app-shell" class="hidden min-h-screen flex">
+
+    <!-- القائمة الجانبية -->
+    <aside class="no-print sidebar-shell w-72 shrink-0 text-white flex flex-col justify-between overflow-y-auto max-h-screen sticky top-0 border-l border-blue-950">
+      <div class="p-4 space-y-3">
+        <div class="flex items-center justify-between pb-3 border-b border-blue-900/60">
+          <div class="flex items-center gap-2.5">
+            <div class="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center font-black text-lg shadow">T</div>
             <div>
-              <div id="lbl-company" class="font-black text-base text-white">TANTAWE ERP</div>
-              <div class="text-[11px] text-blue-400 font-bold">Smart Business Solutions</div>
+              <div id="lbl-company" class="font-black text-sm leading-tight">TANTAWE ERP</div>
+              <div class="text-[11px] text-blue-300 font-semibold">Smart Business Suite</div>
             </div>
+          </div>
+          <span id="active-group-badge" class="text-[10px] px-2 py-0.5 rounded-full bg-blue-900/80 text-blue-200 font-bold">مدير عام</span>
+        </div>
+
+        <button onclick="openTab('dashboard')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl bg-blue-600/20 hover:bg-blue-600/35 border border-blue-500/30 text-xs font-black text-white transition cursor-pointer">
+          <span>الرئيسية</span>
+          <span>📊</span>
+        </button>
+
+        <!-- 1. الحسابات -->
+        <div data-perm="acc" class="space-y-1">
+          <button onclick="toggleMenu('m-acc')" class="w-full flex items-center justify-between px-3 py-2 rounded-xl hover:bg-white/5 text-xs font-extrabold text-slate-100 cursor-pointer">
+            <span>الحسابات</span>
+            <span class="text-[11px] text-blue-300">13</span>
+          </button>
+          <div id="m-acc" class="space-y-0.5 pr-2 border-r border-blue-800/60 mr-2">
+            <button data-tab="acc-coa" onclick="openTab('acc-coa')" class="sub-item-btn">01 دليل الحسابات</button>
+            <button data-tab="acc-journal" onclick="openTab('acc-journal')" class="sub-item-btn">02 القيود اليومية</button>
+            <button data-tab="acc-channels" onclick="openTab('acc-channels')" class="sub-item-btn">03 الخزائن والبنوك</button>
+            <button data-tab="acc-transfers" onclick="openTab('acc-transfers')" class="sub-item-btn">04 التحويلات المالية</button>
+            <button data-tab="acc-reconcile" onclick="openTab('acc-reconcile')" class="sub-item-btn">05 التسويات البنكية</button>
+            <button data-tab="acc-cost-centers" onclick="openTab('acc-cost-centers')" class="sub-item-btn">06 مراكز التكلفة</button>
+            <button data-tab="acc-fixed-assets" onclick="openTab('acc-fixed-assets')" class="sub-item-btn">07 الأصول الثابتة</button>
+            <button data-tab="acc-depreciation" onclick="openTab('acc-depreciation')" class="sub-item-btn">08 الإهلاكات</button>
+            <button data-tab="acc-taxes" onclick="openTab('acc-taxes')" class="sub-item-btn">09 الضرائب</button>
+            <button data-tab="acc-ledger" onclick="openTab('acc-ledger')" class="sub-item-btn">10 الأستاذ العام</button>
+            <button data-tab="acc-trial-balance" onclick="openTab('acc-trial-balance')" class="sub-item-btn">11 ميزان المراجعة</button>
+            <button data-tab="acc-statements" onclick="openTab('acc-statements')" class="sub-item-btn">12 القوائم المالية</button>
+            <button data-tab="acc-closing" onclick="openTab('acc-closing')" class="sub-item-btn">13 الإقفال المالي</button>
           </div>
         </div>
 
-        <nav class="p-3 space-y-1" id="sidebar-nav">
-          <button onclick="openTab('dashboard')" class="sidebar-btn active" data-mod="dashboard">
-            <span class="flex items-center gap-2"><span>🏠</span> <span>الرئيسية (التحليل)</span></span>
+        <!-- 2. المبيعات -->
+        <div data-perm="sales" class="space-y-1">
+          <button onclick="toggleMenu('m-sales')" class="w-full flex items-center justify-between px-3 py-2 rounded-xl hover:bg-white/5 text-xs font-extrabold text-slate-100 cursor-pointer">
+            <span>المبيعات</span>
+            <span class="text-[11px] text-blue-300">9</span>
           </button>
-
-          <div data-perm="sales">
-            <button onclick="toggleMenu('m-sales')" class="sidebar-btn" data-mod="sales">
-              <span class="flex items-center gap-2"><span>🛒</span> <span>المبيعات</span></span><span>▾</span>
-            </button>
-            <div id="m-sales" class="hidden space-y-0.5 mt-1">
-              <button onclick="openTab('sales-customers')" class="sub-item-btn" data-tab="sales-customers">👥 دليل العملاء</button>
-              <button onclick="openTab('sales-orders')" class="sub-item-btn" data-tab="sales-orders">📋 طلبات البيع</button>
-              <button onclick="openTab('sales-invoices')" class="sub-item-btn" data-tab="sales-invoices">🧾 فواتير المبيعات</button>
-              <button onclick="openTab('sales-returns')" class="sub-item-btn" data-tab="sales-returns">↩️ مرتجعات المبيعات</button>
-              <button onclick="openTab('sales-receipts')" class="sub-item-btn" data-tab="sales-receipts">💵 سندات القبض</button>
-            </div>
+          <div id="m-sales" class="hidden space-y-0.5 pr-2 border-r border-blue-800/60 mr-2">
+            <button data-tab="sales-customers" onclick="openTab('sales-customers')" class="sub-item-btn">1. العملاء</button>
+            <button data-tab="sales-quotes" onclick="openTab('sales-quotes')" class="sub-item-btn">2. عروض الأسعار</button>
+            <button data-tab="sales-orders" onclick="openTab('sales-orders')" class="sub-item-btn">3. أوامر البيع</button>
+            <button data-tab="sales-invoices" onclick="openTab('sales-invoices')" class="sub-item-btn">4. فواتير المبيعات</button>
+            <button data-tab="sales-returns" onclick="openTab('sales-returns')" class="sub-item-btn">5. مرتجعات المبيعات</button>
+            <button data-tab="sales-credit-notes" onclick="openTab('sales-credit-notes')" class="sub-item-btn">6. إشعارات الخصم</button>
+            <button data-tab="sales-collections" onclick="openTab('sales-collections')" class="sub-item-btn">7. سندات التحصيل</button>
+            <button data-tab="sales-pricelists" onclick="openTab('sales-pricelists')" class="sub-item-btn">8. قوائم الأسعار</button>
+            <button data-tab="sales-reps" onclick="openTab('sales-reps')" class="sub-item-btn">9. مندوبي المبيعات</button>
           </div>
+        </div>
 
-          <div data-perm="pur">
-            <button onclick="toggleMenu('m-pur')" class="sidebar-btn" data-mod="pur">
-              <span class="flex items-center gap-2"><span>🛍️</span> <span>المشتريات</span></span><span>▾</span>
-            </button>
-            <div id="m-pur" class="hidden space-y-0.5 mt-1">
-              <button onclick="openTab('pur-vendors')" class="sub-item-btn" data-tab="pur-vendors">🏭 دليل الموردين</button>
-              <button onclick="openTab('pur-orders')" class="sub-item-btn" data-tab="pur-orders">📝 طلبات الشراء</button>
-              <button onclick="openTab('pur-invoices')" class="sub-item-btn" data-tab="pur-invoices">🧾 فواتير المشتريات</button>
-              <button onclick="openTab('pur-returns')" class="sub-item-btn" data-tab="pur-returns">↩️ مرتجعات المشتريات</button>
-              <button onclick="openTab('pur-payments')" class="sub-item-btn" data-tab="pur-payments">💸 سندات الصرف للموردين</button>
-            </div>
+        <!-- 3. المشتريات -->
+        <div data-perm="pur" class="space-y-1">
+          <button onclick="toggleMenu('m-pur')" class="w-full flex items-center justify-between px-3 py-2 rounded-xl hover:bg-white/5 text-xs font-extrabold text-slate-100 cursor-pointer">
+            <span>المشتريات</span>
+            <span class="text-[11px] text-blue-300">7</span>
+          </button>
+          <div id="m-pur" class="hidden space-y-0.5 pr-2 border-r border-blue-800/60 mr-2">
+            <button data-tab="pur-vendors" onclick="openTab('pur-vendors')" class="sub-item-btn">1. الموردون</button>
+            <button data-tab="pur-requests" onclick="openTab('pur-requests')" class="sub-item-btn">2. طلبات الشراء</button>
+            <button data-tab="pur-orders" onclick="openTab('pur-orders')" class="sub-item-btn">3. أوامر الشراء</button>
+            <button data-tab="pur-invoices" onclick="openTab('pur-invoices')" class="sub-item-btn">4. فواتير المشتريات</button>
+            <button data-tab="pur-returns" onclick="openTab('pur-returns')" class="sub-item-btn">5. مرتجعات المشتريات</button>
+            <button data-tab="pur-add-notes" onclick="openTab('pur-add-notes')" class="sub-item-btn">6. إشعارات الإضافة</button>
+            <button data-tab="pur-payments" onclick="openTab('pur-payments')" class="sub-item-btn">7. سندات الدفع</button>
           </div>
+        </div>
 
-          <div data-perm="inv">
-            <button onclick="toggleMenu('m-inv')" class="sidebar-btn" data-mod="inv">
-              <span class="flex items-center gap-2"><span>📦</span> <span>المخازن</span></span><span>▾</span>
-            </button>
-            <div id="m-inv" class="hidden space-y-0.5 mt-1">
-              <button onclick="openTab('inv-cats')" class="sub-item-btn" data-tab="inv-cats">🗂️ فئات الأصناف</button>
-              <button onclick="openTab('inv-items')" class="sub-item-btn" data-tab="inv-items">🏷️ دليل الأصناف والأسعار</button>
-              <button onclick="openTab('inv-add-ext')" class="sub-item-btn" data-tab="inv-add-ext">📥 إذن إضافة مخزني</button>
-              <button onclick="openTab('inv-add-int')" class="sub-item-btn" data-tab="inv-add-int">🔄 إذن إضافة داخلي</button>
-              <button onclick="openTab('inv-out-ext')" class="sub-item-btn" data-tab="inv-out-ext">📤 إذن صرف مخزني</button>
-              <button onclick="openTab('inv-out-int')" class="sub-item-btn" data-tab="inv-out-int">🔀 إذن صرف داخلي</button>
-              <button onclick="openTab('inv-stocktake')" class="sub-item-btn" data-tab="inv-stocktake">📋 جرد وتسوية المخزون</button>
-            </div>
+        <!-- 4. المخازن -->
+        <div data-perm="inv" class="space-y-1">
+          <button onclick="toggleMenu('m-inv')" class="w-full flex items-center justify-between px-3 py-2 rounded-xl hover:bg-white/5 text-xs font-extrabold text-slate-100 cursor-pointer">
+            <span>المخازن</span>
+            <span class="text-[11px] text-blue-300">10</span>
+          </button>
+          <div id="m-inv" class="hidden space-y-0.5 pr-2 border-r border-blue-800/60 mr-2">
+            <button data-tab="inv-items" onclick="openTab('inv-items')" class="sub-item-btn">1. الأصناف</button>
+            <button data-tab="inv-groups" onclick="openTab('inv-groups')" class="sub-item-btn">2. مجموعات الأصناف</button>
+            <button data-tab="inv-warehouses" onclick="openTab('inv-warehouses')" class="sub-item-btn">3. المخازن</button>
+            <button data-tab="inv-balances" onclick="openTab('inv-balances')" class="sub-item-btn">4. أرصدة المخزون</button>
+            <button data-tab="inv-add-docs" onclick="openTab('inv-add-docs')" class="sub-item-btn">5. أذون الإضافة</button>
+            <button data-tab="inv-out-docs" onclick="openTab('inv-out-docs')" class="sub-item-btn">6. أذون الصرف</button>
+            <button data-tab="inv-transfers" onclick="openTab('inv-transfers')" class="sub-item-btn">7. التحويل بين المخازن</button>
+            <button data-tab="inv-stocktake" onclick="openTab('inv-stocktake')" class="sub-item-btn">8. الجرد</button>
+            <button data-tab="inv-adjustments" onclick="openTab('inv-adjustments')" class="sub-item-btn">9. تسوية المخزون</button>
+            <button data-tab="inv-movements" onclick="openTab('inv-movements')" class="sub-item-btn">10. حركة الأصناف</button>
           </div>
+        </div>
 
-          <div data-perm="acc">
-            <button onclick="toggleMenu('m-acc')" class="sidebar-btn" data-mod="acc">
-              <span class="flex items-center gap-2"><span>📊</span> <span>الحسابات والقوائم</span></span><span>▾</span>
-            </button>
-            <div id="m-acc" class="hidden space-y-0.5 mt-1">
-              <button onclick="openTab('fin-income')" class="sub-item-btn" data-tab="fin-income">📈 قائمة الدخل (P&L)</button>
-              <button onclick="openTab('fin-balance')" class="sub-item-btn" data-tab="fin-balance">🏛️ قائمة المركز المالي</button>
-              <button onclick="openTab('asset-add')" class="sub-item-btn" data-tab="asset-add">➕ إضافة أصل ثابت</button>
-              <button onclick="openTab('asset-buy')" class="sub-item-btn" data-tab="asset-buy">🛒 شراء أصل</button>
-              <button onclick="openTab('asset-dep')" class="sub-item-btn" data-tab="asset-dep">📉 إهلاك أصل</button>
-              <button onclick="openTab('asset-sell')" class="sub-item-btn" data-tab="asset-sell">💵 بيع أصل</button>
-              <button onclick="openTab('asset-scrap')" class="sub-item-btn" data-tab="asset-scrap">🗑️ تخريد أصل</button>
-              <button onclick="openTab('acc-expenses')" class="sub-item-btn" data-tab="acc-expenses">💸 تسجيل المصروفات</button>
-              <button onclick="openTab('acc-revenues')" class="sub-item-btn" data-tab="acc-revenues">💰 تسجيل الإيرادات</button>
-              <button onclick="openTab('acc-treasury')" class="sub-item-btn" data-tab="acc-treasury">💵 الخزن والصناديق</button>
-              <button onclick="openTab('acc-banks')" class="sub-item-btn" data-tab="acc-banks">🏦 الحسابات البنكية</button>
-              <button onclick="openTab('acc-visa')" class="sub-item-btn" data-tab="acc-visa">💳 الفيزا والمحافظ</button>
-              <button onclick="openTab('acc-coa')" class="sub-item-btn" data-tab="acc-coa">🌳 شجرة الحسابات</button>
-              <button onclick="openTab('acc-journal')" class="sub-item-btn" data-tab="acc-journal">📒 القيود اليومية</button>
-            </div>
+        <!-- 5. الموارد البشرية -->
+        <div data-perm="hr" class="space-y-1">
+          <button onclick="toggleMenu('m-hr')" class="w-full flex items-center justify-between px-3 py-2 rounded-xl hover:bg-white/5 text-xs font-extrabold text-slate-100 cursor-pointer">
+            <span>الموارد البشرية</span>
+            <span class="text-[11px] text-blue-300">11</span>
+          </button>
+          <div id="m-hr" class="hidden space-y-0.5 pr-2 border-r border-blue-800/60 mr-2">
+            <button data-tab="hr-employees" onclick="openTab('hr-employees')" class="sub-item-btn">1. بيانات الموظفين</button>
+            <button data-tab="hr-depts-jobs" onclick="openTab('hr-depts-jobs')" class="sub-item-btn">2. الأقسام والوظائف</button>
+            <button data-tab="hr-attendance" onclick="openTab('hr-attendance')" class="sub-item-btn">3. الحضور والانصراف</button>
+            <button data-tab="hr-shifts" onclick="openTab('hr-shifts')" class="sub-item-btn">4. الورديات</button>
+            <button data-tab="hr-leaves" onclick="openTab('hr-leaves')" class="sub-item-btn">5. الإجازات</button>
+            <button data-tab="hr-salaries" onclick="openTab('hr-salaries')" class="sub-item-btn">6. الرواتب والأجور</button>
+            <button data-tab="hr-payrolls" onclick="openTab('hr-payrolls')" class="sub-item-btn">7. مسيرات الرواتب</button>
+            <button data-tab="hr-advances" onclick="openTab('hr-advances')" class="sub-item-btn">8. السلف</button>
+            <button data-tab="hr-pen-bon" onclick="openTab('hr-pen-bon')" class="sub-item-btn">9. الخصومات والمكافآت</button>
+            <button data-tab="hr-contracts" onclick="openTab('hr-contracts')" class="sub-item-btn">10. العقود</button>
+            <button data-tab="hr-insurance" onclick="openTab('hr-insurance')" class="sub-item-btn">11. التأمينات الاجتماعية</button>
           </div>
+        </div>
 
-          <div data-perm="hr">
-            <button onclick="toggleMenu('m-hr')" class="sidebar-btn" data-mod="hr">
-              <span class="flex items-center gap-2"><span>👥</span> <span>الموارد البشرية</span></span><span>▾</span>
-            </button>
-            <div id="m-hr" class="hidden space-y-0.5 mt-1">
-              <button onclick="openTab('hr-employees')" class="sub-item-btn" data-tab="hr-employees">👤 سجل الموظفين</button>
-              <button onclick="openTab('hr-penalties')" class="sub-item-btn" data-tab="hr-penalties">⚠️ العقوبات والجزاءات</button>
-              <button onclick="openTab('hr-bonuses')" class="sub-item-btn" data-tab="hr-bonuses">🎁 المكافآت والبدلات</button>
-              <button onclick="openTab('hr-attendance')" class="sub-item-btn" data-tab="hr-attendance">🕒 الحضور والانصراف</button>
-              <button onclick="openTab('hr-advances')" class="sub-item-btn" data-tab="hr-advances">💳 السلف والإجازات</button>
-            </div>
+        <!-- 6. بيانات الشركة -->
+        <div data-perm="cmp" class="space-y-1">
+          <button onclick="toggleMenu('m-cmp')" class="w-full flex items-center justify-between px-3 py-2 rounded-xl hover:bg-white/5 text-xs font-extrabold text-slate-100 cursor-pointer">
+            <span>بيانات الشركة</span>
+            <span class="text-[11px] text-blue-300">8</span>
+          </button>
+          <div id="m-cmp" class="hidden space-y-0.5 pr-2 border-r border-blue-800/60 mr-2">
+            <button data-tab="cmp-profile" onclick="openTab('cmp-profile')" class="sub-item-btn">1. بيانات الشركة</button>
+            <button data-tab="cmp-branches" onclick="openTab('cmp-branches')" class="sub-item-btn">2. الفروع</button>
+            <button data-tab="cmp-depts" onclick="openTab('cmp-depts')" class="sub-item-btn">3. الإدارات والأقسام</button>
+            <button data-tab="cmp-fiscal-years" onclick="openTab('cmp-fiscal-years')" class="sub-item-btn">4. السنوات المالية</button>
+            <button data-tab="cmp-periods" onclick="openTab('cmp-periods')" class="sub-item-btn">5. الفترات المحاسبية</button>
+            <button data-tab="cmp-currencies" onclick="openTab('cmp-currencies')" class="sub-item-btn">6. العملات وأسعار الصرف</button>
+            <button data-tab="cmp-user-groups" onclick="openTab('cmp-user-groups')" class="sub-item-btn">7. مجموعات المستخدمين</button>
+            <button data-tab="cmp-users" onclick="openTab('cmp-users')" class="sub-item-btn">8. المستخدمون</button>
           </div>
+        </div>
 
-          <div data-perm="rep">
-            <button onclick="toggleMenu('m-rep')" class="sidebar-btn" data-mod="rep">
-              <span class="flex items-center gap-2"><span>📑</span> <span>التقارير</span></span><span>▾</span>
-            </button>
-            <div id="m-rep" class="hidden space-y-0.5 mt-1">
-              <button onclick="openTab('rep-cust')" class="sub-item-btn" data-tab="rep-cust">👤 كشف حساب عميل</button>
-              <button onclick="openTab('rep-vend')" class="sub-item-btn" data-tab="rep-vend">🏭 كشف حساب مورد</button>
-              <button onclick="openTab('rep-treasury')" class="sub-item-btn" data-tab="rep-treasury">💵 تقرير الخزينة</button>
-              <button onclick="openTab('rep-banks')" class="sub-item-btn" data-tab="rep-banks">🏦 تقرير البنوك والفيزا</button>
-              <button onclick="openTab('rep-exp')" class="sub-item-btn" data-tab="rep-exp">💸 تقرير المصروفات</button>
-              <button onclick="openTab('rep-rev')" class="sub-item-btn" data-tab="rep-rev">💰 تقرير الإيرادات</button>
-              <button onclick="openTab('rep-stock')" class="sub-item-btn" data-tab="rep-stock">📦 تقرير المخزون والأرباح</button>
-              <button onclick="openTab('rep-sql')" class="sub-item-btn" data-tab="rep-sql">⚡ التقارير الديناميكية (SQL)</button>
-            </div>
+        <!-- 7. التقارير -->
+        <div data-perm="rep" class="space-y-1">
+          <button onclick="toggleMenu('m-rep')" class="w-full flex items-center justify-between px-3 py-2 rounded-xl hover:bg-white/5 text-xs font-extrabold text-slate-100 cursor-pointer">
+            <span>التقارير</span>
+            <span class="text-[11px] text-blue-300">8</span>
+          </button>
+          <div id="m-rep" class="hidden space-y-0.5 pr-2 border-r border-blue-800/60 mr-2">
+            <button data-tab="rep-cust" onclick="openTab('rep-cust')" class="sub-item-btn">1. كشف حساب عميل</button>
+            <button data-tab="rep-vend" onclick="openTab('rep-vend')" class="sub-item-btn">2. كشف حساب مورد</button>
+            <button data-tab="rep-treasury" onclick="openTab('rep-treasury')" class="sub-item-btn">3. كشف حساب خزينة</button>
+            <button data-tab="rep-bank" onclick="openTab('rep-bank')" class="sub-item-btn">4. كشف حساب بنك</button>
+            <button data-tab="rep-stock" onclick="openTab('rep-stock')" class="sub-item-btn">5. كشف حساب مخزون</button>
+            <button data-tab="rep-sales-pur" onclick="openTab('rep-sales-pur')" class="sub-item-btn">6. تقرير المبيعات والمشتريات</button>
+            <button data-tab="rep-profit-hr" onclick="openTab('rep-profit-hr')" class="sub-item-btn">7. تقرير الأرباح والموارد</button>
+            <button data-tab="rep-sql" onclick="openTab('rep-sql')" class="sub-item-btn">8. التقارير الديناميكية (SQL)</button>
           </div>
+        </div>
 
-          <div data-perm="sys">
-            <button onclick="toggleMenu('m-sys')" class="sidebar-btn" data-mod="sys">
-              <span class="flex items-center gap-2"><span>⚙️</span> <span>الإعدادات</span></span><span>▾</span>
-            </button>
-            <div id="m-sys" class="hidden space-y-0.5 mt-1">
-              <button onclick="openTab('info-company')" class="sub-item-btn" data-tab="info-company">🏢 بيانات الشركة</button>
-              <button onclick="openTab('info-branches')" class="sub-item-btn" data-tab="info-branches">🏛️ الفروع والمناطق والمناديب</button>
-              <button onclick="openTab('sys-groups')" class="sub-item-btn" data-tab="sys-groups">🛡️ مجموعات الصلاحيات</button>
-              <button onclick="openTab('sys-users')" class="sub-item-btn" data-tab="sys-users">👤 إدارة المستخدمين</button>
-              <button onclick="openTab('sys-backup')" class="sub-item-btn" data-tab="sys-backup">💾 النسخ الاحتياطي</button>
-            </div>
+        <!-- 8. الإعدادات -->
+        <div data-perm="sys" class="space-y-1">
+          <button onclick="toggleMenu('m-set')" class="w-full flex items-center justify-between px-3 py-2 rounded-xl hover:bg-white/5 text-xs font-extrabold text-slate-100 cursor-pointer">
+            <span>الإعدادات</span>
+            <span class="text-[11px] text-blue-300">14</span>
+          </button>
+          <div id="m-set" class="hidden space-y-0.5 pr-2 border-r border-blue-800/60 mr-2">
+            <button data-tab="set-general" onclick="openTab('set-general')" class="sub-item-btn">1. الإعدادات العامة</button>
+            <button data-tab="set-acc" onclick="openTab('set-acc')" class="sub-item-btn">2. إعدادات الحسابات</button>
+            <button data-tab="set-sales" onclick="openTab('set-sales')" class="sub-item-btn">3. إعدادات المبيعات</button>
+            <button data-tab="set-pur" onclick="openTab('set-pur')" class="sub-item-btn">4. إعدادات المشتريات</button>
+            <button data-tab="set-inv" onclick="openTab('set-inv')" class="sub-item-btn">5. إعدادات المخازن</button>
+            <button data-tab="set-hr" onclick="openTab('set-hr')" class="sub-item-btn">6. إعدادات الموارد البشرية</button>
+            <button data-tab="set-tax" onclick="openTab('set-tax')" class="sub-item-btn">7. إعدادات الضرائب</button>
+            <button data-tab="set-numbering" onclick="openTab('set-numbering')" class="sub-item-btn">8. إعدادات ترقيم المستندات</button>
+            <button data-tab="set-print" onclick="openTab('set-print')" class="sub-item-btn">9. إعدادات الطباعة</button>
+            <button data-tab="set-roles" onclick="openTab('set-roles')" class="sub-item-btn">10. الأدوار والصلاحيات</button>
+            <button data-tab="set-alerts" onclick="openTab('set-alerts')" class="sub-item-btn">11. الإشعارات والتنبيهات</button>
+            <button data-tab="set-logs" onclick="openTab('set-logs')" class="sub-item-btn">12. سجل العمليات</button>
+            <button data-tab="set-backup" onclick="openTab('set-backup')" class="sub-item-btn">13. النسخ الاحتياطي واستعادة البيانات</button>
+            <button data-tab="set-locale" onclick="openTab('set-locale')" class="sub-item-btn">14. إعدادات اللغة والتوقيت</button>
           </div>
-        </nav>
+        </div>
       </div>
 
-      <div class="p-4 border-t border-slate-800 bg-slate-950">
-        <button onclick="logout()" class="w-full flex items-center justify-center gap-2 py-2 rounded-lg bg-rose-600/20 text-rose-400 hover:bg-rose-600 hover:text-white font-bold text-xs transition">
-          <span>🚪</span> <span>تسجيل الخروج</span>
-        </button>
+      <div class="p-3 border-t border-blue-900/60">
+        <button onclick="logout()" class="w-full py-2 rounded-xl bg-rose-600/20 hover:bg-rose-600 text-rose-200 hover:text-white text-xs font-black transition cursor-pointer">تسجيل الخروج</button>
       </div>
     </aside>
 
+    <!-- منطقة المحتوى الرئيسية -->
     <div class="flex-1 flex flex-col min-w-0">
-      <header class="no-print top-bar-custom px-6 py-3 flex flex-wrap items-center justify-between gap-4 sticky top-0 z-30">
+
+      <header class="no-print bg-white border-b border-slate-200 px-6 py-3.5 flex flex-wrap items-center justify-between gap-3 sticky top-0 z-20">
         <div>
-          <h2 id="current-page-title" class="font-black text-base text-slate-900">الرئيسية (التحليل اليومي)</h2>
-          <div id="header-date" class="text-[11px] text-slate-500"></div>
+          <h2 id="current-page-title" class="text-lg font-black text-slate-900">الرئيسية</h2>
+          <p id="header-date" class="text-xs text-slate-500 font-semibold"></p>
         </div>
 
         <div class="flex items-center gap-3">
-          <span id="active-group-badge" class="px-3 py-1 rounded-full bg-blue-50 text-blue-700 font-bold text-xs border border-blue-200">مدير عام</span>
-          <select id="branch-selector" onchange="switchBranch(this.value)" class="erp-input !w-auto font-bold text-xs"></select>
-          <button onclick="window.print()" class="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs border border-slate-200">
-            🖨️ طباعة
-          </button>
+          <select id="branch-selector" onchange="switchBranch(this.value)" class="px-3 py-2 rounded-xl bg-slate-100 border border-slate-200 text-xs font-extrabold text-slate-800"></select>
+          <button onclick="window.print()" class="px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-extrabold cursor-pointer">طباعة</button>
         </div>
       </header>
 
-      <main class="p-6 space-y-6 flex-1">
+      <main class="flex-1 p-6 space-y-6">
+
+        <!-- الرئيسية -->
         <section id="sec-dashboard" class="sec-view space-y-6">
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div class="erp-card p-5 text-white flex items-center justify-between shadow-md" style="background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);">
-              <div>
-                <div class="text-xs font-bold opacity-90">إجمالي المبيعات</div>
-                <div id="card-sales-val" class="text-2xl font-black mt-2">0</div>
-              </div>
-              <div class="text-3xl opacity-85">📈</div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+            <div class="erp-card p-5 border-r-4 border-r-blue-700">
+              <div class="text-xs font-bold text-slate-500">إجمالي المبيعات</div>
+              <div id="card-sales" class="text-2xl font-black text-blue-700 mt-1">0</div>
             </div>
-
-            <div class="erp-card p-5 text-white flex items-center justify-between shadow-md" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);">
-              <div>
-                <div class="text-xs font-bold opacity-90">إجمالي المشتريات</div>
-                <div id="card-pur-val" class="text-2xl font-black mt-2">0</div>
-              </div>
-              <div class="text-3xl opacity-85">🛒</div>
+            <div class="erp-card p-5 border-r-4 border-r-slate-900">
+              <div class="text-xs font-bold text-slate-500">إجمالي المشتريات</div>
+              <div id="card-pur" class="text-2xl font-black text-slate-900 mt-1">0</div>
             </div>
-
-            <div class="erp-card p-5 text-white flex items-center justify-between shadow-md" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);">
-              <div>
-                <div class="text-xs font-bold opacity-90">قيمة المخزون</div>
-                <div id="card-stock-val" class="text-2xl font-black mt-2">0</div>
-              </div>
-              <div class="text-3xl opacity-85">📦</div>
+            <div class="erp-card p-5 border-r-4 border-r-blue-500">
+              <div class="text-xs font-bold text-slate-500">قيمة المخزون</div>
+              <div id="card-stock" class="text-2xl font-black text-blue-600 mt-1">0</div>
             </div>
-
-            <div class="erp-card p-5 text-white flex items-center justify-between shadow-md" style="background: linear-gradient(135deg, #1d4ed8 0%, #0f172a 100%);">
-              <div>
-                <div class="text-xs font-bold opacity-90">عدد العملاء</div>
-                <div id="card-cust-val" class="text-2xl font-black mt-2">0</div>
-              </div>
-              <div class="text-3xl opacity-85">👥</div>
+            <div class="erp-card p-5 border-r-4 border-r-slate-700">
+              <div class="text-xs font-bold text-slate-500">عدد العملاء</div>
+              <div id="card-cust" class="text-2xl font-black text-slate-800 mt-1">0</div>
             </div>
           </div>
 
           <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div class="erp-card lg:col-span-2 p-5 space-y-3">
-              <h3 class="font-extrabold text-slate-800 text-sm border-b border-slate-100 pb-3">📊 المبيعات خلال الشهر</h3>
+            <div class="erp-card p-5 lg:col-span-2">
+              <h3 class="text-sm font-black text-slate-800 mb-3">تحليل المبيعات الشهرية</h3>
               <div class="h-64"><canvas id="salesMonthChart"></canvas></div>
             </div>
-
-            <div class="erp-card p-5 space-y-3">
-              <h3 class="font-extrabold text-slate-800 text-sm border-b border-slate-100 pb-3">🕒 أحدث الأنشطة</h3>
-              <div id="recent-activities-list" class="space-y-3 text-xs"></div>
+            <div class="erp-card p-5">
+              <h3 class="text-sm font-black text-slate-800 mb-3">أحدث الحركات</h3>
+              <div id="recent-activities" class="space-y-2.5 text-xs"></div>
             </div>
           </div>
+        </section>
 
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <button onclick="openTab('acc-coa')" class="erp-card p-4 flex items-center justify-between hover:border-blue-500 transition">
-              <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl font-bold">🧮</div>
-                <div class="text-right"><div class="font-black text-sm text-slate-800">إدارة الحسابات</div><div class="text-[11px] text-slate-400">القوائم والشجرة والقيود</div></div>
-              </div>
-              <span class="text-slate-400 text-lg">←</span>
-            </button>
-
-            <button onclick="openTab('sales-customers')" class="erp-card p-4 flex items-center justify-between hover:border-blue-500 transition">
-              <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl font-bold">🤝</div>
-                <div class="text-right"><div class="font-black text-sm text-slate-800">إدارة العملاء</div><div class="text-[11px] text-slate-400">العملاء والطلبات والفواتير</div></div>
-              </div>
-              <span class="text-slate-400 text-lg">←</span>
-            </button>
-
-            <button onclick="openTab('inv-items')" class="erp-card p-4 flex items-center justify-between hover:border-blue-500 transition">
-              <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl font-bold">📦</div>
-                <div class="text-right"><div class="font-black text-sm text-slate-800">إدارة المخزون</div><div class="text-[11px] text-slate-400">الأصناف والأذون والجرد</div></div>
-              </div>
-              <span class="text-slate-400 text-lg">←</span>
-            </button>
-
-            <button onclick="openTab('rep-sql')" class="erp-card p-4 flex items-center justify-between hover:border-blue-500 transition">
-              <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl font-bold">⚡</div>
-                <div class="text-right"><div class="font-black text-sm text-slate-800">التقارير و SQL</div><div class="text-[11px] text-slate-400">كشوفات الحساب وتقارير SQL</div></div>
-              </div>
-              <span class="text-slate-400 text-lg">←</span>
-            </button>
+        <!-- دليل الحسابات -->
+        <section id="sec-acc-coa" class="sec-view hidden space-y-5">
+          <div class="erp-card p-5 space-y-4">
+            <h3 class="font-black text-sm">01 دليل الحسابات</h3>
+            <form onsubmit="addCoa(event)" class="grid grid-cols-1 md:grid-cols-4 gap-3">
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">كود الحساب</label><input id="coa-code" required class="erp-input" placeholder="1105" /></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">اسم الحساب</label><input id="coa-name" required class="erp-input" placeholder="بنك مصر" /></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">نوع الحساب</label><select id="coa-type" class="erp-input"><option>أصول متداولة</option><option>أصول ثابتة</option><option>التزامات</option><option>إيرادات</option><option>مصروفات</option></select></div>
+              <div class="flex items-end"><button class="w-full py-2 btn-blue text-xs">إضافة حساب</button></div>
+            </form>
+            <table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">الكود</th><th class="p-2 border">الحساب</th><th class="p-2 border">النوع</th></tr>
+            </thead><tbody id="tb-coa"></tbody></table>
           </div>
         </section>
 
-        <section id="sec-sales-customers" class="sec-view hidden space-y-6">
+        <section id="sec-acc-journal" class="sec-view hidden space-y-5">
           <div class="erp-card p-5 space-y-4">
-            <h3 class="font-bold text-sm">إضافة عميل جديد</h3>
+            <h3 class="font-black text-sm">02 القيود اليومية</h3>
+            <form onsubmit="addJournal(event)" class="grid grid-cols-1 md:grid-cols-5 gap-3">
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">مدين</label><select id="je-dr" class="erp-input sel-coa"></select></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">دائن</label><select id="je-cr" class="erp-input sel-coa"></select></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">البيان</label><input id="je-desc" required class="erp-input" placeholder="شرح القيد" /></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">المبلغ</label><input type="number" id="je-amt" required class="erp-input font-bold" /></div>
+              <div class="flex items-end"><button class="w-full py-2 btn-blue text-xs">ترحيل القيد</button></div>
+            </form>
+            <table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">رقم القيد</th><th class="p-2 border">مدين</th><th class="p-2 border">دائن</th><th class="p-2 border">البيان</th><th class="p-2 border">المبلغ</th></tr></thead><tbody id="tb-je"></tbody></table>
+          </div>
+        </section>
+
+        <section id="sec-acc-channels" class="sec-view hidden space-y-5">
+          <div class="erp-card p-5 space-y-4">
+            <h3 class="font-black text-sm">03 الخزائن والبنوك</h3>
+            <form onsubmit="addChannel(event)" class="grid grid-cols-1 md:grid-cols-4 gap-3">
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">اسم الخزينة / البنك</label><input id="ch-name" required class="erp-input" /></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">النوع</label><select id="ch-type" class="erp-input"><option value="خزينة">خزينة</option><option value="بنك">بنك</option></select></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">الرصيد الافتتاحي</label><input type="number" id="ch-bal" required class="erp-input font-bold" /></div>
+              <div class="flex items-end"><button class="w-full py-2 btn-blue text-xs">إضافة</button></div>
+            </form>
+            <table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">الاسم</th><th class="p-2 border">النوع</th><th class="p-2 border">الرصيد</th></tr></thead><tbody id="tb-ch"></tbody></table>
+          </div>
+        </section>
+
+        <section id="sec-acc-transfers" class="sec-view hidden space-y-5">
+          <div class="erp-card p-5 space-y-4">
+            <h3 class="font-black text-sm">04 التحويلات المالية</h3>
+            <form onsubmit="addTransfer(event)" class="grid grid-cols-1 md:grid-cols-4 gap-3">
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">من</label><div class="flex gap-1"><select id="tr-from" class="erp-input sel-chan"></select><button type="button" onclick="quickAddChan('tr-from')" class="quick-add-btn">+</button></div></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">إلى</label><div class="flex gap-1"><select id="tr-to" class="erp-input sel-chan"></select><button type="button" onclick="quickAddChan('tr-to')" class="quick-add-btn">+</button></div></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">المبلغ</label><input type="number" id="tr-amt" required class="erp-input font-bold" /></div>
+              <div class="flex items-end"><button class="w-full py-2 btn-blue text-xs">تنفيذ التحويل</button></div>
+            </form>
+            <table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">من</th><th class="p-2 border">إلى</th><th class="p-2 border">المبلغ</th></tr></thead><tbody id="tb-tr"></tbody></table>
+          </div>
+        </section>
+
+        <section id="sec-acc-reconcile" class="sec-view hidden space-y-5">
+          <div class="erp-card p-5 space-y-4">
+            <h3 class="font-black text-sm">05 التسويات البنكية</h3>
+            <form onsubmit="addReconcile(event)" class="grid grid-cols-1 md:grid-cols-4 gap-3">
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">البنك</label><div class="flex gap-1"><select id="rec-bank" class="erp-input sel-bank"></select><button type="button" onclick="quickAddChan('rec-bank')" class="quick-add-btn">+</button></div></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">رصيد كشف البنك</label><input type="number" id="rec-stmt" required class="erp-input font-bold" /></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">ملاحظات التسوية</label><input id="rec-note" class="erp-input" /></div>
+              <div class="flex items-end"><button class="w-full py-2 btn-blue text-xs">حفظ التسوية</button></div>
+            </form>
+            <table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">البنك</th><th class="p-2 border">رصيد الكشف</th><th class="p-2 border">ملاحظات</th></tr></thead><tbody id="tb-rec"></tbody></table>
+          </div>
+        </section>
+
+        <section id="sec-acc-cost-centers" class="sec-view hidden space-y-5">
+          <div class="erp-card p-5 space-y-4">
+            <h3 class="font-black text-sm">06 مراكز التكلفة</h3>
+            <form onsubmit="addCostCenter(event)" class="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">اسم المركز</label><input id="cc-name" required class="erp-input" /></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">الموازنة التقديرية</label><input type="number" id="cc-bud" required class="erp-input font-bold" /></div>
+              <div class="flex items-end"><button class="w-full py-2 btn-blue text-xs">إضافة مركز</button></div>
+            </form>
+            <table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">المركز</th><th class="p-2 border">الموازنة</th></tr></thead><tbody id="tb-cc"></tbody></table>
+          </div>
+        </section>
+
+        <section id="sec-acc-fixed-assets" class="sec-view hidden space-y-5">
+          <div class="erp-card p-5 space-y-4">
+            <h3 class="font-black text-sm">07 الأصول الثابتة</h3>
+            <form onsubmit="addFixedAsset(event)" class="grid grid-cols-1 md:grid-cols-4 gap-3">
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">اسم الأصل</label><input id="fa-name" required class="erp-input" /></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">القيمة الدفترية</label><input type="number" id="fa-val" required class="erp-input font-bold" /></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">نسبة الإهلاك %</label><input type="number" id="fa-rate" value="10" required class="erp-input" /></div>
+              <div class="flex items-end"><button class="w-full py-2 btn-blue text-xs">حفظ الأصل</button></div>
+            </form>
+            <table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">الأصل</th><th class="p-2 border">القيمة</th><th class="p-2 border">الإهلاك %</th><th class="p-2 border">مجمع الإهلاك</th></tr></thead><tbody id="tb-fa"></tbody></table>
+          </div>
+        </section>
+
+        <section id="sec-acc-depreciation" class="sec-view hidden space-y-5">
+          <div class="erp-card p-5 space-y-4">
+            <h3 class="font-black text-sm">08 الإهلاكات</h3>
+            <form onsubmit="addDepreciation(event)" class="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">الأصل الثابت</label><select id="dep-asset" class="erp-input sel-asset"></select></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">قيمة الإهلاك</label><input type="number" id="dep-amt" required class="erp-input font-bold" /></div>
+              <div class="flex items-end"><button class="w-full py-2 btn-blue text-xs">ترحيل الإهلاك</button></div>
+            </form>
+            <table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">الأصل</th><th class="p-2 border">قيمة الإهلاك</th></tr></thead><tbody id="tb-dep"></tbody></table>
+          </div>
+        </section>
+
+        <section id="sec-acc-taxes" class="sec-view hidden space-y-5">
+          <div class="erp-card p-5 space-y-4">
+            <h3 class="font-black text-sm">09 الضرائب</h3>
+            <form onsubmit="addTaxRecord(event)" class="grid grid-cols-1 md:grid-cols-4 gap-3">
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">البيان الضريبي</label><input id="tax-name" required class="erp-input" /></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">النسبة %</label><input type="number" id="tax-rate" value="14" required class="erp-input" /></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">قيمة الضريبة</label><input type="number" id="tax-amt" required class="erp-input font-bold" /></div>
+              <div class="flex items-end"><button class="w-full py-2 btn-blue text-xs">تسجيل</button></div>
+            </form>
+            <table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">البيان</th><th class="p-2 border">النسبة</th><th class="p-2 border">القيمة</th></tr></thead><tbody id="tb-tax"></tbody></table>
+          </div>
+        </section>
+
+        <section id="sec-acc-ledger" class="sec-view hidden space-y-5">
+          <div class="erp-card p-5 space-y-4">
+            <h3 class="font-black text-sm">10 الأستاذ العام</h3>
+            <table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">الحساب</th><th class="p-2 border">البيان</th><th class="p-2 border">مدين</th><th class="p-2 border">دائن</th></tr></thead><tbody id="tb-ledger"></tbody></table>
+          </div>
+        </section>
+
+        <section id="sec-acc-trial-balance" class="sec-view hidden space-y-5">
+          <div class="erp-card p-5 space-y-4">
+            <h3 class="font-black text-sm">11 ميزان المراجعة</h3>
+            <table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">الكود</th><th class="p-2 border">الحساب</th><th class="p-2 border">إجمالي مدين</th><th class="p-2 border">إجمالي دائن</th></tr></thead><tbody id="tb-tb"></tbody></table>
+          </div>
+        </section>
+
+        <section id="sec-acc-statements" class="sec-view hidden space-y-5">
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 text-xs">
+            <div class="erp-card p-5 space-y-2">
+              <h3 class="font-black text-sm border-b pb-2 text-blue-700">قائمة الدخل</h3>
+              <div class="flex justify-between p-2 bg-slate-50 rounded"><span>الإيرادات والمبيعات</span><b id="st-inc">0.00</b></div>
+              <div class="flex justify-between p-2 bg-slate-50 rounded"><span>المصروفات والمشتريات</span><b id="st-exp">0.00</b></div>
+              <div class="flex justify-between p-2.5 bg-blue-700 text-white rounded font-black"><span>صافي الربح / الخسارة</span><span id="st-net">0.00</span></div>
+            </div>
+
+            <div class="erp-card p-5 space-y-2">
+              <h3 class="font-black text-sm border-b pb-2 text-slate-900">قائمة المركز المالي</h3>
+              <div class="flex justify-between p-2 bg-slate-50 rounded"><span>إجمالي الأصول</span><b id="st-assets">0.00</b></div>
+              <div class="flex justify-between p-2 bg-slate-50 rounded"><span>الالتزامات وحقوق الملكية</span><b id="st-liab">0.00</b></div>
+            </div>
+
+            <div class="erp-card p-5 space-y-2">
+              <h3 class="font-black text-sm border-b pb-2 text-blue-700">قائمة التدفقات النقدية</h3>
+              <div class="flex justify-between p-2 bg-slate-50 rounded"><span>التدفقات النقدية الداخلة</span><b id="st-cf-in">0.00</b></div>
+              <div class="flex justify-between p-2 bg-slate-50 rounded"><span>التدفقات النقدية الخارجة</span><b id="st-cf-out">0.00</b></div>
+              <div class="flex justify-between p-2.5 bg-slate-900 text-white rounded font-black"><span>صافي التدفق النقدي</span><span id="st-cf-net">0.00</span></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="sec-acc-closing" class="sec-view hidden space-y-5">
+          <div class="erp-card p-5 space-y-4">
+            <h3 class="font-black text-sm">13 الإقفال المالي</h3>
+            <form onsubmit="addClosing(event)" class="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">السنة المالية</label><input id="cl-yr" value="2026" required class="erp-input" /></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">ملاحظات الإقفال</label><input id="cl-note" required class="erp-input" /></div>
+              <div class="flex items-end"><button class="w-full py-2 btn-blue text-xs">تنفيذ الإقفال</button></div>
+            </form>
+            <table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">السنة</th><th class="p-2 border">ملاحظات</th><th class="p-2 border">النتيجة</th></tr></thead><tbody id="tb-cl"></tbody></table>
+          </div>
+        </section>
+
+        <!-- ================= موديول المبيعات (9 تبويبات) ================= -->
+        <section id="sec-sales-customers" class="sec-view hidden space-y-5">
+          <div class="erp-card p-5 space-y-4">
+            <h3 class="font-black text-sm">1. العملاء</h3>
             <form onsubmit="addCustomer(event)" class="grid grid-cols-1 md:grid-cols-4 gap-3">
-              <div><label class="text-xs font-bold text-slate-500 block mb-1">اسم العميل</label><input id="cust-name" required placeholder="مثال: شركة الصفا" class="erp-input" /></div>
-              <div><label class="text-xs font-bold text-slate-500 block mb-1">رقم الهاتف</label><input id="cust-phone" required placeholder="01012345678" class="erp-input" /></div>
-              <div><label class="text-xs font-bold text-slate-500 block mb-1">المنطقة / الفرع</label><input id="cust-area" placeholder="طنطا" class="erp-input" /></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">اسم العميل</label><input id="cust-name" required class="erp-input" /></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">رقم الهاتف</label><input id="cust-phone" required class="erp-input" /></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">المندوب</label><div class="flex gap-1"><select id="cust-rep" class="erp-input sel-rep"></select><button type="button" onclick="quickAddRep()" class="quick-add-btn">+</button></div></div>
               <div class="flex items-end"><button class="w-full py-2 btn-blue text-xs">حفظ العميل</button></div>
             </form>
-            <table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">العميل</th><th class="p-2 border">الهاتف</th><th class="p-2 border">المنطقة</th></tr></thead><tbody id="tb-cust"></tbody></table>
+            <table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">العميل</th><th class="p-2 border">الهاتف</th><th class="p-2 border">المندوب</th></tr></thead><tbody id="tb-cust"></tbody></table>
           </div>
         </section>
 
-        <section id="sec-sales-orders" class="sec-view hidden space-y-6">
+        <section id="sec-sales-quotes" class="sec-view hidden space-y-5">
           <div class="erp-card p-5 space-y-4">
-            <h3 class="font-bold text-sm">إنشاء طلب بيع</h3>
-            <form onsubmit="addSalesOrder(event)" class="grid grid-cols-1 md:grid-cols-5 gap-3">
-              <div><label class="text-xs font-bold text-slate-500 block mb-1">العميل</label><select id="so-cust" class="erp-input sel-cust"></select></div>
-              <div><label class="text-xs font-bold text-slate-500 block mb-1">الصنف</label><select id="so-item" onchange="syncPriceFromItem('so-item','so-price','so-qty','so-total')" class="erp-input sel-item"></select></div>
-              <div><label class="text-xs font-bold text-slate-500 block mb-1">الكمية</label><input type="number" id="so-qty" value="1" min="1" oninput="calcLine('so-qty','so-price','so-total')" required class="erp-input font-bold" /></div>
-              <div><label class="text-xs font-bold text-slate-500 block mb-1">سعر الوحدة</label><input type="number" id="so-price" oninput="calcLine('so-qty','so-price','so-total')" required class="erp-input font-bold" /></div>
-              <div><label class="text-xs font-bold text-slate-500 block mb-1">الإجمالي</label><input type="number" id="so-total" readonly class="erp-input bg-slate-100 font-bold text-blue-600" /></div>
-              <div class="md:col-span-5"><button class="w-full py-2.5 btn-blue text-xs">حفظ طلب البيع</button></div>
+            <h3 class="font-black text-sm">2. عروض الأسعار</h3>
+            <form onsubmit="addQuote(event)" class="grid grid-cols-1 md:grid-cols-5 gap-3">
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">العميل</label><div class="flex gap-1"><select id="sq-cust" class="erp-input sel-cust"></select><button type="button" onclick="quickAddCust('sq-cust')" class="quick-add-btn">+</button></div></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">الصنف</label><div class="flex gap-1"><select id="sq-item" onchange="syncPrice('sq-item','sq-price','sq-qty','sq-total')" class="erp-input sel-item"></select><button type="button" onclick="quickAddItem('sq-item')" class="quick-add-btn">+</button></div></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">الكمية</label><input type="number" id="sq-qty" value="1" min="1" oninput="calcTotal('sq-qty','sq-price','sq-total')" required class="erp-input font-bold" /></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">السعر</label><input type="number" id="sq-price" oninput="calcTotal('sq-qty','sq-price','sq-total')" required class="erp-input font-bold" /></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">الإجمالي</label><input type="number" id="sq-total" readonly class="erp-input bg-slate-100 font-bold text-blue-700" /></div>
+              <div class="md:col-span-5"><button class="w-full py-2.5 btn-blue text-xs">حفظ عرض السعر</button></div>
             </form>
-            <table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">رقم الطلب</th><th class="p-2 border">العميل</th><th class="p-2 border">الصنف</th><th class="p-2 border">الكمية</th><th class="p-2 border">الإجمالي</th></tr></thead><tbody id="tb-so"></tbody></table>
+            <table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">العرض</th><th class="p-2 border">العميل</th><th class="p-2 border">الصنف</th><th class="p-2 border">الكمية</th><th class="p-2 border">الإجمالي</th></tr></thead><tbody id="tb-sq"></tbody></table>
           </div>
         </section>
 
-        <section id="sec-sales-invoices" class="sec-view hidden space-y-6">
+        <section id="sec-sales-orders" class="sec-view hidden space-y-5">
           <div class="erp-card p-5 space-y-4">
-            <h3 class="font-bold text-sm">إصدار فاتورة مبيعات</h3>
+            <h3 class="font-black text-sm">3. أوامر البيع</h3>
+            <form onsubmit="addSalesOrder(event)" class="grid grid-cols-1 md:grid-cols-5 gap-3">
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">العميل</label><div class="flex gap-1"><select id="so-cust" class="erp-input sel-cust"></select><button type="button" onclick="quickAddCust('so-cust')" class="quick-add-btn">+</button></div></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">الصنف</label><div class="flex gap-1"><select id="so-item" onchange="syncPrice('so-item','so-price','so-qty','so-total')" class="erp-input sel-item"></select><button type="button" onclick="quickAddItem('so-item')" class="quick-add-btn">+</button></div></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">الكمية</label><input type="number" id="so-qty" value="1" min="1" oninput="calcTotal('so-qty','so-price','so-total')" required class="erp-input font-bold" /></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">السعر</label><input type="number" id="so-price" oninput="calcTotal('so-qty','so-price','so-total')" required class="erp-input font-bold" /></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">الإجمالي</label><input type="number" id="so-total" readonly class="erp-input bg-slate-100 font-bold text-blue-700" /></div>
+              <div class="md:col-span-5"><button class="w-full py-2.5 btn-blue text-xs">حفظ أمر البيع</button></div>
+            </form>
+            <table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">الأمر</th><th class="p-2 border">العميل</th><th class="p-2 border">الصنف</th><th class="p-2 border">الكمية</th><th class="p-2 border">الإجمالي</th></tr></thead><tbody id="tb-so"></tbody></table>
+          </div>
+        </section>
+
+        <section id="sec-sales-invoices" class="sec-view hidden space-y-5">
+          <div class="erp-card p-5 space-y-4">
+            <h3 class="font-black text-sm">4. فواتير المبيعات</h3>
             <form onsubmit="addSaleInvoice(event)" class="grid grid-cols-1 md:grid-cols-5 gap-3">
-              <div><label class="text-xs font-bold text-slate-500 block mb-1">العميل</label><select id="sinv-cust" class="erp-input sel-cust"></select></div>
-              <div><label class="text-xs font-bold text-slate-500 block mb-1">الصنف</label><select id="sinv-item" onchange="syncPriceFromItem('sinv-item','sinv-price','sinv-qty','sinv-total')" class="erp-input sel-item"></select></div>
-              <div><label class="text-xs font-bold text-slate-500 block mb-1">الكمية</label><input type="number" id="sinv-qty" value="1" min="1" oninput="calcLine('sinv-qty','sinv-price','sinv-total')" required class="erp-input font-bold" /></div>
-              <div><label class="text-xs font-bold text-slate-500 block mb-1">سعر الوحدة</label><input type="number" id="sinv-price" oninput="calcLine('sinv-qty','sinv-price','sinv-total')" required class="erp-input font-bold" /></div>
-              <div><label class="text-xs font-bold text-slate-500 block mb-1">الإجمالي</label><input type="number" id="sinv-total" readonly class="erp-input bg-slate-100 font-bold text-blue-600" /></div>
-              <div class="md:col-span-5"><button class="w-full py-2.5 btn-blue text-xs">حفظ فاتورة المبيعات وخصم المخزون</button></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">العميل</label><div class="flex gap-1"><select id="sinv-cust" class="erp-input sel-cust"></select><button type="button" onclick="quickAddCust('sinv-cust')" class="quick-add-btn">+</button></div></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">الصنف</label><div class="flex gap-1"><select id="sinv-item" onchange="syncPrice('sinv-item','sinv-price','sinv-qty','sinv-total')" class="erp-input sel-item"></select><button type="button" onclick="quickAddItem('sinv-item')" class="quick-add-btn">+</button></div></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">الكمية</label><input type="number" id="sinv-qty" value="1" min="1" oninput="calcTotal('sinv-qty','sinv-price','sinv-total')" required class="erp-input font-bold" /></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">سعر الوحدة</label><input type="number" id="sinv-price" oninput="calcTotal('sinv-qty','sinv-price','sinv-total')" required class="erp-input font-bold" /></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">الإجمالي</label><input type="number" id="sinv-total" readonly class="erp-input bg-slate-100 font-bold text-blue-700" /></div>
+              <div class="md:col-span-5"><button class="w-full py-2.5 btn-blue text-xs">حفظ فاتورة المبيعات</button></div>
             </form>
             <table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">الفاتورة</th><th class="p-2 border">العميل</th><th class="p-2 border">الصنف</th><th class="p-2 border">الكمية</th><th class="p-2 border">السعر</th><th class="p-2 border">الإجمالي</th></tr></thead><tbody id="tb-sales"></tbody></table>
           </div>
         </section>
 
-        <section id="sec-sales-returns" class="sec-view hidden space-y-6">
+        <section id="sec-sales-returns" class="sec-view hidden space-y-5">
           <div class="erp-card p-5 space-y-4">
-            <h3 class="font-bold text-sm">مرتجع مبيعات</h3>
+            <h3 class="font-black text-sm">5. مرتجعات المبيعات</h3>
             <form onsubmit="addSalesReturn(event)" class="grid grid-cols-1 md:grid-cols-4 gap-3">
-              <div><label class="text-xs font-bold text-slate-500 block mb-1">العميل</label><select id="sr-cust" class="erp-input sel-cust"></select></div>
-              <div><label class="text-xs font-bold text-slate-500 block mb-1">الصنف</label><select id="sr-item" class="erp-input sel-item"></select></div>
-              <div><label class="text-xs font-bold text-slate-500 block mb-1">الكمية المرتجعة</label><input type="number" id="sr-qty" value="1" min="1" required class="erp-input font-bold" /></div>
-              <div class="flex items-end"><button class="w-full py-2 btn-blue text-xs">ترحيل المرتجع للمخزون</button></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">العميل</label><div class="flex gap-1"><select id="sr-cust" class="erp-input sel-cust"></select><button type="button" onclick="quickAddCust('sr-cust')" class="quick-add-btn">+</button></div></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">الصنف</label><div class="flex gap-1"><select id="sr-item" class="erp-input sel-item"></select><button type="button" onclick="quickAddItem('sr-item')" class="quick-add-btn">+</button></div></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">الكمية</label><input type="number" id="sr-qty" value="1" min="1" required class="erp-input font-bold" /></div>
+              <div class="flex items-end"><button class="w-full py-2 btn-blue text-xs">حفظ المرتجع</button></div>
             </form>
             <table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">العميل</th><th class="p-2 border">الصنف</th><th class="p-2 border">الكمية</th></tr></thead><tbody id="tb-sr"></tbody></table>
           </div>
         </section>
 
-        <section id="sec-sales-receipts" class="sec-view hidden space-y-6">
+        <section id="sec-sales-credit-notes" class="sec-view hidden space-y-5">
           <div class="erp-card p-5 space-y-4">
-            <h3 class="font-bold text-sm">سند قبض من عميل</h3>
-            <form onsubmit="addVoucher(event, 'سند قبض', 1)" class="grid grid-cols-1 md:grid-cols-4 gap-3">
-              <div><label class="text-xs font-bold text-slate-500 block mb-1">العميل</label><select class="erp-input sel-cust v-party"></select></div>
-              <div><label class="text-xs font-bold text-slate-500 block mb-1">الخزينة / البنك / الفيزا</label><select class="erp-input sel-chan v-chan"></select></div>
-              <div><label class="text-xs font-bold text-slate-500 block mb-1">المبلغ</label><input type="number" required class="erp-input v-amt font-bold" /></div>
-              <div class="flex items-end"><button class="w-full py-2 btn-blue text-xs">إصدار سند القبض</button></div>
+            <h3 class="font-black text-sm">6. إشعارات الخصم</h3>
+            <form onsubmit="addCreditNote(event)" class="grid grid-cols-1 md:grid-cols-4 gap-3">
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">العميل</label><div class="flex gap-1"><select id="cn-cust" class="erp-input sel-cust"></select><button type="button" onclick="quickAddCust('cn-cust')" class="quick-add-btn">+</button></div></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">قيمة الخصم</label><input type="number" id="cn-amt" required class="erp-input font-bold" /></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">السبب</label><input id="cn-reason" required class="erp-input" /></div>
+              <div class="flex items-end"><button class="w-full py-2 btn-blue text-xs">إصدار الإشعار</button></div>
             </form>
-            <table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">النوع</th><th class="p-2 border">الجهة</th><th class="p-2 border">القناة</th><th class="p-2 border">المبلغ</th></tr></thead><tbody id="tb-rcpt"></tbody></table>
+            <table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">العميل</th><th class="p-2 border">السبب</th><th class="p-2 border">القيمة</th></tr></thead><tbody id="tb-cn"></tbody></table>
           </div>
         </section>
 
-        <section id="sec-pur-vendors" class="sec-view hidden space-y-6">
+        <section id="sec-sales-collections" class="sec-view hidden space-y-5">
           <div class="erp-card p-5 space-y-4">
-            <h3 class="font-bold text-sm">إضافة مورد</h3>
+            <h3 class="font-black text-sm">7. سندات التحصيل</h3>
+            <form onsubmit="addCollection(event)" class="grid grid-cols-1 md:grid-cols-4 gap-3">
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">العميل</label><div class="flex gap-1"><select id="col-cust" class="erp-input sel-cust"></select><button type="button" onclick="quickAddCust('col-cust')" class="quick-add-btn">+</button></div></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">الخزينة / البنك</label><div class="flex gap-1"><select id="col-chan" class="erp-input sel-chan"></select><button type="button" onclick="quickAddChan('col-chan')" class="quick-add-btn">+</button></div></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">المبلغ المحصل</label><input type="number" id="col-amt" required class="erp-input font-bold" /></div>
+              <div class="flex items-end"><button class="w-full py-2 btn-blue text-xs">إصدار سند التحصيل</button></div>
+            </form>
+            <table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">العميل</th><th class="p-2 border">الخزينة/البنك</th><th class="p-2 border">المبلغ</th></tr></thead><tbody id="tb-col"></tbody></table>
+          </div>
+        </section>
+
+        <section id="sec-sales-pricelists" class="sec-view hidden space-y-5">
+          <div class="erp-card p-5 space-y-4">
+            <h3 class="font-black text-sm">8. قوائم الأسعار</h3>
+            <form onsubmit="addPriceList(event)" class="grid grid-cols-1 md:grid-cols-4 gap-3">
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">اسم القائمة</label><input id="pl-name" required class="erp-input" placeholder="قائمة الجملة" /></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">الصنف</label><div class="flex gap-1"><select id="pl-item" class="erp-input sel-item"></select><button type="button" onclick="quickAddItem('pl-item')" class="quick-add-btn">+</button></div></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">السعر في القائمة</label><input type="number" id="pl-price" required class="erp-input font-bold" /></div>
+              <div class="flex items-end"><button class="w-full py-2 btn-blue text-xs">إضافة للقائمة</button></div>
+            </form>
+            <table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">القائمة</th><th class="p-2 border">الصنف</th><th class="p-2 border">السعر</th></tr></thead><tbody id="tb-pl"></tbody></table>
+          </div>
+        </section>
+
+        <section id="sec-sales-reps" class="sec-view hidden space-y-5">
+          <div class="erp-card p-5 space-y-4">
+            <h3 class="font-black text-sm">9. مندوبي المبيعات</h3>
+            <form onsubmit="addSalesRep(event)" class="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">اسم المندوب</label><input id="rep-name" required class="erp-input" /></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">نسبة العمولة %</label><input type="number" id="rep-comm" value="2" required class="erp-input font-bold" /></div>
+              <div class="flex items-end"><button class="w-full py-2 btn-blue text-xs">إضافة مندوب</button></div>
+            </form>
+            <table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">المندوب</th><th class="p-2 border">العمولة %</th></tr></thead><tbody id="tb-rep"></tbody></table>
+          </div>
+        </section>
+
+        <!-- ================= موديول المشتريات (7 تبويبات) ================= -->
+        <section id="sec-pur-vendors" class="sec-view hidden space-y-5">
+          <div class="erp-card p-5 space-y-4">
+            <h3 class="font-black text-sm">1. الموردون</h3>
             <form onsubmit="addVendor(event)" class="grid grid-cols-1 md:grid-cols-3 gap-3">
               <div><label class="text-xs font-bold text-slate-500 block mb-1">اسم المورد</label><input id="vnd-name" required class="erp-input" /></div>
-              <div><label class="text-xs font-bold text-slate-500 block mb-1">رقم الهاتف</label><input id="vnd-phone" class="erp-input" /></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">رقم الهاتف</label><input id="vnd-phone" required class="erp-input" /></div>
               <div class="flex items-end"><button class="w-full py-2 btn-blue text-xs">حفظ المورد</button></div>
             </form>
             <table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">المورد</th><th class="p-2 border">الهاتف</th></tr></thead><tbody id="tb-vnd"></tbody></table>
           </div>
         </section>
 
-        <section id="sec-pur-orders" class="sec-view hidden space-y-6">
+        <section id="sec-pur-requests" class="sec-view hidden space-y-5">
           <div class="erp-card p-5 space-y-4">
-            <h3 class="font-bold text-sm">طلب شراء</h3>
-            <form onsubmit="addPurOrder(event)" class="grid grid-cols-1 md:grid-cols-5 gap-3">
-              <div><label class="text-xs font-bold text-slate-500 block mb-1">المورد</label><select id="po-vnd" class="erp-input sel-vnd"></select></div>
-              <div><label class="text-xs font-bold text-slate-500 block mb-1">الصنف</label><select id="po-item" class="erp-input sel-item"></select></div>
-              <div><label class="text-xs font-bold text-slate-500 block mb-1">الكمية</label><input type="number" id="po-qty" value="1" min="1" oninput="calcLine('po-qty','po-price','po-total')" required class="erp-input font-bold" /></div>
-              <div><label class="text-xs font-bold text-slate-500 block mb-1">سعر الشراء</label><input type="number" id="po-price" oninput="calcLine('po-qty','po-price','po-total')" required class="erp-input font-bold" /></div>
-              <div><label class="text-xs font-bold text-slate-500 block mb-1">الإجمالي</label><input type="number" id="po-total" readonly class="erp-input bg-slate-100 font-bold text-blue-600" /></div>
-              <div class="md:col-span-5"><button class="w-full py-2.5 btn-blue text-xs">حفظ طلب الشراء</button></div>
+            <h3 class="font-black text-sm">2. طلبات الشراء</h3>
+            <form onsubmit="addPurRequest(event)" class="grid grid-cols-1 md:grid-cols-4 gap-3">
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">الصنف</label><div class="flex gap-1"><select id="prq-item" class="erp-input sel-item"></select><button type="button" onclick="quickAddItem('prq-item')" class="quick-add-btn">+</button></div></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">الكمية المطلوبة</label><input type="number" id="prq-qty" value="1" min="1" required class="erp-input font-bold" /></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">ملاحظات</label><input id="prq-note" class="erp-input" /></div>
+              <div class="flex items-end"><button class="w-full py-2 btn-blue text-xs">إرسال طلب شراء</button></div>
             </form>
-            <table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">رقم الطلب</th><th class="p-2 border">المورد</th><th class="p-2 border">الصنف</th><th class="p-2 border">الكمية</th><th class="p-2 border">الإجمالي</th></tr></thead><tbody id="tb-po"></tbody></table>
+            <table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">الصنف</th><th class="p-2 border">الكمية</th><th class="p-2 border">ملاحظات</th></tr></thead><tbody id="tb-prq"></tbody></table>
           </div>
         </section>
 
-        <section id="sec-pur-invoices" class="sec-view hidden space-y-6">
+        <section id="sec-pur-orders" class="sec-view hidden space-y-5">
           <div class="erp-card p-5 space-y-4">
-            <h3 class="font-bold text-sm">إصدار فاتورة مشتريات</h3>
+            <h3 class="font-black text-sm">3. أوامر الشراء</h3>
+            <form onsubmit="addPurOrder(event)" class="grid grid-cols-1 md:grid-cols-5 gap-3">
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">المورد</label><div class="flex gap-1"><select id="po-vnd" class="erp-input sel-vnd"></select><button type="button" onclick="quickAddVnd('po-vnd')" class="quick-add-btn">+</button></div></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">الصنف</label><div class="flex gap-1"><select id="po-item" onchange="syncPrice('po-item','po-price','po-qty','po-total')" class="erp-input sel-item"></select><button type="button" onclick="quickAddItem('po-item')" class="quick-add-btn">+</button></div></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">الكمية</label><input type="number" id="po-qty" value="1" min="1" oninput="calcTotal('po-qty','po-price','po-total')" required class="erp-input font-bold" /></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">السعر</label><input type="number" id="po-price" oninput="calcTotal('po-qty','po-price','po-total')" required class="erp-input font-bold" /></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">الإجمالي</label><input type="number" id="po-total" readonly class="erp-input bg-slate-100 font-bold text-blue-700" /></div>
+              <div class="md:col-span-5"><button class="w-full py-2.5 btn-blue text-xs">حفظ أمر الشراء</button></div>
+            </form>
+            <table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">الأمر</th><th class="p-2 border">المورد</th><th class="p-2 border">الصنف</th><th class="p-2 border">الكمية</th><th class="p-2 border">الإجمالي</th></tr></thead><tbody id="tb-po"></tbody></table>
+          </div>
+        </section>
+
+        <section id="sec-pur-invoices" class="sec-view hidden space-y-5">
+          <div class="erp-card p-5 space-y-4">
+            <h3 class="font-black text-sm">4. فواتير المشتريات</h3>
             <form onsubmit="addPurInvoice(event)" class="grid grid-cols-1 md:grid-cols-5 gap-3">
-              <div><label class="text-xs font-bold text-slate-500 block mb-1">المورد</label><select id="pinv-vnd" class="erp-input sel-vnd"></select></div>
-              <div><label class="text-xs font-bold text-slate-500 block mb-1">الصنف</label><select id="pinv-item" class="erp-input sel-item"></select></div>
-              <div><label class="text-xs font-bold text-slate-500 block mb-1">الكمية</label><input type="number" id="pinv-qty" value="1" min="1" oninput="calcLine('pinv-qty','pinv-price','pinv-total')" required class="erp-input font-bold" /></div>
-              <div><label class="text-xs font-bold text-slate-500 block mb-1">سعر الشراء</label><input type="number" id="pinv-price" oninput="calcLine('pinv-qty','pinv-price','pinv-total')" required class="erp-input font-bold" /></div>
-              <div><label class="text-xs font-bold text-slate-500 block mb-1">الإجمالي</label><input type="number" id="pinv-total" readonly class="erp-input bg-slate-100 font-bold text-blue-600" /></div>
-              <div class="md:col-span-5"><button class="w-full py-2.5 btn-blue text-xs">حفظ فاتورة المشتريات وإضافة للمخزون</button></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">المورد</label><div class="flex gap-1"><select id="pinv-vnd" class="erp-input sel-vnd"></select><button type="button" onclick="quickAddVnd('pinv-vnd')" class="quick-add-btn">+</button></div></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">الصنف</label><div class="flex gap-1"><select id="pinv-item" onchange="syncPrice('pinv-item','pinv-price','pinv-qty','pinv-total')" class="erp-input sel-item"></select><button type="button" onclick="quickAddItem('pinv-item')" class="quick-add-btn">+</button></div></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">الكمية</label><input type="number" id="pinv-qty" value="1" min="1" oninput="calcTotal('pinv-qty','pinv-price','pinv-total')" required class="erp-input font-bold" /></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">سعر الشراء</label><input type="number" id="pinv-price" oninput="calcTotal('pinv-qty','pinv-price','pinv-total')" required class="erp-input font-bold" /></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">الإجمالي</label><input type="number" id="pinv-total" readonly class="erp-input bg-slate-100 font-bold text-blue-700" /></div>
+              <div class="md:col-span-5"><button class="w-full py-2.5 btn-blue text-xs">حفظ فاتورة المشتريات</button></div>
             </form>
             <table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">الفاتورة</th><th class="p-2 border">المورد</th><th class="p-2 border">الصنف</th><th class="p-2 border">الكمية</th><th class="p-2 border">السعر</th><th class="p-2 border">الإجمالي</th></tr></thead><tbody id="tb-pur"></tbody></table>
           </div>
         </section>
 
-        <section id="sec-pur-returns" class="sec-view hidden space-y-6">
+        <section id="sec-pur-returns" class="sec-view hidden space-y-5">
           <div class="erp-card p-5 space-y-4">
-            <h3 class="font-bold text-sm">مرتجع مشتريات</h3>
+            <h3 class="font-black text-sm">5. مرتجعات المشتريات</h3>
             <form onsubmit="addPurReturn(event)" class="grid grid-cols-1 md:grid-cols-4 gap-3">
-              <div><label class="text-xs font-bold text-slate-500 block mb-1">المورد</label><select id="pr-vnd" class="erp-input sel-vnd"></select></div>
-              <div><label class="text-xs font-bold text-slate-500 block mb-1">الصنف</label><select id="pr-item" class="erp-input sel-item"></select></div>
-              <div><label class="text-xs font-bold text-slate-500 block mb-1">الكمية المرتجعة</label><input type="number" id="pr-qty" value="1" min="1" required class="erp-input font-bold" /></div>
-              <div class="flex items-end"><button class="w-full py-2 btn-blue text-xs">ترحيل المرتجع</button></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">المورد</label><div class="flex gap-1"><select id="pr-vnd" class="erp-input sel-vnd"></select><button type="button" onclick="quickAddVnd('pr-vnd')" class="quick-add-btn">+</button></div></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">الصنف</label><div class="flex gap-1"><select id="pr-item" class="erp-input sel-item"></select><button type="button" onclick="quickAddItem('pr-item')" class="quick-add-btn">+</button></div></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">الكمية</label><input type="number" id="pr-qty" value="1" min="1" required class="erp-input font-bold" /></div>
+              <div class="flex items-end"><button class="w-full py-2 btn-blue text-xs">حفظ المرتجع</button></div>
             </form>
             <table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">المورد</th><th class="p-2 border">الصنف</th><th class="p-2 border">الكمية</th></tr></thead><tbody id="tb-pr"></tbody></table>
           </div>
         </section>
 
-        <section id="sec-pur-payments" class="sec-view hidden space-y-6">
+        <section id="sec-pur-add-notes" class="sec-view hidden space-y-5">
           <div class="erp-card p-5 space-y-4">
-            <h3 class="font-bold text-sm">سند صرف لمورد</h3>
-            <form onsubmit="addVoucher(event, 'سند صرف', -1)" class="grid grid-cols-1 md:grid-cols-4 gap-3">
-              <div><label class="text-xs font-bold text-slate-500 block mb-1">المورد</label><select class="erp-input sel-vnd v-party"></select></div>
-              <div><label class="text-xs font-bold text-slate-500 block mb-1">الخزينة / البنك / الفيزا</label><select class="erp-input sel-chan v-chan"></select></div>
-              <div><label class="text-xs font-bold text-slate-500 block mb-1">المبلغ</label><input type="number" required class="erp-input v-amt font-bold" /></div>
-              <div class="flex items-end"><button class="w-full py-2 btn-blue text-xs">إصدار سند الصرف</button></div>
+            <h3 class="font-black text-sm">6. إشعارات الإضافة</h3>
+            <form onsubmit="addPurNote(event)" class="grid grid-cols-1 md:grid-cols-4 gap-3">
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">المورد</label><div class="flex gap-1"><select id="pan-vnd" class="erp-input sel-vnd"></select><button type="button" onclick="quickAddVnd('pan-vnd')" class="quick-add-btn">+</button></div></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">القيمة</label><input type="number" id="pan-amt" required class="erp-input font-bold" /></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">البيان</label><input id="pan-note" required class="erp-input" /></div>
+              <div class="flex items-end"><button class="w-full py-2 btn-blue text-xs">إصدار الإشعار</button></div>
             </form>
-            <table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">النوع</th><th class="p-2 border">الجهة</th><th class="p-2 border">القناة</th><th class="p-2 border">المبلغ</th></tr></thead><tbody id="tb-pmt"></tbody></table>
+            <table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">المورد</th><th class="p-2 border">البيان</th><th class="p-2 border">القيمة</th></tr></thead><tbody id="tb-pan"></tbody></table>
           </div>
         </section>
 
-        <section id="sec-inv-cats" class="sec-view hidden space-y-6">
+        <section id="sec-pur-payments" class="sec-view hidden space-y-5">
           <div class="erp-card p-5 space-y-4">
-            <h3 class="font-bold text-sm">فئات الأصناف</h3>
-            <form onsubmit="addCategory(event)" class="flex gap-3 max-w-md">
-              <input id="cat-name" placeholder="اسم الفئة (مثال: أجهزة، أدوات)" required class="erp-input" />
+            <h3 class="font-black text-sm">7. سندات الدفع</h3>
+            <form onsubmit="addPayment(event)" class="grid grid-cols-1 md:grid-cols-4 gap-3">
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">المورد</label><div class="flex gap-1"><select id="pmt-vnd" class="erp-input sel-vnd"></select><button type="button" onclick="quickAddVnd('pmt-vnd')" class="quick-add-btn">+</button></div></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">الخزينة / البنك</label><div class="flex gap-1"><select id="pmt-chan" class="erp-input sel-chan"></select><button type="button" onclick="quickAddChan('pmt-chan')" class="quick-add-btn">+</button></div></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">المبلغ المدفوع</label><input type="number" id="pmt-amt" required class="erp-input font-bold" /></div>
+              <div class="flex items-end"><button class="w-full py-2 btn-blue text-xs">إصدار سند الدفع</button></div>
+            </form>
+            <table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">المورد</th><th class="p-2 border">الخزينة/البنك</th><th class="p-2 border">المبلغ</th></tr></thead><tbody id="tb-pmt"></tbody></table>
+          </div>
+        </section>
+
+        <!-- ================= موديول المخازن (10 تبويبات) ================= -->
+        <section id="sec-inv-items" class="sec-view hidden space-y-5">
+          <div class="erp-card p-5 space-y-4">
+            <h3 class="font-black text-sm">1. الأصناف</h3>
+            <form onsubmit="addItem(event)" class="grid grid-cols-1 md:grid-cols-5 gap-3">
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">الكود</label><input id="itm-code" required class="erp-input" /></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">اسم الصنف</label><input id="itm-name" required class="erp-input" /></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">المجموعة</label><div class="flex gap-1"><select id="itm-grp" class="erp-input sel-grp"></select><button type="button" onclick="quickAddItemGrp('itm-grp')" class="quick-add-btn">+</button></div></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">السعر</label><input type="number" id="itm-price" required class="erp-input font-bold" /></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">الكمية</label><input type="number" id="itm-qty" value="0" required class="erp-input font-bold" /></div>
+              <div class="md:col-span-5"><button class="w-full py-2.5 btn-blue text-xs">حفظ الصنف</button></div>
+            </form>
+            <table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">الكود</th><th class="p-2 border">الصنف</th><th class="p-2 border">المجموعة</th><th class="p-2 border">السعر</th><th class="p-2 border">الكمية</th></tr></thead><tbody id="tb-itm"></tbody></table>
+          </div>
+        </section>
+
+        <section id="sec-inv-groups" class="sec-view hidden space-y-5">
+          <div class="erp-card p-5 space-y-4">
+            <h3 class="font-black text-sm">2. مجموعات الأصناف</h3>
+            <form onsubmit="addItemGroup(event)" class="flex gap-3 max-w-md">
+              <input id="igrp-name" placeholder="اسم المجموعة" required class="erp-input" />
               <button class="btn-blue text-xs px-5">إضافة</button>
             </form>
-            <ul id="list-cats" class="list-disc pr-5 text-xs space-y-1"></ul>
+            <ul id="list-igrp" class="list-disc pr-5 text-xs space-y-1"></ul>
           </div>
         </section>
 
-        <section id="sec-inv-items" class="sec-view hidden space-y-6">
+        <section id="sec-inv-warehouses" class="sec-view hidden space-y-5">
           <div class="erp-card p-5 space-y-4">
-            <h3 class="font-bold text-sm">دليل الأصناف والأسعار</h3>
-            <form onsubmit="addItem(event)" class="grid grid-cols-1 md:grid-cols-6 gap-3">
-              <div><label class="text-xs font-bold text-slate-500 block mb-1">كود الصنف</label><input id="itm-code" required class="erp-input" /></div>
-              <div><label class="text-xs font-bold text-slate-500 block mb-1">اسم الصنف</label><input id="itm-name" required class="erp-input" /></div>
-              <div><label class="text-xs font-bold text-slate-500 block mb-1">الفئة</label><select id="itm-cat" class="erp-input sel-cat"></select></div>
-              <div><label class="text-xs font-bold text-slate-500 block mb-1">سعر البيع</label><input type="number" id="itm-price" required class="erp-input font-bold" /></div>
-              <div><label class="text-xs font-bold text-slate-500 block mb-1">الكمية الافتتاحية</label><input type="number" id="itm-qty" value="0" required class="erp-input font-bold" /></div>
-              <div class="flex items-end"><button class="w-full py-2 btn-blue text-xs">حفظ الصنف</button></div>
+            <h3 class="font-black text-sm">3. المخازن</h3>
+            <form onsubmit="addWarehouse(event)" class="flex gap-3 max-w-md">
+              <input id="wh-name" placeholder="اسم المخزن" required class="erp-input" />
+              <button class="btn-blue text-xs px-5">إضافة مخزن</button>
             </form>
-            <table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">الكود</th><th class="p-2 border">الصنف</th><th class="p-2 border">الفئة</th><th class="p-2 border">السعر</th><th class="p-2 border">الكمية</th></tr></thead><tbody id="tb-itm"></tbody></table>
+            <ul id="list-wh" class="list-disc pr-5 text-xs space-y-1"></ul>
           </div>
         </section>
 
-        <section id="sec-inv-add-ext" class="sec-view hidden space-y-6">
+        <section id="sec-inv-balances" class="sec-view hidden space-y-5">
           <div class="erp-card p-5 space-y-4">
-            <h3 class="font-bold text-sm">إذن إضافة مخزني (خارجي)</h3>
-            <form onsubmit="addStockDoc(event, 'إذن إضافة مخزني', 1)" class="grid grid-cols-1 md:grid-cols-4 gap-3">
-              <div><label class="text-xs font-bold text-slate-500 block mb-1">الصنف</label><select class="erp-input sel-item doc-item"></select></div>
-              <div><label class="text-xs font-bold text-slate-500 block mb-1">الكمية المضافة</label><input type="number" min="1" value="1" required class="erp-input doc-qty font-bold" /></div>
-              <div><label class="text-xs font-bold text-slate-500 block mb-1">البيان</label><input class="erp-input doc-note" placeholder="وارد من مورد" /></div>
-              <div class="flex items-end"><button class="w-full py-2 btn-blue text-xs">ترحيل الإذن</button></div>
+            <h3 class="font-black text-sm">4. أرصدة المخزون</h3>
+            <table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">الكود</th><th class="p-2 border">الصنف</th><th class="p-2 border">الرصيد</th><th class="p-2 border">القيمة</th></tr></thead><tbody id="tb-bal"></tbody></table>
+          </div>
+        </section>
+
+        <section id="sec-inv-add-docs" class="sec-view hidden space-y-5">
+          <div class="erp-card p-5 space-y-4">
+            <h3 class="font-black text-sm">5. أذون الإضافة</h3>
+            <form onsubmit="addInvMove(event,'إذن إضافة',1)" class="grid grid-cols-1 md:grid-cols-4 gap-3">
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">الصنف</label><div class="flex gap-1"><select class="erp-input sel-item mv-item"></select><button type="button" onclick="quickAddItem()" class="quick-add-btn">+</button></div></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">الكمية</label><input type="number" value="1" min="1" required class="erp-input mv-qty font-bold" /></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">البيان</label><input class="erp-input mv-note" placeholder="إضافة للمخزن" /></div>
+              <div class="flex items-end"><button class="w-full py-2 btn-blue text-xs">ترحيل إذن الإضافة</button></div>
             </form>
-            <table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">النوع</th><th class="p-2 border">الصنف</th><th class="p-2 border">الكمية</th><th class="p-2 border">البيان</th></tr></thead><tbody class="tb-stock-docs"></tbody></table>
+            <table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">النوع</th><th class="p-2 border">الصنف</th><th class="p-2 border">الكمية</th><th class="p-2 border">البيان</th></tr></thead><tbody class="tb-mv"></tbody></table>
           </div>
         </section>
 
-        <section id="sec-inv-add-int" class="sec-view hidden space-y-6">
+        <section id="sec-inv-out-docs" class="sec-view hidden space-y-5">
           <div class="erp-card p-5 space-y-4">
-            <h3 class="font-bold text-sm">إذن إضافة داخلي</h3>
-            <form onsubmit="addStockDoc(event, 'إذن إضافة داخلي', 1)" class="grid grid-cols-1 md:grid-cols-4 gap-3">
-              <div><label class="text-xs font-bold text-slate-500 block mb-1">الصنف</label><select class="erp-input sel-item doc-item"></select></div>
-              <div><label class="text-xs font-bold text-slate-500 block mb-1">الكمية</label><input type="number" min="1" value="1" required class="erp-input doc-qty font-bold" /></div>
-              <div><label class="text-xs font-bold text-slate-500 block mb-1">جهة التحويل</label><input class="erp-input doc-note" placeholder="تحويل من فرع آخر" /></div>
-              <div class="flex items-end"><button class="w-full py-2 btn-blue text-xs">ترحيل الإذن</button></div>
+            <h3 class="font-black text-sm">6. أذون الصرف</h3>
+            <form onsubmit="addInvMove(event,'إذن صرف',-1)" class="grid grid-cols-1 md:grid-cols-4 gap-3">
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">الصنف</label><div class="flex gap-1"><select class="erp-input sel-item mv-item"></select><button type="button" onclick="quickAddItem()" class="quick-add-btn">+</button></div></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">الكمية</label><input type="number" value="1" min="1" required class="erp-input mv-qty font-bold" /></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">البيان</label><input class="erp-input mv-note" placeholder="صرف من المخزن" /></div>
+              <div class="flex items-end"><button class="w-full py-2 btn-blue text-xs">ترحيل إذن الصرف</button></div>
             </form>
-            <table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">النوع</th><th class="p-2 border">الصنف</th><th class="p-2 border">الكمية</th><th class="p-2 border">البيان</th></tr></thead><tbody class="tb-stock-docs"></tbody></table>
+            <table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">النوع</th><th class="p-2 border">الصنف</th><th class="p-2 border">الكمية</th><th class="p-2 border">البيان</th></tr></thead><tbody class="tb-mv"></tbody></table>
           </div>
         </section>
 
-        <section id="sec-inv-out-ext" class="sec-view hidden space-y-6">
+        <section id="sec-inv-transfers" class="sec-view hidden space-y-5">
           <div class="erp-card p-5 space-y-4">
-            <h3 class="font-bold text-sm">إذن صرف مخزني (خارجي)</h3>
-            <form onsubmit="addStockDoc(event, 'إذن صرف مخزني', -1)" class="grid grid-cols-1 md:grid-cols-4 gap-3">
-              <div><label class="text-xs font-bold text-slate-500 block mb-1">الصنف</label><select class="erp-input sel-item doc-item"></select></div>
-              <div><label class="text-xs font-bold text-slate-500 block mb-1">الكمية المنصرفة</label><input type="number" min="1" value="1" required class="erp-input doc-qty font-bold" /></div>
-              <div><label class="text-xs font-bold text-slate-500 block mb-1">الجهة / الملاحظات</label><input class="erp-input doc-note" placeholder="صرف لعميل" /></div>
-              <div class="flex items-end"><button class="w-full py-2 btn-blue text-xs">ترحيل الصرف</button></div>
+            <h3 class="font-black text-sm">7. التحويل بين المخازن</h3>
+            <form onsubmit="addWhTransfer(event)" class="grid grid-cols-1 md:grid-cols-4 gap-3">
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">من مخزن</label><select id="wht-from" class="erp-input sel-wh"></select></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">إلى مخزن</label><select id="wht-to" class="erp-input sel-wh"></select></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">الصنف والكمية</label><div class="flex gap-1"><select id="wht-item" class="erp-input sel-item"></select><input type="number" id="wht-qty" value="1" min="1" required class="erp-input !w-20 font-bold" /></div></div>
+              <div class="flex items-end"><button class="w-full py-2 btn-blue text-xs">ترحيل التحويل</button></div>
             </form>
-            <table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">النوع</th><th class="p-2 border">الصنف</th><th class="p-2 border">الكمية</th><th class="p-2 border">البيان</th></tr></thead><tbody class="tb-stock-docs"></tbody></table>
+            <table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">من</th><th class="p-2 border">إلى</th><th class="p-2 border">الصنف</th><th class="p-2 border">الكمية</th></tr></thead><tbody id="tb-wht"></tbody></table>
           </div>
         </section>
 
-        <section id="sec-inv-out-int" class="sec-view hidden space-y-6">
+        <section id="sec-inv-stocktake" class="sec-view hidden space-y-5">
           <div class="erp-card p-5 space-y-4">
-            <h3 class="font-bold text-sm">إذن صرف داخلي</h3>
-            <form onsubmit="addStockDoc(event, 'إذن صرف داخلي', -1)" class="grid grid-cols-1 md:grid-cols-4 gap-3">
-              <div><label class="text-xs font-bold text-slate-500 block mb-1">الصنف</label><select class="erp-input sel-item doc-item"></select></div>
-              <div><label class="text-xs font-bold text-slate-500 block mb-1">الكمية</label><input type="number" min="1" value="1" required class="erp-input doc-qty font-bold" /></div>
-              <div><label class="text-xs font-bold text-slate-500 block mb-1">القسم الداخلي</label><input class="erp-input doc-note" placeholder="استهلاك داخلي" /></div>
-              <div class="flex items-end"><button class="w-full py-2 btn-blue text-xs">ترحيل الصرف</button></div>
+            <h3 class="font-black text-sm">8. الجرد</h3>
+            <table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">الصنف</th><th class="p-2 border">الرصيد الدفتري</th><th class="p-2 border">السعر</th><th class="p-2 border">الإجمالي</th></tr></thead><tbody id="tb-stk"></tbody></table>
+          </div>
+        </section>
+
+        <section id="sec-inv-adjustments" class="sec-view hidden space-y-5">
+          <div class="erp-card p-5 space-y-4">
+            <h3 class="font-black text-sm">9. تسوية المخزون</h3>
+            <form onsubmit="addAdjustment(event)" class="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">الصنف</label><div class="flex gap-1"><select id="adj-item" class="erp-input sel-item"></select><button type="button" onclick="quickAddItem('adj-item')" class="quick-add-btn">+</button></div></div>
+              <div><label class="text-xs font-bold text-slate-500 block mb-1">الرصيد الفعلي الجديد</label><input type="number" id="adj-qty" required class="erp-input font-bold" /></div>
+              <div class="flex items-end"><button class="w-full py-2 btn-blue text-xs">اعتماد التسوية</button></div>
             </form>
-            <table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">النوع</th><th class="p-2 border">الصنف</th><th class="p-2 border">الكمية</th><th class="p-2 border">البيان</th></tr></thead><tbody class="tb-stock-docs"></tbody></table>
+            <table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">الصنف</th><th class="p-2 border">الرصيد بعد التسوية</th></tr></thead><tbody id="tb-adj"></tbody></table>
           </div>
         </section>
 
-        <section id="sec-inv-stocktake" class="sec-view hidden space-y-6">
+        <section id="sec-inv-movements" class="sec-view hidden space-y-5">
           <div class="erp-card p-5 space-y-4">
-            <h3 class="font-bold text-sm">جرد وتسوية المخزون</h3>
-            <table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">الكود</th><th class="p-2 border">الصنف</th><th class="p-2 border">الكمية الحالية</th><th class="p-2 border">قيمة المخزون</th></tr></thead><tbody id="tb-stocktake"></tbody></table>
+            <h3 class="font-black text-sm">10. حركة الأصناف</h3>
+            <table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">النوع</th><th class="p-2 border">الصنف</th><th class="p-2 border">الكمية</th><th class="p-2 border">البيان</th></tr></thead><tbody class="tb-mv"></tbody></table>
           </div>
         </section>
 
-        <section id="sec-fin-income" class="sec-view hidden space-y-6">
-          <div class="erp-card p-6 space-y-4 max-w-3xl mx-auto text-xs">
-            <h3 class="font-black text-base text-center border-b pb-3">قائمة الدخل (P&L)</h3>
-            <div class="flex justify-between p-3 bg-blue-50 rounded-lg font-bold"><span>إجمالي المبيعات والإيرادات</span><span id="pl-rev">0.00</span></div>
-            <div class="flex justify-between p-3 bg-slate-100 rounded-lg font-bold"><span>تكلفة المشتريات (-)</span><span id="pl-cost">0.00</span></div>
-            <div class="flex justify-between p-3 bg-rose-50 rounded-lg font-bold"><span>المصروفات (-)</span><span id="pl-exp">0.00</span></div>
-            <div class="flex justify-between p-4 bg-slate-900 text-white rounded-xl font-black text-sm"><span>صافي الربح / الخسارة</span><span id="pl-net">0.00</span></div>
-          </div>
-        </section>
-
-        <section id="sec-fin-balance" class="sec-view hidden space-y-6">
-          <div class="erp-card p-6 space-y-4 max-w-4xl mx-auto text-xs">
-            <h3 class="font-black text-base text-center border-b pb-3">قائمة المركز المالي</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div class="space-y-2">
-                <div class="font-black text-blue-600 border-b pb-1">الأصول</div>
-                <div class="flex justify-between p-2 border-b"><span>الأصول الثابتة</span><span id="bs-fixed" class="font-bold">0.00</span></div>
-                <div class="flex justify-between p-2 border-b"><span>الخزن والبنوك والفيزا</span><span id="bs-cash" class="font-bold">0.00</span></div>
-                <div class="flex justify-between p-2 border-b"><span>المخزون السلعي</span><span id="bs-stock" class="font-bold">0.00</span></div>
-                <div class="flex justify-between p-3 bg-blue-50 rounded-lg font-black"><span>إجمالي الأصول</span><span id="bs-tot-a">0.00</span></div>
-              </div>
-              <div class="space-y-2">
-                <div class="font-black text-slate-800 border-b pb-1">الالتزامات وحقوق الملكية</div>
-                <div class="flex justify-between p-2 border-b"><span>رأس المال</span><span id="bs-cap" class="font-bold">0.00</span></div>
-                <div class="flex justify-between p-2 border-b"><span>صافي أرباح الفترة</span><span id="bs-prof" class="font-bold">0.00</span></div>
-                <div class="flex justify-between p-3 bg-slate-100 rounded-lg font-black"><span>إجمالي الالتزامات وحقوق الملكية</span><span id="bs-tot-l">0.00</span></div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section id="sec-asset-add" class="sec-view hidden space-y-6"><div class="erp-card p-5 space-y-4"><h3 class="font-bold text-sm">إضافة أصل ثابت</h3><form onsubmit="addAssetOp(event,'إضافة أصل')" class="grid grid-cols-1 md:grid-cols-4 gap-3"><input id="aadd-name" placeholder="اسم الأصل" required class="erp-input" /><input type="number" id="aadd-val" placeholder="القيمة" required class="erp-input font-bold" /><input type="number" id="aadd-rate" placeholder="نسبة الإهلاك %" value="10" class="erp-input" /><button class="btn-blue text-xs py-2">حفظ الأصل</button></form><table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">الأصل</th><th class="p-2 border">العملية</th><th class="p-2 border">القيمة</th><th class="p-2 border">ملاحظات</th></tr></thead><tbody class="tb-assets"></tbody></table></div></section>
-        <section id="sec-asset-buy" class="sec-view hidden space-y-6"><div class="erp-card p-5 space-y-4"><h3 class="font-bold text-sm">شراء أصل</h3><form onsubmit="addAssetOp(event,'شراء أصل')" class="grid grid-cols-1 md:grid-cols-4 gap-3"><input id="abuy-name" placeholder="اسم الأصل" required class="erp-input" /><input type="number" id="abuy-val" placeholder="تكلفة الشراء" required class="erp-input font-bold" /><select id="abuy-chan" class="erp-input sel-chan"></select><button class="btn-blue text-xs py-2">تأكيد الشراء</button></form><table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">الأصل</th><th class="p-2 border">العملية</th><th class="p-2 border">القيمة</th><th class="p-2 border">ملاحظات</th></tr></thead><tbody class="tb-assets"></tbody></table></div></section>
-        <section id="sec-asset-dep" class="sec-view hidden space-y-6"><div class="erp-card p-5 space-y-4"><h3 class="font-bold text-sm">إهلاك أصل</h3><form onsubmit="addAssetOp(event,'إهلاك أصل')" class="grid grid-cols-1 md:grid-cols-3 gap-3"><select id="adep-name" class="erp-input sel-asset"></select><input type="number" id="adep-val" placeholder="قيمة الإهلاك" required class="erp-input font-bold" /><button class="btn-blue text-xs py-2">ترحيل الإهلاك</button></form><table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">الأصل</th><th class="p-2 border">العملية</th><th class="p-2 border">القيمة</th><th class="p-2 border">ملاحظات</th></tr></thead><tbody class="tb-assets"></tbody></table></div></section>
-        <section id="sec-asset-sell" class="sec-view hidden space-y-6"><div class="erp-card p-5 space-y-4"><h3 class="font-bold text-sm">بيع أصل</h3><form onsubmit="addAssetOp(event,'بيع أصل')" class="grid grid-cols-1 md:grid-cols-4 gap-3"><select id="asell-name" class="erp-input sel-asset"></select><input type="number" id="asell-val" placeholder="سعر البيع" required class="erp-input font-bold" /><select id="asell-chan" class="erp-input sel-chan"></select><button class="btn-blue text-xs py-2">تنفيذ البيع</button></form><table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">الأصل</th><th class="p-2 border">العملية</th><th class="p-2 border">القيمة</th><th class="p-2 border">ملاحظات</th></tr></thead><tbody class="tb-assets"></tbody></table></div></section>
-        <section id="sec-asset-scrap" class="sec-view hidden space-y-6"><div class="erp-card p-5 space-y-4"><h3 class="font-bold text-sm">تخريد أصل</h3><form onsubmit="addAssetOp(event,'تخريد أصل')" class="grid grid-cols-1 md:grid-cols-3 gap-3"><select id="ascrap-name" class="erp-input sel-asset"></select><input id="ascrap-reason" placeholder="سبب التخريد" required class="erp-input" /><button class="btn-blue text-xs py-2">تخريد الأصل</button></form><table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">الأصل</th><th class="p-2 border">العملية</th><th class="p-2 border">القيمة</th><th class="p-2 border">ملاحظات</th></tr></thead><tbody class="tb-assets"></tbody></table></div></section>
-
-        <section id="sec-acc-expenses" class="sec-view hidden space-y-6"><div class="erp-card p-5 space-y-4"><h3 class="font-bold text-sm">تسجيل المصروفات</h3><form onsubmit="addExpense(event)" class="grid grid-cols-1 md:grid-cols-5 gap-3"><input id="exp-cat" placeholder="بند المصروف" required class="erp-input" /><input id="exp-desc" placeholder="البيان" required class="erp-input" /><select id="exp-chan" class="erp-input sel-chan"></select><input type="number" id="exp-amt" placeholder="المبلغ" required class="erp-input font-bold" /><button class="btn-blue text-xs py-2">حفظ المصروف</button></form><table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">البند</th><th class="p-2 border">البيان</th><th class="p-2 border">القناة</th><th class="p-2 border">المبلغ</th></tr></thead><tbody id="tb-exp"></tbody></table></div></section>
-        <section id="sec-acc-revenues" class="sec-view hidden space-y-6"><div class="erp-card p-5 space-y-4"><h3 class="font-bold text-sm">تسجيل الإيرادات</h3><form onsubmit="addRevenue(event)" class="grid grid-cols-1 md:grid-cols-5 gap-3"><input id="rev-cat" placeholder="نوع الإيراد" required class="erp-input" /><input id="rev-desc" placeholder="البيان" required class="erp-input" /><select id="rev-chan" class="erp-input sel-chan"></select><input type="number" id="rev-amt" placeholder="المبلغ" required class="erp-input font-bold" /><button class="btn-blue text-xs py-2">حفظ الإيراد</button></form><table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">النوع</th><th class="p-2 border">البيان</th><th class="p-2 border">القناة</th><th class="p-2 border">المبلغ</th></tr></thead><tbody id="tb-rev"></tbody></table></div></section>
-
-        <section id="sec-acc-treasury" class="sec-view hidden space-y-6"><div class="erp-card p-5 space-y-4"><h3 class="font-bold text-sm">الخزن والصناديق</h3><form onsubmit="addChannel(event,'خزينة','ch-tr-n','ch-tr-b')" class="grid grid-cols-1 md:grid-cols-3 gap-3"><input id="ch-tr-n" placeholder="اسم الخزينة" required class="erp-input" /><input type="number" id="ch-tr-b" placeholder="رصيد افتتاحي" required class="erp-input font-bold" /><button class="btn-blue text-xs py-2">إضافة خزينة</button></form><table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">الخزينة</th><th class="p-2 border">الرصيد</th></tr></thead><tbody id="tb-tr"></tbody></table></div></section>
-        <section id="sec-acc-banks" class="sec-view hidden space-y-6"><div class="erp-card p-5 space-y-4"><h3 class="font-bold text-sm">الحسابات البنكية</h3><form onsubmit="addChannel(event,'بنك','ch-bk-n','ch-bk-b')" class="grid grid-cols-1 md:grid-cols-3 gap-3"><input id="ch-bk-n" placeholder="اسم البنك / الحساب" required class="erp-input" /><input type="number" id="ch-bk-b" placeholder="رصيد افتتاحي" required class="erp-input font-bold" /><button class="btn-blue text-xs py-2">إضافة بنك</button></form><table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">البنك</th><th class="p-2 border">الرصيد</th></tr></thead><tbody id="tb-bk"></tbody></table></div></section>
-        <section id="sec-acc-visa" class="sec-view hidden space-y-6"><div class="erp-card p-5 space-y-4"><h3 class="font-bold text-sm">الفيزا والمحافظ الإلكترونية</h3><form onsubmit="addChannel(event,'فيزا','ch-vs-n','ch-vs-b')" class="grid grid-cols-1 md:grid-cols-3 gap-3"><input id="ch-vs-n" placeholder="اسم الفيزا / المحفظة" required class="erp-input" /><input type="number" id="ch-vs-b" placeholder="رصيد افتتاحي" required class="erp-input font-bold" /><button class="btn-blue text-xs py-2">إضافة فيزا</button></form><table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">الفيزا / المحفظة</th><th class="p-2 border">الرصيد</th></tr></thead><tbody id="tb-vs"></tbody></table></div></section>
-
-        <section id="sec-acc-coa" class="sec-view hidden space-y-6"><div class="erp-card p-5 space-y-4"><h3 class="font-bold text-sm">شجرة الحسابات</h3><table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">الكود</th><th class="p-2 border">الحساب</th><th class="p-2 border">النوع</th></tr></thead><tbody id="tb-coa"></tbody></table></div></section>
-        <section id="sec-acc-journal" class="sec-view hidden space-y-6"><div class="erp-card p-5 space-y-4"><h3 class="font-bold text-sm">القيود اليومية</h3><table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">القيد</th><th class="p-2 border">البيان</th><th class="p-2 border">المبلغ</th></tr></thead><tbody id="tb-je"></tbody></table></div></section>
-
-        <section id="sec-hr-employees" class="sec-view hidden space-y-6"><div class="erp-card p-5 space-y-4"><h3 class="font-bold text-sm">سجل الموظفين</h3><form onsubmit="addEmployee(event)" class="grid grid-cols-1 md:grid-cols-4 gap-3"><input id="e-name" placeholder="اسم الموظف" required class="erp-input" /><input id="e-role" placeholder="الوظيفة" required class="erp-input" /><input type="number" id="e-sal" placeholder="الراتب" required class="erp-input font-bold" /><button class="btn-blue text-xs py-2">حفظ الموظف</button></form><table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">الاسم</th><th class="p-2 border">الوظيفة</th><th class="p-2 border">الراتب</th></tr></thead><tbody id="tb-emp"></tbody></table></div></section>
-        <section id="sec-hr-penalties" class="sec-view hidden space-y-6"><div class="erp-card p-5 space-y-4"><h3 class="font-bold text-sm">العقوبات والجزاءات</h3><form onsubmit="addPenalty(event)" class="grid grid-cols-1 md:grid-cols-4 gap-3"><select class="erp-input sel-emp p-emp"></select><input placeholder="السبب" required class="erp-input p-reason" /><input type="number" placeholder="الخصم" required class="erp-input p-amt font-bold" /><button class="btn-blue text-xs py-2">تسجيل الجزاء</button></form><table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">الموظف</th><th class="p-2 border">السبب</th><th class="p-2 border">الخصم</th></tr></thead><tbody id="tb-pen"></tbody></table></div></section>
-        <section id="sec-hr-bonuses" class="sec-view hidden space-y-6"><div class="erp-card p-5 space-y-4"><h3 class="font-bold text-sm">المكافآت والبدلات</h3><form onsubmit="addBonus(event)" class="grid grid-cols-1 md:grid-cols-4 gap-3"><select class="erp-input sel-emp b-emp"></select><input placeholder="السبب" required class="erp-input b-reason" /><input type="number" placeholder="المكافأة" required class="erp-input b-amt font-bold" /><button class="btn-blue text-xs py-2">إضافة مكافأة</button></form><table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">الموظف</th><th class="p-2 border">السبب</th><th class="p-2 border">المكافأة</th></tr></thead><tbody id="tb-bon"></tbody></table></div></section>
-        <section id="sec-hr-attendance" class="sec-view hidden space-y-6"><div class="erp-card p-5 space-y-4"><h3 class="font-bold text-sm">الحضور والانصراف</h3><form onsubmit="addAttendance(event)" class="grid grid-cols-1 md:grid-cols-4 gap-3"><select class="erp-input sel-emp att-emp"></select><select class="erp-input att-st"><option>حاضر</option><option>متأخر</option><option>غائب</option></select><input type="date" required class="erp-input att-dt" /><button class="btn-blue text-xs py-2">تسجيل</button></form><table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">الموظف</th><th class="p-2 border">الحالة</th><th class="p-2 border">التاريخ</th></tr></thead><tbody id="tb-att"></tbody></table></div></section>
-        <section id="sec-hr-advances" class="sec-view hidden space-y-6"><div class="erp-card p-5 space-y-4"><h3 class="font-bold text-sm">السلف والإجازات</h3><form onsubmit="addAdvance(event)" class="grid grid-cols-1 md:grid-cols-4 gap-3"><select class="erp-input sel-emp adv-emp"></select><input placeholder="النوع (سلفة / إجازة)" required class="erp-input adv-type" /><input type="number" placeholder="القيمة / الأيام" required class="erp-input adv-val font-bold" /><button class="btn-blue text-xs py-2">حفظ</button></form><table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">الموظف</th><th class="p-2 border">النوع</th><th class="p-2 border">القيمة / الأيام</th></tr></thead><tbody id="tb-adv"></tbody></table></div></section>
-
-        <section id="sec-rep-cust" class="sec-view hidden space-y-4"><div class="erp-card p-5 space-y-3"><h3 class="font-bold text-sm">كشف حساب عميل</h3><select id="rcust-sel" onchange="renderReports()" class="erp-input sel-cust !max-w-xs"></select><div id="rep-cust-box" class="text-xs space-y-2"></div></div></section>
-        <section id="sec-rep-vend" class="sec-view hidden space-y-4"><div class="erp-card p-5 space-y-3"><h3 class="font-bold text-sm">كشف حساب مورد</h3><select id="rvend-sel" onchange="renderReports()" class="erp-input sel-vnd !max-w-xs"></select><div id="rep-vend-box" class="text-xs space-y-2"></div></div></section>
-        <section id="sec-rep-treasury" class="sec-view hidden space-y-4"><div class="erp-card p-5 space-y-3"><h3 class="font-bold text-sm">تقرير الخزينة</h3><div id="rep-tr-box" class="text-xs space-y-2"></div></div></section>
-        <section id="sec-rep-banks" class="sec-view hidden space-y-4"><div class="erp-card p-5 space-y-3"><h3 class="font-bold text-sm">تقرير البنوك والفيزا</h3><div id="rep-bk-box" class="text-xs space-y-2"></div></div></section>
-        <section id="sec-rep-exp" class="sec-view hidden space-y-4"><div class="erp-card p-5 space-y-3"><h3 class="font-bold text-sm">تقرير المصروفات</h3><div id="rep-exp-box" class="text-xs space-y-2"></div></div></section>
-        <section id="sec-rep-rev" class="sec-view hidden space-y-4"><div class="erp-card p-5 space-y-3"><h3 class="font-bold text-sm">تقرير الإيرادات</h3><div id="rep-rev-box" class="text-xs space-y-2"></div></div></section>
-        <section id="sec-rep-stock" class="sec-view hidden space-y-4"><div class="erp-card p-5 space-y-3"><h3 class="font-bold text-sm">تقرير المخزون والأرباح</h3><div id="rep-stk-box" class="text-xs space-y-2"></div></div></section>
-
-        <section id="sec-rep-sql" class="sec-view hidden space-y-6">
-          <div class="erp-card p-5 space-y-4">
-            <div class="flex flex-wrap items-center justify-between gap-2">
-              <h3 class="font-bold text-sm text-slate-800">⚡ التقارير الديناميكية (استعلامات SQL)</h3>
-              <div class="flex flex-wrap gap-2 text-xs">
-                <button type="button" onclick="presetSql('SELECT id, cust, item, qty, total FROM salesInvoices')" class="px-3 py-1.5 rounded bg-blue-50 text-blue-700 font-bold border border-blue-200">تقرير فواتير المبيعات</button>
-                <button type="button" onclick="presetSql('SELECT code, name, cat, price, qty FROM items')" class="px-3 py-1.5 rounded bg-blue-50 text-blue-700 font-bold border border-blue-200">تقرير الأصناف والمخزون</button>
-                <button type="button" onclick="presetSql('SELECT name, type, balance FROM channels')" class="px-3 py-1.5 rounded bg-blue-50 text-blue-700 font-bold border border-blue-200">تقرير أرصدة القنوات</button>
-              </div>
-            </div>
-
-            <div>
-              <label class="text-xs font-bold text-slate-500 block mb-1">اسم التقرير المخصص</label>
-              <input id="sql-rep-title" placeholder="مثال: تقرير أعلى المبيعات" class="erp-input !max-w-sm mb-2" />
-              <label class="text-xs font-bold text-slate-500 block mb-1">كود SQL (SELECT)</label>
-              <textarea id="sql-query-input" rows="3" dir="ltr" class="erp-input font-mono text-xs bg-slate-900 text-emerald-400">SELECT id, cust, item, qty, total FROM salesInvoices</textarea>
-            </div>
-
-            <div class="flex gap-3">
-              <button type="button" onclick="runSqlReport()" class="btn-blue text-xs px-5 py-2.5">تشغيل الاستعلام الآن</button>
-              <button type="button" onclick="saveSqlReport()" class="px-4 py-2.5 rounded-lg bg-slate-800 text-white font-bold text-xs">حفظ التقرير في القائمة</button>
-            </div>
-
-            <div id="sql-saved-list" class="flex flex-wrap gap-2 text-xs"></div>
-            <div id="sql-result-box" class="overflow-x-auto text-xs pt-2"></div>
-          </div>
-        </section>
-
-        <section id="sec-info-company" class="sec-view hidden space-y-4"><div class="erp-card p-5 space-y-3 max-w-lg"><h3 class="font-bold text-sm">بيانات الشركة</h3><input id="cmp-name" class="erp-input" placeholder="اسم الشركة" /><input id="cmp-tax" class="erp-input" placeholder="الرقم الضريبي" /><button onclick="saveCompany()" class="btn-blue text-xs px-4 py-2">حفظ البيانات</button></div></section>
-        <section id="sec-info-branches" class="sec-view hidden space-y-4"><div class="erp-card p-5 space-y-4"><h3 class="font-bold text-sm">الفروع والمناطق والمناديب</h3><div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs"><div><div class="font-bold mb-1">الفروع</div><ul id="list-br" class="list-disc pr-4 space-y-1"></ul></div><div><div class="font-bold mb-1">المناطق</div><ul id="list-rg" class="list-disc pr-4 space-y-1"></ul></div><div><div class="font-bold mb-1">المناديب</div><ul id="list-ag" class="list-disc pr-4 space-y-1"></ul></div></div></div></section>
-        <section id="sec-sys-groups" class="sec-view hidden space-y-4"><div class="erp-card p-5 space-y-4"><h3 class="font-bold text-sm">مجموعات الصلاحيات</h3><form onsubmit="addGroup(event)" class="space-y-3"><input id="grp-name" placeholder="اسم المجموعة (مثال: مبيعات، مخازن)" required class="erp-input !max-w-sm" /><div class="flex flex-wrap gap-4 text-xs"><label><input type="checkbox" class="grp-p" value="sales" checked /> المبيعات</label><label><input type="checkbox" class="grp-p" value="pur" checked /> المشتريات</label><label><input type="checkbox" class="grp-p" value="inv" checked /> المخازن</label><label><input type="checkbox" class="grp-p" value="acc" /> الحسابات</label><label><input type="checkbox" class="grp-p" value="hr" /> الموارد البشرية</label><label><input type="checkbox" class="grp-p" value="rep" checked /> التقارير</label><label><input type="checkbox" class="grp-p" value="sys" /> الإعدادات</label></div><button class="btn-blue text-xs px-4 py-2">إنشاء المجموعة</button></form><div id="list-groups" class="text-xs space-y-1"></div></div></section>
-        <section id="sec-sys-users" class="sec-view hidden space-y-4"><div class="erp-card p-5 space-y-4"><h3 class="font-bold text-sm">إدارة المستخدمين</h3><form onsubmit="addUser(event)" class="grid grid-cols-1 md:grid-cols-4 gap-3"><input id="usr-name" placeholder="اسم المستخدم" required class="erp-input" /><input id="usr-pass" placeholder="كلمة المرور" required class="erp-input" /><select id="usr-grp" class="erp-input sel-grp"></select><button class="btn-blue text-xs py-2">إضافة مستخدم</button></form><table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">المستخدم</th><th class="p-2 border">المجموعة</th></tr></thead><tbody id="tb-users"></tbody></table></div></section>
-        <section id="sec-sys-backup" class="sec-view hidden space-y-4"><div class="erp-card p-5 space-y-3"><h3 class="font-bold text-sm">النسخ الاحتياطي</h3><div class="flex gap-3"><button onclick="exportBackup()" class="btn-blue text-xs px-4 py-2">تصدير نسخة JSON</button><button onclick="resetSeed()" class="px-4 py-2 rounded-lg bg-rose-600 text-white font-bold text-xs">استعادة البيانات الافتراضية</button></div></div></section>
-      </main>
-
-      <footer class="no-print bg-white border-t border-slate-200 px-6 py-2.5 flex items-center justify-between text-xs text-slate-500">
-        <div class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block"></span><span class="font-bold text-slate-700">متصل بالشبكة</span></div>
-        <div class="font-semibold">TANTAWE ERP | <span class="text-blue-600 font-black">Smart Business Solutions</span></div>
-      </footer>
-    </div>
-  </div>
-
-  <div id="print-modal" class="hidden fixed inset-0 bg-slate-900/60 z-50 flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-sm w-full p-6 space-y-4 shadow-2xl text-center">
-      <div class="text-3xl">🖨️</div>
-      <h3 class="font-black text-slate-900 text-base">تم حفظ المستند بنجاح</h3>
-      <p class="text-xs text-slate-500">هل تريد طباعة المستند الآن؟</p>
-      <div class="flex gap-3 pt-2">
-        <button onclick="document.getElementById('print-modal').classList.add('hidden'); window.print();" class="flex-1 py-2.5 btn-blue text-xs">طباعة الآن</button>
-        <button onclick="document.getElementById('print-modal').classList.add('hidden');" class="flex-1 py-2.5 bg-slate-100 text-slate-700 font-bold text-xs rounded-lg">إلغاء</button>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    const DB_KEY = 'tantawe_erp_v6_fixed';
-
-    const SEED = {
-      sessionUser: null,
-      company: { name: 'TANTAWE ERP', tax: '410-882-190' },
-      activeBranch: 'الفرع الرئيسي',
-      branches: ['الفرع الرئيسي', 'فرع طنطا', 'فرع القاهرة'],
-      regions: ['الدلتا', 'القاهرة الكبرى', 'الإسكندرية'],
-      agents: ['أحمد حسن', 'محمود سعيد'],
-      groups: [
-        { name: 'مدير عام', perms: ['sales','pur','inv','acc','hr','rep','sys'] },
-        { name: 'محاسب', perms: ['sales','pur','acc','rep'] },
-        { name: 'مبيعات ومخازن', perms: ['sales','inv','rep'] }
-      ],
-      users: [
-        { username: 'admin', password: '1234', group: 'مدير عام' },
-        { username: 'sales1', password: '123', group: 'مبيعات ومخازن' }
-      ],
-      customers: [
-        { name: 'شركة النور للتجارة', phone: '01001122334', area: 'طنطا' },
-        { name: 'مؤسسة الأمل', phone: '01209988776', area: 'القاهرة' }
-      ],
-      vendors: [
-        { name: 'شركة التوريدات المتحدة', phone: '01112223344' },
-        { name: 'مخازن الدلتا', phone: '01556677889' }
-      ],
-      categories: ['أجهزة ومعدات', 'مستلزمات تشغيل'],
-      items: [
-        { code: 'ITM-01', name: 'لابتوب أعمال i7', cat: 'أجهزة ومعدات', price: 25000, qty: 12 },
-        { code: 'ITM-02', name: 'طابعة حرارية POS', cat: 'مستلزمات تشغيل', price: 3500, qty: 20 }
-      ],
-      salesOrders: [
-        { id: 'SO-101', cust: 'شركة النور للتجارة', item: 'لابتوب أعمال i7', qty: 2, total: 50000 }
-      ],
-      salesInvoices: [
-        { id: '1005', cust: 'شركة النور للتجارة', item: 'طابعة حرارية POS', qty: 3, price: 3500, total: 10500, time: '18:20' }
-      ],
-      salesReturns: [
-        { cust: 'شركة النور للتجارة', item: 'طابعة حرارية POS', qty: 1 }
-      ],
-      purOrders: [
-        { id: 'PO-201', vnd: 'شركة التوريدات المتحدة', item: 'لابتوب أعمال i7', qty: 4, total: 80000 }
-      ],
-      purInvoices: [
-        { id: '2008', vnd: 'شركة التوريدات المتحدة', item: 'لابتوب أعمال i7', qty: 5, price: 20000, total: 100000, time: '17:45' }
-      ],
-      purReturns: [
-        { vnd: 'مخازن الدلتا', item: 'طابعة حرارية POS', qty: 1 }
-      ],
-      vouchers: [
-        { type: 'سند قبض', party: 'شركة النور للتجارة', chan: 'الخزينة الرئيسية', amount: 10500 }
-      ],
-      stockDocs: [
-        { type: 'إذن صرف مخزني', item: 'طابعة حرارية POS', qty: 1, note: 'صرف قسم المبيعات', time: '16:30' }
-      ],
-      channels: [
-        { name: 'الخزينة الرئيسية', type: 'خزينة', balance: 60500 },
-        { name: 'البنك الأهلي', type: 'بنك', balance: 150000 },
-        { name: 'فيزا المبيعات', type: 'فيزا', balance: 30000 }
-      ],
-      assets: [
-        { name: 'سيارة توزيع', type: 'إضافة أصل', value: 250000, note: 'إهلاك سنوي 10%' }
-      ],
-      expenses: [
-        { cat: 'إيجار', desc: 'إيجار المقر الشهري', chan: 'الخزينة الرئيسية', amount: 8000 }
-      ],
-      revenues: [
-        { cat: 'خدمات فنية', desc: 'تركيب وصيانة أنظمة', chan: 'البنك الأهلي', amount: 12000 }
-      ],
-      employees: [
-        { name: 'محمد طنطاوي', role: 'مدير النظام', salary: 15000 },
-        { name: 'سارة محمود', role: 'محاسبة', salary: 9000 }
-      ],
-      penalties: [{ emp: 'سارة محمود', reason: 'تأخير صباحي', amount: 200 }],
-      bonuses: [{ emp: 'محمد طنطاوي', reason: 'حافز أداء شهري', amount: 1500 }],
-      attendance: [{ emp: 'محمد طنطاوي', status: 'حاضر', date: '2026-11-20' }],
-      advances: [{ emp: 'سارة محمود', type: 'سلفة نقدية', val: 2000 }],
-      savedSqlReports: [
-        { title: 'فواتير المبيعات', sql: 'SELECT id, cust, item, qty, total FROM salesInvoices' },
-        { title: 'أرصدة الخزن والبنوك والفيزا', sql: 'SELECT name, type, balance FROM channels' }
-      ],
-      coa: [
-        { code: '1101', name: 'الخزينة والصناديق', type: 'أصول متداولة' },
-        { code: '1102', name: 'البنوك والفيزا', type: 'أصول متداولة' },
-        { code: '1201', name: 'الأصول الثابتة', type: 'أصول ثابتة' },
-        { code: '4101', name: 'إيرادات المبيعات', type: 'إيرادات' },
-        { code: '5101', name: 'المصروفات التشغيلية', type: 'مصروفات' }
-      ]
-    };
-
-    let db = loadDb();
-
-    function loadDb() {
-      try {
-        const raw = localStorage.getItem(DB_KEY);
-        return raw ? { ...structuredClone(SEED), ...JSON.parse(raw) } : structuredClone(SEED);
-      } catch {
-        return structuredClone(SEED);
-      }
-    }
-    function saveDb() {
-      try { localStorage.setItem(DB_KEY, JSON.stringify(db)); } catch {}
-    }
-    function money(n) { return Number(n || 0).toLocaleString('en-US', { minimumFractionDigits: 2 }) + ' ج.م'; }
-    function askPrint() { document.getElementById('print-modal')?.classList.remove('hidden'); }
-    function setText(id, val) { const el = document.getElementById(id); if (el) el.textContent = val; }
-    function setHtml(id, val) { const el = document.getElementById(id); if (el) el.innerHTML = val; }
-
-    function quickAdminLogin() {
-      document.getElementById('login-user').value = 'admin';
-      document.getElementById('login-pass').value = '1234';
-      document.getElementById('login-error')?.classList.add('hidden');
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      const form = document.getElementById('login-form');
-      if (form) {
-        form.addEventListener('submit', (e) => {
-          e.preventDefault();
-          const u = (document.getElementById('login-user').value || '').trim();
-          const p = document.getElementById('login-pass').value || '';
-          const found = db.users.find(x => x.username === u && x.password === p);
-          if (found) {
-            db.sessionUser = found.username;
-            saveDb();
-            initApp();
-          } else {
-            document.getElementById('login-error')?.classList.remove('hidden');
-          }
-        });
-      }
-      initApp();
-    });
-
-    function logout() { db.sessionUser = null; saveDb(); initApp(); }
-
-    function getUserPerms() {
-      const u = db.users.find(x => x.username === db.sessionUser);
-      if (!u) return ['sales','pur','inv','acc','hr','rep','sys'];
-      const grp = db.groups.find(g => g.name === u.group);
-      return grp ? grp.perms : ['sales','pur','inv','acc','hr','rep','sys'];
-    }
-
-    function initApp() {
-      const loginEl = document.getElementById('login-screen');
-      const shellEl = document.getElementById('app-shell');
-      if (!db.sessionUser) {
-        shellEl?.classList.add('hidden');
-        loginEl?.classList.remove('hidden');
-        return;
-      }
-      loginEl?.classList.add('hidden');
-      shellEl?.classList.remove('hidden');
-
-      const u = db.users.find(x => x.username === db.sessionUser);
-      setText('active-group-badge', u ? u.group : 'مدير عام');
-      setText('header-date', new Date().toLocaleDateString('ar-EG', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }));
-
-      const perms = getUserPerms();
-      document.querySelectorAll('[data-perm]').forEach(el => {
-        el.classList.toggle('hidden', !perms.includes(el.getAttribute('data-perm')));
-      });
-
-      bindSelects();
-      refreshAll();
-    }
-
-    function toggleMenu(id) { document.getElementById(id)?.classList.toggle('hidden'); }
-
-    function openTab(tabId) {
-      document.querySelectorAll('.sec-view').forEach(s => s.classList.add('hidden'));
-      document.getElementById(`sec-${tabId}`)?.classList.remove('hidden');
-
-      document.querySelectorAll('.sub-item-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tabId));
-      const activeBtn = document.querySelector(`.sub-item-btn[data-tab="${tabId}"]`);
-      setText('current-page-title', activeBtn ? activeBtn.textContent.trim() : 'الرئيسية (التحليل اليومي)');
-
-      renderReports();
-      renderFinancials();
-    }
-
-    function switchBranch(b) { db.activeBranch = b; saveDb(); }
-
-    function bindSelects() {
-      document.querySelectorAll('.sel-cust').forEach(s => s.innerHTML = db.customers.map(c => `<option value="${c.name}">${c.name}</option>`).join(''));
-      document.querySelectorAll('.sel-vnd').forEach(s => s.innerHTML = db.vendors.map(v => `<option value="${v.name}">${v.name}</option>`).join(''));
-      document.querySelectorAll('.sel-cat').forEach(s => s.innerHTML = db.categories.map(c => `<option value="${c}">${c}</option>`).join(''));
-      document.querySelectorAll('.sel-item').forEach(s => s.innerHTML = db.items.map(i => `<option value="${i.name}">${i.name} (متاح: ${i.qty})</option>`).join(''));
-      document.querySelectorAll('.sel-chan').forEach(s => s.innerHTML = db.channels.map(c => `<option value="${c.name}">${c.name} (${c.type})</option>`).join(''));
-      document.querySelectorAll('.sel-asset').forEach(s => s.innerHTML = db.assets.map(a => `<option value="${a.name}">${a.name}</option>`).join(''));
-      document.querySelectorAll('.sel-emp').forEach(s => s.innerHTML = db.employees.map(e => `<option value="${e.name}">${e.name}</option>`).join(''));
-      document.querySelectorAll('.sel-grp').forEach(s => s.innerHTML = db.groups.map(g => `<option value="${g.name}">${g.name}</option>`).join(''));
-
-      const brSel = document.getElementById('branch-selector');
-      if (brSel) {
-        brSel.innerHTML = db.branches.map(b => `<option value="${b}">${b}</option>`).join('');
-        brSel.value = db.activeBranch;
-      }
-
-      syncPriceFromItem('sinv-item','sinv-price','sinv-qty','sinv-total');
-      syncPriceFromItem('so-item','so-price','so-qty','so-total');
-      syncPriceFromItem('pinv-item','pinv-price','pinv-qty','pinv-total');
-      syncPriceFromItem('po-item','po-price','po-qty','po-total');
-    }
-
-    function syncPriceFromItem(itemSelId, priceId, qtyId, totalId) {
-      const itm = db.items.find(i => i.name === document.getElementById(itemSelId)?.value);
-      if (itm && document.getElementById(priceId)) {
-        document.getElementById(priceId).value = itm.price;
-        calcLine(qtyId, priceId, totalId);
-      }
-    }
-
-    function calcLine(qtyId, priceId, totalId) {
-      const q = Number(document.getElementById(qtyId)?.value || 0);
-      const p = Number(document.getElementById(priceId)?.value || 0);
-      if (document.getElementById(totalId)) document.getElementById(totalId).value = q * p;
-    }
-
-    function adjustChannel(name, delta) {
-      const ch = db.channels.find(c => c.name === name);
-      if (ch) ch.balance = Number(ch.balance || 0) + Number(delta || 0);
-    }
-
-    function adjustStock(name, delta) {
-      const itm = db.items.find(i => i.name === name);
-      if (itm) itm.qty = Number(itm.qty || 0) + Number(delta || 0);
-    }
-
-    function addCustomer(e) { e.preventDefault(); db.customers.push({ name: document.getElementById('cust-name').value, phone: document.getElementById('cust-phone').value, area: document.getElementById('cust-area').value }); saveDb(); e.target.reset(); bindSelects(); refreshAll(); }
-    function addVendor(e) { e.preventDefault(); db.vendors.push({ name: document.getElementById('vnd-name').value, phone: document.getElementById('vnd-phone').value }); saveDb(); e.target.reset(); bindSelects(); refreshAll(); }
-    function addCategory(e) { e.preventDefault(); db.categories.push(document.getElementById('cat-name').value); saveDb(); e.target.reset(); bindSelects(); refreshAll(); }
-    function addItem(e) { e.preventDefault(); db.items.push({ code: document.getElementById('itm-code').value, name: document.getElementById('itm-name').value, cat: document.getElementById('itm-cat').value, price: Number(document.getElementById('itm-price').value), qty: Number(document.getElementById('itm-qty').value) }); saveDb(); e.target.reset(); bindSelects(); refreshAll(); }
-
-    function addSalesOrder(e) {
-      e.preventDefault();
-      const qty = Number(document.getElementById('so-qty').value);
-      const price = Number(document.getElementById('so-price').value);
-      db.salesOrders.push({ id: 'SO-' + (101 + db.salesOrders.length), cust: document.getElementById('so-cust').value, item: document.getElementById('so-item').value, qty, total: qty * price });
-      saveDb(); e.target.reset(); bindSelects(); refreshAll(); askPrint();
-    }
-
-    function addSaleInvoice(e) {
-      e.preventDefault();
-      const item = document.getElementById('sinv-item').value;
-      const qty = Number(document.getElementById('sinv-qty').value);
-      const price = Number(document.getElementById('sinv-price').value);
-      adjustStock(item, -qty);
-      db.salesInvoices.push({ id: (1005 + db.salesInvoices.length).toString(), cust: document.getElementById('sinv-cust').value, item, qty, price, total: qty * price, time: new Date().toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' }) });
-      saveDb(); e.target.reset(); bindSelects(); refreshAll(); askPrint();
-    }
-
-    function addSalesReturn(e) {
-      e.preventDefault();
-      const item = document.getElementById('sr-item').value;
-      const qty = Number(document.getElementById('sr-qty').value);
-      adjustStock(item, qty);
-      db.salesReturns.push({ cust: document.getElementById('sr-cust').value, item, qty });
-      saveDb(); e.target.reset(); bindSelects(); refreshAll(); askPrint();
-    }
-
-    function addPurOrder(e) {
-      e.preventDefault();
-      const qty = Number(document.getElementById('po-qty').value);
-      const price = Number(document.getElementById('po-price').value);
-      db.purOrders.push({ id: 'PO-' + (201 + db.purOrders.length), vnd: document.getElementById('po-vnd').value, item: document.getElementById('po-item').value, qty, total: qty * price });
-      saveDb(); e.target.reset(); bindSelects(); refreshAll(); askPrint();
-    }
-
-    function addPurInvoice(e) {
-      e.preventDefault();
-      const item = document.getElementById('pinv-item').value;
-      const qty = Number(document.getElementById('pinv-qty').value);
-      const price = Number(document.getElementById('pinv-price').value);
-      adjustStock(item, qty);
-      db.purInvoices.push({ id: (2008 + db.purInvoices.length).toString(), vnd: document.getElementById('pinv-vnd').value, item, qty, price, total: qty * price, time: new Date().toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' }) });
-      saveDb(); e.target.reset(); bindSelects(); refreshAll(); askPrint();
-    }
-
-    function addPurReturn(e) {
-      e.preventDefault();
-      const item = document.getElementById('pr-item').value;
-      const qty = Number(document.getElementById('pr-qty').value);
-      adjustStock(item, -qty);
-      db.purReturns.push({ vnd: document.getElementById('pr-vnd').value, item, qty });
-      saveDb(); e.target.reset(); bindSelects(); refreshAll(); askPrint();
-    }
-
-    function addVoucher(e, type, sign) {
-      e.preventDefault();
-      const party = e.target.querySelector('.v-party').value;
-      const chan = e.target.querySelector('.v-chan').value;
-      const amount = Number(e.target.querySelector('.v-amt').value);
-      adjustChannel(chan, sign * amount);
-      db.vouchers.push({ type, party, chan, amount });
-      saveDb(); e.target.reset(); bindSelects(); refreshAll(); askPrint();
-    }
-
-    function addStockDoc(e, type, sign) {
-      e.preventDefault();
-      const item = e.target.querySelector('.doc-item').value;
-      const qty = Number(e.target.querySelector('.doc-qty').value);
-      const note = e.target.querySelector('.doc-note').value;
-      adjustStock(item, sign * qty);
-      db.stockDocs.push({ type, item, qty, note, time: new Date().toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' }) });
-      saveDb(); e.target.reset(); bindSelects(); refreshAll(); askPrint();
-    }
-
-    function addAssetOp(e, opType) {
-      e.preventDefault();
-      if (opType === 'إضافة أصل') db.assets.push({ name: document.getElementById('aadd-name').value, type: opType, value: Number(document.getElementById('aadd-val').value), note: 'إهلاك ' + (document.getElementById('aadd-rate').value || 10) + '%' });
-      else if (opType === 'شراء أصل') { const v = Number(document.getElementById('abuy-val').value); const ch = document.getElementById('abuy-chan').value; adjustChannel(ch, -v); db.assets.push({ name: document.getElementById('abuy-name').value, type: opType, value: v, note: ch }); }
-      else if (opType === 'إهلاك أصل') db.assets.push({ name: document.getElementById('adep-name').value, type: opType, value: Number(document.getElementById('adep-val').value), note: 'إهلاك مسجل' });
-      else if (opType === 'بيع أصل') { const v = Number(document.getElementById('asell-val').value); const ch = document.getElementById('asell-chan').value; adjustChannel(ch, v); db.assets.push({ name: document.getElementById('asell-name').value, type: opType, value: v, note: ch }); }
-      else if (opType === 'تخريد أصل') db.assets.push({ name: document.getElementById('ascrap-name').value, type: opType, value: 0, note: document.getElementById('ascrap-reason').value });
-      saveDb(); e.target.reset(); bindSelects(); refreshAll();
-    }
-
-    function addExpense(e) { e.preventDefault(); const amt = Number(document.getElementById('exp-amt').value); const ch = document.getElementById('exp-chan').value; adjustChannel(ch, -amt); db.expenses.push({ cat: document.getElementById('exp-cat').value, desc: document.getElementById('exp-desc').value, chan: ch, amount: amt }); saveDb(); e.target.reset(); bindSelects(); refreshAll(); }
-    function addRevenue(e) { e.preventDefault(); const amt = Number(document.getElementById('rev-amt').value); const ch = document.getElementById('rev-chan').value; adjustChannel(ch, amt); db.revenues.push({ cat: document.getElementById('rev-cat').value, desc: document.getElementById('rev-desc').value, chan: ch, amount: amt }); saveDb(); e.target.reset(); bindSelects(); refreshAll(); }
-    function addChannel(e, type, nId, bId) { e.preventDefault(); db.channels.push({ name: document.getElementById(nId).value, type, balance: Number(document.getElementById(bId).value) }); saveDb(); e.target.reset(); bindSelects(); refreshAll(); }
-
-    function addEmployee(e) { e.preventDefault(); db.employees.push({ name: document.getElementById('e-name').value, role: document.getElementById('e-role').value, salary: Number(document.getElementById('e-sal').value) }); saveDb(); e.target.reset(); bindSelects(); refreshAll(); }
-    function addPenalty(e) { e.preventDefault(); db.penalties.push({ emp: e.target.querySelector('.p-emp').value, reason: e.target.querySelector('.p-reason').value, amount: Number(e.target.querySelector('.p-amt').value) }); saveDb(); e.target.reset(); refreshAll(); }
-    function addBonus(e) { e.preventDefault(); db.bonuses.push({ emp: e.target.querySelector('.b-emp').value, reason: e.target.querySelector('.b-reason').value, amount: Number(e.target.querySelector('.b-amt').value) }); saveDb(); e.target.reset(); refreshAll(); }
-    function addAttendance(e) { e.preventDefault(); db.attendance.push({ emp: e.target.querySelector('.att-emp').value, status: e.target.querySelector('.att-st').value, date: e.target.querySelector('.att-dt').value }); saveDb(); e.target.reset(); refreshAll(); }
-    function addAdvance(e) { e.preventDefault(); db.advances.push({ emp: e.target.querySelector('.adv-emp').value, type: e.target.querySelector('.adv-type').value, val: Number(e.target.querySelector('.adv-val').value) }); saveDb(); e.target.reset(); refreshAll(); }
-
-    function saveCompany() { db.company.name = document.getElementById('cmp-name').value || 'TANTAWE ERP'; db.company.tax = document.getElementById('cmp-tax').value; saveDb(); refreshAll(); }
-    function addGroup(e) { e.preventDefault(); const perms = [...document.querySelectorAll('.grp-p:checked')].map(c => c.value); db.groups.push({ name: document.getElementById('grp-name').value.trim(), perms }); saveDb(); e.target.reset(); bindSelects(); refreshAll(); }
-    function addUser(e) { e.preventDefault(); db.users.push({ username: document.getElementById('usr-name').value.trim(), password: document.getElementById('usr-pass').value, group: document.getElementById('usr-grp').value }); saveDb(); e.target.reset(); refreshAll(); }
-    function exportBackup() { const b = new Blob([JSON.stringify(db, null, 2)], { type: 'application/json' }); const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = 'tantawe-erp-backup.json'; a.click(); }
-    function resetSeed() { localStorage.removeItem(DB_KEY); db = structuredClone(SEED); db.sessionUser = 'admin'; saveDb(); initApp(); }
-
-    function presetSql(q) { const inp = document.getElementById('sql-query-input'); if (inp) inp.value = q; runSqlReport(); }
-
-    function saveSqlReport() {
-      const title = (document.getElementById('sql-rep-title')?.value || '').trim() || ('تقرير SQL #' + (db.savedSqlReports.length + 1));
-      const sql = (document.getElementById('sql-query-input')?.value || '').trim();
-      if (!sql) return;
-      db.savedSqlReports.push({ title, sql });
-      saveDb();
-      renderSavedSqlButtons();
-    }
-
-    function renderSavedSqlButtons() {
-      setHtml('sql-saved-list', db.savedSqlReports.map(r => `
-        <button type="button" onclick="presetSql(${JSON.stringify(r.sql)})" class="px-3 py-1.5 rounded-lg bg-slate-900 text-white font-bold">
-          📌 ${r.title}
-        </button>
-      `).join(''));
-    }
-
-    function runSqlReport() {
-      const q = (document.getElementById('sql-query-input')?.value || '').trim();
-      const box = document.getElementById('sql-result-box');
-      if (!box) return;
-      try {
-        if (typeof alasql !== 'undefined') {
-          alasql.tables.salesInvoices = { data: db.salesInvoices };
-          alasql.tables.purInvoices = { data: db.purInvoices };
-          alasql.tables.items = { data: db.items };
-          alasql.tables.customers = { data: db.customers };
-          alasql.tables.vendors = { data: db.vendors };
-          alasql.tables.channels = { data: db.channels };
-          alasql.tables.expenses = { data: db.expenses };
-          alasql.tables.revenues = { data: db.revenues };
-          alasql.tables.employees = { data: db.employees };
-
-          const res = alasql(q);
-          if (!Array.isArray(res) || res.length === 0) {
-            box.innerHTML = '<div class="p-3 bg-slate-50 border rounded-lg text-slate-500">لا توجد نتائج مطابقة للاستعلام</div>';
-            return;
-          }
-          const cols = Object.keys(res[0]);
-          box.innerHTML = `
-            <table class="w-full text-right border">
-              <thead class="bg-slate-100"><tr>${cols.map(c => `<th class="p-2 border">${c}</th>`).join('')}</tr></thead>
-              <tbody>${res.map(row => `<tr>${cols.map(c => `<td class="p-2 border">${row[c]}</td>`).join('')}</tr>`).join('')}</tbody>
-            </table>
-          `;
-        }
-      } catch (err) {
-        box.innerHTML = `<div class="p-3 bg-rose-50 text-rose-700 border border-rose-200 rounded-lg font-bold">خطأ في صياغة SQL: ${err.message}</div>`;
-      }
-    }
-
-    function renderReports() {
-      const c = document.getElementById('rcust-sel')?.value;
-      const cRows = db.salesInvoices.filter(d => d.cust === c);
-      setHtml('rep-cust-box', cRows.length ? cRows.map(r => `<div class="p-2.5 border rounded-lg flex justify-between"><span>فاتورة #${r.id} - ${r.item} (كمية: ${r.qty})</span><b>${money(r.total)}</b></div>`).join('') : '<div class="text-slate-400">لا توجد فواتير مسجلة لهذا العميل</div>');
-
-      const v = document.getElementById('rvend-sel')?.value;
-      const vRows = db.purInvoices.filter(d => d.vnd === v);
-      setHtml('rep-vend-box', vRows.length ? vRows.map(r => `<div class="p-2.5 border rounded-lg flex justify-between"><span>فاتورة #${r.id} - ${r.item} (كمية: ${r.qty})</span><b>${money(r.total)}</b></div>`).join('') : '<div class="text-slate-400">لا توجد فواتير مسجلة لهذا المورد</div>');
-
-      setHtml('rep-tr-box', db.channels.filter(x => x.type === 'خزينة').map(x => `<div class="p-2.5 border rounded-lg flex justify-between"><span>${x.name}</span><b>${money(x.balance)}</b></div>`).join(''));
-      setHtml('rep-bk-box', db.channels.filter(x => x.type !== 'خزينة').map(x => `<div class="p-2.5 border rounded-lg flex justify-between"><span>${x.name} (${x.type})</span><b>${money(x.balance)}</b></div>`).join(''));
-      setHtml('rep-exp-box', db.expenses.map(x => `<div class="p-2.5 border rounded-lg flex justify-between"><span>${x.cat} - ${x.desc} (${x.chan})</span><b>${money(x.amount)}</b></div>`).join(''));
-      setHtml('rep-rev-box', db.revenues.map(r => `<div class="p-2.5 border rounded-lg flex justify-between"><span>${r.cat} - ${r.desc} (${r.chan})</span><b>${money(r.amount)}</b></div>`).join(''));
-      setHtml('rep-stk-box', db.items.map(i => `<div class="p-2.5 border rounded-lg flex justify-between"><span>${i.code} - ${i.name} (كمية: ${i.qty})</span><b>قيمة: ${money(i.qty * i.price)}</b></div>`).join(''));
-
-      renderSavedSqlButtons();
-    }
-
-    function renderFinancials() {
-      const salesSum = db.salesInvoices.reduce((s, x) => s + Number(x.total || 0), 0);
-      const revSum = db.revenues.reduce((s, x) => s + Number(x.amount || 0), 0);
-      const purSum = db.purInvoices.reduce((s, x) => s + Number(x.total || 0), 0);
-      const expSum = db.expenses.reduce((s, x) => s + Number(x.amount || 0), 0);
-      const net = (salesSum + revSum) - (purSum + expSum);
-
-      setText('pl-rev', money(salesSum + revSum));
-      setText('pl-cost', money(purSum));
-      setText('pl-exp', money(expSum));
-      setText('pl-net', money(net));
-
-      const fixed = db.assets.reduce((s, a) => s + Number(a.value || 0), 0);
-      const cash = db.channels.reduce((s, c) => s + Number(c.balance || 0), 0);
-      const stock = db.items.reduce((s, i) => s + (Number(i.qty || 0) * Number(i.price || 0)), 0);
-      const totAssets = fixed + cash + stock;
-
-      setText('bs-fixed', money(fixed));
-      setText('bs-cash', money(cash));
-      setText('bs-stock', money(stock));
-      setText('bs-tot-a', money(totAssets));
-      setText('bs-cap', money(totAssets - net));
-      setText('bs-prof', money(net));
-      setText('bs-tot-l', money(totAssets));
-    }
-
-    let chartInstance = null;
-    function refreshAll() {
-      setText('lbl-company', db.company.name);
-      const cmpN = document.getElementById('cmp-name');
-      const cmpT = document.getElementById('cmp-tax');
-      if (cmpN) cmpN.value = db.company.name;
-      if (cmpT) cmpT.value = db.company.tax || '';
-
-      const salesSum = db.salesInvoices.reduce((s, x) => s + Number(x.total || 0), 0);
-      const purSum = db.purInvoices.reduce((s, x) => s + Number(x.total || 0), 0);
-      const stockVal = db.items.reduce((s, i) => s + (Number(i.qty || 0) * Number(i.price || 0)), 0);
-
-      setText('card-sales-val', Number(salesSum).toLocaleString());
-      setText('card-pur-val', Number(purSum).toLocaleString());
-      setText('card-stock-val', Number(stockVal).toLocaleString());
-      setText('card-cust-val', db.customers.length);
-
-      setHtml('recent-activities-list', db.salesInvoices.slice(-3).reverse().map(s => `
-        <div class="flex items-center justify-between p-2.5 rounded-xl bg-blue-50 border border-blue-100">
-          <span class="font-bold">فاتورة بيع #${s.id} (${s.item} × ${s.qty})</span>
-          <span class="text-blue-600 font-bold">${s.time || ''}</span>
-        </div>
-      `).join(''));
-
-      const canvas = document.getElementById('salesMonthChart');
-      if (canvas && typeof Chart !== 'undefined') {
-        const ctx = canvas.getContext('2d');
-        if (chartInstance) chartInstance.destroy();
-        chartInstance = new Chart(ctx, {
-          type: 'bar',
-          data: {
-            labels: ['الأسبوع الأول', 'الأسبوع الثاني', 'الأسبوع الثالث', 'الأسبوع الرابع'],
-            datasets: [{ label: 'المبيعات', data: [80000, 95000, 120000, salesSum || 110000], backgroundColor: '#2563eb', borderRadius: 8 }]
-          },
-          options: { responsive: true, maintainAspectRatio: false }
-        });
-      }
-
-      setHtml('tb-cust', db.customers.map(c => `<tr><td class="p-2 border font-bold">${c.name}</td><td class="p-2 border">${c.phone}</td><td class="p-2 border">${c.area || ''}</td></tr>`).join(''));
-      setHtml('tb-so', db.salesOrders.map(o => `<tr><td class="p-2 border font-bold">${o.id}</td><td class="p-2 border">${o.cust}</td><td class="p-2 border">${o.item}</td><td class="p-2 border">${o.qty}</td><td class="p-2 border font-bold text-blue-600">${money(o.total)}</td></tr>`).join(''));
-      setHtml('tb-sales', db.salesInvoices.map(s => `<tr><td class="p-2 border font-bold">#${s.id}</td><td class="p-2 border">${s.cust}</td><td class="p-2 border">${s.item}</td><td class="p-2 border">${s.qty}</td><td class="p-2 border">${money(s.price)}</td><td class="p-2 border font-bold text-blue-600">${money(s.total)}</td></tr>`).join(''));
-      setHtml('tb-sr', db.salesReturns.map(r => `<tr><td class="p-2 border">${r.cust}</td><td class="p-2 border">${r.item}</td><td class="p-2 border font-bold">${r.qty}</td></tr>`).join(''));
-      setHtml('tb-rcpt', db.vouchers.filter(v => v.type === 'سند قبض').map(v => `<tr><td class="p-2 border">${v.type}</td><td class="p-2 border font-bold">${v.party}</td><td class="p-2 border">${v.chan}</td><td class="p-2 border font-bold text-blue-600">${money(v.amount)}</td></tr>`).join(''));
-
-      setHtml('tb-vnd', db.vendors.map(v => `<tr><td class="p-2 border font-bold">${v.name}</td><td class="p-2 border">${v.phone}</td></tr>`).join(''));
-      setHtml('tb-po', db.purOrders.map(o => `<tr><td class="p-2 border font-bold">${o.id}</td><td class="p-2 border">${o.vnd}</td><td class="p-2 border">${o.item}</td><td class="p-2 border">${o.qty}</td><td class="p-2 border font-bold text-blue-600">${money(o.total)}</td></tr>`).join(''));
-      setHtml('tb-pur', db.purInvoices.map(p => `<tr><td class="p-2 border font-bold">#${p.id}</td><td class="p-2 border">${p.vnd}</td><td class="p-2 border">${p.item}</td><td class="p-2 border">${p.qty}</td><td class="p-2 border">${money(p.price)}</td><td class="p-2 border font-bold text-slate-800">${money(p.total)}</td></tr>`).join(''));
-      setHtml('tb-pr', db.purReturns.map(r => `<tr><td class="p-2 border">${r.vnd}</td><td class="p-2 border">${r.item}</td><td class="p-2 border font-bold">${r.qty}</td></tr>`).join(''));
-      setHtml('tb-pmt', db.vouchers.filter(v => v.type === 'سند صرف').map(v => `<tr><td class="p-2 border">${v.type}</td><td class="p-2 border font-bold">${v.party}</td><td class="p-2 border">${v.chan}</td><td class="p-2 border font-bold text-rose-600">${money(v.amount)}</td></tr>`).join(''));
-
-      setHtml('list-cats', db.categories.map(c => `<li>${c}</li>`).join(''));
-      setHtml('tb-itm', db.items.map(i => `<tr><td class="p-2 border font-bold">${i.code}</td><td class="p-2 border">${i.name}</td><td class="p-2 border">${i.cat}</td><td class="p-2 border">${money(i.price)}</td><td class="p-2 border font-bold text-blue-600">${i.qty}</td></tr>`).join(''));
-      document.querySelectorAll('.tb-stock-docs').forEach(tb => tb.innerHTML = db.stockDocs.map(d => `<tr><td class="p-2 border font-bold">${d.type}</td><td class="p-2 border">${d.item}</td><td class="p-2 border">${d.qty}</td><td class="p-2 border">${d.note || ''}</td></tr>`).join(''));
-      setHtml('tb-stocktake', db.items.map(i => `<tr><td class="p-2 border font-bold">${i.code}</td><td class="p-2 border">${i.name}</td><td class="p-2 border font-bold">${i.qty}</td><td class="p-2 border text-blue-600 font-bold">${money(i.qty * i.price)}</td></tr>`).join(''));
-
-      document.querySelectorAll('.tb-assets').forEach(tb => tb.innerHTML = db.assets.map(a => `<tr><td class="p-2 border font-bold">${a.name}</td><td class="p-2 border">${a.type}</td><td class="p-2 border">${money(a.value)}</td><td class="p-2 border">${a.note || ''}</td></tr>`).join(''));
-      setHtml('tb-exp', db.expenses.map(x => `<tr><td class="p-2 border font-bold">${x.cat}</td><td class="p-2 border">${x.desc}</td><td class="p-2 border">${x.chan}</td><td class="p-2 border text-rose-600 font-bold">${money(x.amount)}</td></tr>`).join(''));
-      setHtml('tb-rev', db.revenues.map(r => `<tr><td class="p-2 border font-bold">${r.cat}</td><td class="p-2 border">${r.desc}</td><td class="p-2 border">${r.chan}</td><td class="p-2 border text-blue-600 font-bold">${money(r.amount)}</td></tr>`).join(''));
-      setHtml('tb-tr', db.channels.filter(c => c.type === 'خزينة').map(c => `<tr><td class="p-2 border font-bold">${c.name}</td><td class="p-2 border font-bold">${money(c.balance)}</td></tr>`).join(''));
-      setHtml('tb-bk', db.channels.filter(c => c.type === 'بنك').map(c => `<tr><td class="p-2 border font-bold">${c.name}</td><td class="p-2 border font-bold">${money(c.balance)}</td></tr>`).join(''));
-      setHtml('tb-vs', db.channels.filter(c => c.type === 'فيزا').map(c => `<tr><td class="p-2 border font-bold">${c.name}</td><td class="p-2 border font-bold">${money(c.balance)}</td></tr>`).join(''));
-      setHtml('tb-coa', db.coa.map(c => `<tr><td class="p-2 border font-bold">${c.code}</td><td class="p-2 border">${c.name}</td><td class="p-2 border">${c.type}</td></tr>`).join(''));
-      setHtml('tb-je', db.salesInvoices.map(s => `<tr><td class="p-2 border font-bold">JE-${s.id}</td><td class="p-2 border">قيد فاتورة مبيعات #${s.id} (${s.cust})</td><td class="p-2 border font-bold">${money(s.total)}</td></tr>`).join(''));
-
-      setHtml('tb-emp', db.employees.map(e => `<tr><td class="p-2 border font-bold">${e.name}</td><td class="p-2 border">${e.role}</td><td class="p-2 border font-bold">${money(e.salary)}</td></tr>`).join(''));
-      setHtml('tb-pen', db.penalties.map(p => `<tr><td class="p-2 border font-bold">${p.emp}</td><td class="p-2 border">${p.reason}</td><td class="p-2 border text-rose-600 font-bold">${money(p.amount)}</td></tr>`).join(''));
-      setHtml('tb-bon', db.bonuses.map(b => `<tr><td class="p-2 border font-bold">${b.emp}</td><td class="p-2 border">${b.reason}</td><td class="p-2 border text-blue-600 font-bold">${money(b.amount)}</td></tr>`).join(''));
-      setHtml('tb-att', db.attendance.map(a => `<tr><td class="p-2 border font-bold">${a.emp}</td><td class="p-2 border">${a.status}</td><td class="p-2 border">${a.date}</td></tr>`).join(''));
-      setHtml('tb-adv', db.advances.map(a => `<tr><td class="p-2 border font-bold">${a.emp}</td><td class="p-2 border">${a.type}</td><td class="p-2 border font-bold">${a.val}</td></tr>`).join(''));
-
-      setHtml('list-br', db.branches.map(b => `<li>${b}</li>`).join(''));
-      setHtml('list-rg', db.regions.map(r => `<li>${r}</li>`).join(''));
-      setHtml('list-ag', db.agents.map(a => `<li>${a}</li>`).join(''));
-      setHtml('list-groups', db.groups.map(g => `<div class="p-2 border rounded bg-slate-50"><b>${g.name}</b>: ${g.perms.join('، ')}</div>`).join(''));
-      setHtml('tb-users', db.users.map(u => `<tr><td class="p-2 border font-bold">${u.username}</td><td class="p-2 border">${u.group}</td></tr>`).join(''));
-
-      renderReports();
-      renderFinancials();
-    }
-  </script>
-</body>
-</html>
+        <!-- ================= موديول الموارد البشرية (11 تبويباً) ================= -->
+        <section id="sec-hr-employees" class="sec-view hidden space-y-5"><div class="erp-card p-5 space-y-4"><h3 class="font-black text-sm">1. بيانات الموظفين</h3><form onsubmit="addEmployee(event)" class="grid grid-cols-1 md:grid-cols-4 gap-3"><input id="e-name" placeholder="اسم الموظف" required class="erp-input" /><input id="e-job" placeholder="الوظيفة" required class="erp-input" /><input type="number" id="e-sal" placeholder="الراتب الأساسي" required class="erp-input font-bold" /><button class="btn-blue text-xs py-2">حفظ الموظف</button></form><table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">الاسم</th><th class="p-2 border">الوظيفة</th><th class="p-2 border">الراتب</th></tr></thead><tbody id="tb-emp"></tbody></table></div></section>
+        <section id="sec-hr-depts-jobs" class="sec-view hidden space-y-5"><div class="erp-card p-5 space-y-4"><h3 class="font-black text-sm">2. الأقسام والوظائف</h3><form onsubmit="addDeptJob(event)" class="grid grid-cols-1 md:grid-cols-3 gap-3"><input id="dj-dept" placeholder="القسم" required class="erp-input" /><input id="dj-job" placeholder="المسمى الوظيفي" required class="erp-input" /><button class="btn-blue text-xs py-2">إضافة</button></form><table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">القسم</th><th class="p-2 border">الوظيفة</th></tr></thead><tbody id="tb-dj"></tbody></table></div></section>
+        <section id="sec-hr-attendance" class="sec-view hidden space-y-5"><div class="erp-card p-5 space-y-4"><h3 class="font-black text-sm">3. الحضور والانصراف</h3><form onsubmit="addAttendance(event)" class="grid grid-cols-1 md:grid-cols-4 gap-3"><select id="att-emp" class="erp-input sel-emp"></select><select id="att-st" class="erp-input"><option>حاضر</option><option>متأخر</option><option>غائب</option></select><input type="date" id="att-dt" required class="erp-input" /><button class="btn-blue text-xs py-2">تسجيل</button></form><table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">الموظف</th><th class="p-2 border">الحالة</th><th class="p-2 border">التاريخ</th></tr></thead><tbody id="tb-att"></tbody></table></div></section>
+        <section id="sec-hr-shifts" class="sec-view hidden space-y-5"><div class="erp-card p-5 space-y-4"><h3 class="font-black text-sm">4. الورديات</h3><form onsubmit="addShift(event)" class="grid grid-cols-1 md:grid-cols-3 gap-3"><input id="sh-name" placeholder="اسم الوردية" required class="erp-input" /><input id="sh-time" placeholder="مثال: 09:00 ص - 05:00 م" required class="erp-input" /><button class="btn-blue text-xs py-2">إضافة وردية</button></form><table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">الوردية</th><th class="p-2 border">المواعيد</th></tr></thead><tbody id="tb-sh"></tbody></table></div></section>
+        <section id="sec-hr-leaves" class="sec-view hidden space-y-5"><div class="erp-card p-5 space-y-4"><h3 class="font-black text-sm">5. الإجازات</h3><form onsubmit="addLeave(event)" class="grid grid-cols-1 md:grid-cols-4 gap-3"><select id="lv-emp" class="erp-input sel-emp"></select><input id="lv-type" placeholder="نوع الإجازة" required class="erp-input" /><input type="number" id="lv-days" placeholder="عدد الأيام" required class="erp-input font-bold" /><button class="btn-blue text-xs py-2">تسجيل إجازة</button></form><table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">الموظف</th><th class="p-2 border">النوع</th><th class="p-2 border">الأيام</th></tr></thead><tbody id="tb-lv"></tbody></table></div></section>
+        <section id="sec-hr-salaries" class="sec-view hidden space-y-5"><div class="erp-card p-5 space-y-4"><h3 class="font-black text-sm">6. الرواتب والأجور</h3><table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">الموظف</th><th class="p-2 border">الوظيفة</th><th class="p-2 border">الراتب الشهري</th></tr></thead><tbody id="tb-sal"></tbody></table></div></section>
+        <section id="sec-hr-payrolls" class="sec-view hidden space-y-5"><div class="erp-card p-5 space-y-4"><h3 class="font-black text-sm">7. مسيرات الرواتب</h3><form onsubmit="addPayroll(event)" class="flex gap-3 max-w-md"><input id="prl-month" placeholder="الشهر (مثال: نوفمبر 2026)" required class="erp-input" /><button class="btn-blue text-xs px-5">إصدار المسير</button></form><table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">الشهر</th><th class="p-2 border">إجمالي الرواتب</th></tr></thead><tbody id="tb-prl"></tbody></table></div></section>
+        <section id="sec-hr-advances" class="sec-view hidden space-y-5"><div class="erp-card p-5 space-y-4"><h3 class="font-black text-sm">8. السلف</h3><form onsubmit="addAdvance(event)" class="grid grid-cols-1 md:grid-cols-3 gap-3"><select id="adv-emp" class="erp-input sel-emp"></select><input type="number" id="adv-amt" placeholder="قيمة السلفة" required class="erp-input font-bold" /><button class="btn-blue text-xs py-2">صرف سلفة</button></form><table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">الموظف</th><th class="p-2 border">القيمة</th></tr></thead><tbody id="tb-adv"></tbody></table></div></section>
+        <section id="sec-hr-pen-bon" class="sec-view hidden space-y-5"><div class="erp-card p-5 space-y-4"><h3 class="font-black text-sm">9. الخصومات والمكافآت</h3><form onsubmit="addPenBon(event)" class="grid grid-cols-1 md:grid-cols-4 gap-3"><select id="pb-emp" class="erp-input sel-emp"></select><select id="pb-type" class="erp-input"><option value="مكافأة">مكافأة</option><option value="خصم">خصم</option></select><input type="number" id="pb-amt" placeholder="المبلغ" required class="erp-input font-bold" /><button class="btn-blue text-xs py-2">حفظ</button></form><table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">الموظف</th><th class="p-2 border">النوع</th><th class="p-2 border">المبلغ</th></tr></thead><tbody id="tb-pb"></tbody></table></div></section>
+        <section id="sec-hr-contracts" class="sec-view hidden space-y-5"><div class="erp-card p-5 space-y-4"><h3 class="font-black text-sm">10. العقود</h3><form onsubmit="addContract(event)" class="grid grid-cols-1 md:grid-cols-3 gap-3"><select id="con-emp" class="erp-input sel-emp"></select><input id="con-dur" placeholder="مدة العقد (مثال: سنة)" required class="erp-input" /><button class="btn-blue text-xs py-2">إضافة عقد</button></form><table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">الموظف</th><th class="p-2 border">المدة</th></tr></thead><tbody id="tb-con"></tbody></table></div></section>
+        <section id="sec-hr-insurance" class="sec-view hidden space-y-5"><div class="erp-card p-5 space-y-4"><h3 class="font-black text-sm">11. التأمينات الاجتماعية</h3><form onsubmit="addInsurance(event)" class="grid grid-cols-1 md:grid-cols-3 gap-3"><select id="ins-emp" class="erp-input sel-emp"></select><input id="ins-no" placeholder="رقم التأمين" required class="erp-input" /><button class="btn-blue text-xs py-2">تسجيل</button></form><table class="w-full text-xs text-right border"><thead class="bg-slate-50"><tr><th class="p-2 border">الموظف</th><th class="p-2 border">رقم التأمين</th></tr></thead><tbody id="tb-ins"></tbody></table></div></section>
+
+        <!-- ================= موديول بيانات الشركة (8 تبويبات) ================= -->
+        <section id="sec-cmp-profile" class="sec-view hidden space-y-5"><div class="erp-card p-5 space-y-3 max-w-lg"><h3 class="font-black text-sm">1. بيانات الشركة</h3><input id="cmp-n" class="erp-input" placeholder="اسم الشركة" /><input id="cmp-t" class="erp-input" placeholder="الرقم الضريبي" /><button onclick="saveCompany()" class="btn-blue text-xs px-4 py-2">حفظ</button></div></section>
+        <section id="sec-cmp-branches" class="sec-view hidden space-y-5"><div class="erp-card p-5 space-y-3"><h3 class="font-black text-sm">2. الفروع</h3><form onsubmit="addSimpleList(event,'branches','br-in')" class="flex gap-2 max-w-md"><input id="br-in" required class="erp-input" placeholder="اسم الفرع" /><button class="btn-blue text-xs px-4">إضافة</button></form><ul id="list-branches" class="list-disc pr-5 text-xs space-y-1"></ul></div></section>
+        <section id="sec-cmp-depts" class="sec-view hidden space-y-5"><div class="erp-card p-5 space-y-3"><h3 class="font-black text-sm">3.
