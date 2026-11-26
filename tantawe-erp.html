@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TANTAWE ERP</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--n:#0b1f44;--b:#1d4ed8;--k:#070b14;--bg:#eef2f7;--bd:#dbe4f0}
+*{box-sizing:border-box;font-family:Cairo,sans-serif}
+body{margin:0;background:var(--bg);color:#0f172a;font-size:13px}
+.hidden{display:none!important}
+button{cursor:pointer;font-weight:700}
+#login{min-height:100vh;display:grid;grid-template-columns:1.1fr 1fr}
+.brand{background:radial-gradient(circle at 20% 10%,#1d4ed8 0,#0b1f44 45%,#070b14 100%);color:#fff;padding:56px;display:flex;flex-direction:column;justify-content:space-between}
+.brand h1{font-size:44px;font-weight:900;margin:0 0 10px;line-height:1.2}
+.brand p{color:#bfdbfe;max-width:420px;line-height:1.9}
+.chips{display:flex;flex-wrap:wrap;gap:8px}.chips span{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:5px 12px;border-radius:99px;font-size:12px}
+.lform{display:flex;align-items:center;justify-content:center;padding:32px;background:#fff}
+.lform form{width:100%;max-width:360px;display:grid;gap:14px}
+.lform h2{margin:0;font-size:24px;font-weight:900;color:var(--n)}
+.pw{position:relative}.pw button{position:absolute;left:8px;top:50%;transform:translateY(-50%);background:none;border:0;font-size:16px}
+.inp{width:100%;padding:10px 12px;border:1px solid #cbd5e1;border-radius:10px;background:#f8fafc;font-size:13px}
+.inp:focus{outline:2px solid #93b4f8;background:#fff}
+.btn{background:linear-gradient(135deg,var(--n),var(--b));color:#fff;border:0;border-radius:10px;padding:10px 18px;font-size:13px}
+.btn:hover{filter:brightness(1.12)}.btn.sec{background:#e2e8f0;color:#0f172a}.btn.red{background:#be123c}
+.err{background:#fff1f2;color:#be123c;border:1px solid #fecdd3;padding:8px;border-radius:8px;text-align:center;font-weight:700}
+.top{background:linear-gradient(90deg,var(--k),var(--n));color:#fff;display:flex;align-items:center;gap:14px;padding:10px 22px;position:sticky;top:0;z-index:10}
+.top .logo{font-weight:900;font-size:16px;cursor:pointer;display:flex;align-items:center;gap:8px}
+.top .logo i{font-style:normal;background:var(--b);width:32px;height:32px;border-radius:9px;display:grid;place-items:center}
+.top .sp{flex:1}.top button{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.2);border-radius:8px;padding:6px 12px}
+.crumb{padding:14px 26px 0;color:#64748b;font-weight:700}.crumb a{color:var(--b);cursor:pointer}
+main{padding:18px 26px 40px;max-width:1500px;margin:auto}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-bottom:22px}
+.kpi{background:#fff;border:1px solid var(--bd);border-radius:12px;padding:14px 16px}.kpi small{color:#64748b;font-weight:700}.kpi b{display:block;font-size:21px;margin-top:4px;color:var(--n)}
+.apps{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:16px}
+.app{background:#fff;border:1px solid var(--bd);border-radius:20px;padding:24px 12px;text-align:center;transition:.15s;color:#0f172a}
+.app:hover{transform:translateY(-4px);box-shadow:0 14px 28px rgba(11,31,68,.14);border-color:var(--c)}
+.app .ic{width:68px;height:68px;margin:0 auto 12px;border-radius:20px;display:grid;place-items:center;font-size:32px;background:var(--c);box-shadow:0 8px 18px -6px var(--c)}
+.app b{font-size:15px;display:block}.app small{color:#64748b}
+.banner{background:linear-gradient(115deg,var(--k),var(--n) 55%,var(--b));color:#fff;border-radius:18px;padding:22px 28px;margin-bottom:18px;display:flex;justify-content:space-between;align-items:center}
+.banner h2{margin:0;font-size:24px;font-weight:900}.banner p{margin:4px 0 0;color:#bfdbfe}.banner .ic{font-size:40px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
+.tile{background:#fff;border:1px solid var(--bd);border-right:4px solid var(--c);border-radius:14px;padding:16px;display:flex;align-items:center;gap:12px;text-align:right;font-size:14px;color:#0f172a}
+.tile:hover{background:#f8fbff;box-shadow:0 8px 20px rgba(29,78,216,.12)}.tile span{font-size:24px}
+.strip{display:flex;gap:6px;overflow-x:auto;margin-bottom:14px;padding-bottom:4px}
+.strip button{white-space:nowrap;background:#fff;border:1px solid var(--bd);border-radius:99px;padding:6px 14px;color:#334155}
+.strip button.on{background:var(--b);color:#fff;border-color:var(--b)}
+.card{background:#fff;border:1px solid var(--bd);border-radius:16px;padding:18px;margin-bottom:16px;box-shadow:0 4px 16px rgba(15,23,42,.04)}
+.card h3{margin:0 0 14px;color:var(--n);font-weight:900;font-size:15px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;align-items:end}
+.grid label{display:block;font-weight:700;color:#475569;margin-bottom:4px;font-size:12px}
+.chk{display:flex;gap:8px;align-items:center;background:#f8fafc;border:1px solid var(--bd);border-radius:10px;padding:10px;font-weight:700}.chk input{width:auto}
+table{width:100%;border-collapse:separate;border-spacing:0;border:1px solid var(--bd);border-radius:12px;overflow:hidden;text-align:right}
+th{background:var(--n);color:#fff;padding:10px}td{padding:9px 10px;border-top:1px solid #e8eef6}tr:nth-child(even) td{background:#f8fafc}tr:hover td{background:#eff6ff}
+.tw{overflow-x:auto}.empty{text-align:center;color:#94a3b8;padding:22px}
+.act button{background:none;border:0;font-size:15px}
+.tree .nd{padding:7px 10px;border-bottom:1px solid #eef2f7;display:flex;gap:10px;align-items:center}.tree .nd:hover{background:#eff6ff}
+.tree .nd b{color:var(--n)}.tree .nd em{font-style:normal;color:#64748b;font-size:11px;margin-right:auto}
+.modal{position:fixed;inset:0;background:rgba(7,11,20,.6);display:grid;place-items:center;z-index:50}
+.modal>div{background:#fff;border-radius:18px;padding:26px;max-width:340px;text-align:center;display:grid;gap:12px}
+.modal .r{display:flex;gap:10px}.modal .r button{flex:1}
+@media(max-width:800px){#login{grid-template-columns:1fr}.brand{display:none}}
+</style></head>
+<body>
+
+<div id="login">
+ <div class="brand">
+  <div style="font-weight:900;font-size:18px">TANTAWE ERP</div>
+  <div><h1>أدر شركتك كلها<br>من مكان واحد</h1><p>حسابات، مبيعات، مشتريات، مخازن وموارد بشرية في نظام واحد مترابط، تُسجَّل فيه كل عملية مرة واحدة وتظهر في كل مكان.</p></div>
+  <div class="chips"><span>الحسابات</span><span>المبيعات</span><span>المشتريات</span><span>المخازن</span><span>الموارد البشرية</span><span>التقارير</span></div>
+ </div>
+ <div class="lform"><form onsubmit="doLogin(event)">
+  <h2>تسجيل الدخول</h2><div style="color:#64748b">أدخل بيانات حسابك للمتابعة</div>
+  <div><label style="font-weight:700">اسم المستخدم</label><input id="lu" class="inp" autocomplete="username" required></div>
+  <div><label style="font-weight:700">كلمة المرور</label><div class="pw"><input id="lp" type="password" class="inp" autocomplete="current-password" required><button type="button" onclick="lp.type=lp.type=='password'?'text':'password'">👁</button></div></div>
+  <div id="lerr" class="err hidden">اسم المستخدم أو كلمة المرور غير صحيحة</div>
+  <button class="btn" style="padding:12px">دخول</button>
+  <div style="color:#94a3b8;text-align:center;font-size:12px">البيانات الافتراضية: admin / 1234</div>
+ </form></div>
+</div>
+
+<div id="app" class="hidden">
+ <div class="top">
+  <div class="logo" onclick="go()"><i>T</i><span id="cname"></span></div>
+  <button onclick="go()">▦ التطبيقات</button><span class="sp"></span>
+  <span id="who"></span><button onclick="logout()">خروج</button>
+ </div>
+ <div class="crumb" id="crumb"></div>
+ <main id="main"></main>
+</div>
+<div id="modal" class="modal hidden"></div>
+
+<script>
+const K='tantawe_erp_v2',$=s=>document.querySelector(s),today=()=>new Date().toISOString().slice(0,10);
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const COLL='coa journals channels transfers reconciles costCenters fixedAssets depreciations taxes closings reps customers quotes salesOrders salesInvoices salesReturns creditNotes collections priceLists vendors purRequests purOrders purInvoices purReturns purAddNotes payments itemGroups warehouses items invMoves whTransfers adjustments employees depts attendance shifts leaves payrolls advances penBon contracts insurances branches fiscalYears periods currencies groups users logs'.split(' ');
+const ALL='acc,sales,pur,inv,hr,cmp,rep,sys';
+function seed(){const d={session:null,settings:{sinvPrefix:'INV-',pinvPrefix:'PO-',docPrefix:'DOC-',currency:'ج.م',invFooter:'شكراً لتعاملكم معنا',askPrint:true,confirmSave:false,name:'TANTAWE ERP',baseCur:'الجنيه المصري (EGP)',autoJournal:true,salesPay:'آجل',purStock:true,allowNeg:false,trackMoves:true,hrAdj:true,taxRate:14,workDays:26,insRate:11,paper:'A4',copies:1,showLogo:true,sessionMin:60,minPwd:4,lowStock:5,lowAlert:true,lang:'العربية (RTL)',tz:'إفريقيا/القاهرة',dateFmt:'YYYY-MM-DD'}};
+COLL.forEach(c=>d[c]=[]);
+d.coa=[['1','الأصول','أصول','',0],['11','الأصول المتداولة','أصول','1',0],['1101','الخزينة','أصول','11',0],['1102','البنوك','أصول','11',0],['1103','العملاء','أصول','11',0],['1104','المخزون','أصول','11',0],['12','الأصول الثابتة','أصول','1',0],['2','الالتزامات','التزامات','',0],['2101','الموردون','التزامات','2',0],['2102','ضريبة القيمة المضافة','التزامات','2',0],['3','حقوق الملكية','حقوق ملكية','',0],['3101','رأس المال','حقوق ملكية','3',0],['4','الإيرادات','إيرادات','',0],['4101','إيرادات المبيعات','إيرادات','4',0],['5','المصروفات','مصروفات','',0],['5101','تكلفة المشتريات','مصروفات','5',0],['5102','الرواتب والأجور','مصروفات','5',0]].map(a=>({code:a[0],name:a[1],type:a[2],parent:a[3],openBal:a[4]}));
+d.branches=[{name:'الفرع الرئيسي'}];d.warehouses=[{name:'المخزن الرئيسي'}];d.itemGroups=[{name:'عام'}];d.currencies=[{name:'الجنيه المصري',rate:1}];d.fiscalYears=[{name:'2026'}];
+d.groups=[{name:'مدير عام',perms:'all'},{name:'محاسب',perms:'acc,sales,pur,rep'},{name:'مبيعات ومخازن',perms:'sales,inv,rep'}];
+d.users=[{username:'admin',password:'1234',group:'مدير عام'},{username:'acc1',password:'123',group:'محاسب'}];return d}
+let db=(()=>{try{const p=JSON.parse(localStorage.getItem(K));if(p){const s=seed();return{...s,...p,settings:{...s.settings,...p.settings}}}}catch(e){}return seed()})();
+const save=()=>{try{localStorage.setItem(K,JSON.stringify(db))}catch(e){}},S=()=>db.settings;
+const log=m=>{db.logs.unshift({msg:new Date().toLocaleString('ar-EG')+' — '+m});db.logs=db.logs.slice(0,80)};
+const money=n=>Number(n||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})+' '+S().currency;
+const sum=(a,k)=>a.reduce((s,x)=>s+(+x[k]||0),0);
+
+/* ---------- تعريف الحقول ---------- */
+const t=(k,l,v)=>({k,l,t:'t',v}),n=(k,l,v)=>({k,l,t:'n',v}),d=(k,l)=>({k,l,t:'d'}),s=(k,l,o)=>({k,l,t:'s',o}),r=(k,l,o)=>({k,l,t:'r',o}),c=(k,l)=>({k,l,t:'c'}),b=(k,l)=>({k,l,t:'b'});
+const X=(id,title,icon,coll,fields,o={})=>({id,title,icon,coll,fields,...o});
+const CU='customers.name',VN='vendors.name',IT='items.name',CH='channels.name',WH='warehouses.name',CO='coa.name',EM='employees.name';
+const docF=(who,whoRef,pcost)=>[d('dt','التاريخ'),r(who,who=='cust'?'العميل':'المورد',whoRef),r('item','الصنف',IT),n('qty','الكمية',1),n('price','السعر'),n('disc','خصم %',0),c('total','الإجمالي (شامل الضريبة)')];
+const MODS=[
+{id:'acc',name:'الحسابات',icon:'🧮',color:'#1d4ed8',sub:'الدليل، القيود، الخزائن والقوائم المالية',tabs:[
+ {id:'coa',title:'شجرة الحسابات',icon:'🌳',custom:coaView},
+ X('je','القيود اليومية','📒','journals',[d('dt','التاريخ'),r('dr','الحساب المدين',CO),r('cr','الحساب الدائن',CO),r('cc','مركز التكلفة','costCenters.name'),n('amt','المبلغ'),t('desc','البيان')],{pf:'docPrefix'}),
+ X('ch','الخزائن والبنوك','🏦','channels',[t('name','الاسم'),s('type','النوع',['خزينة','بنك']),t('accNo','رقم الحساب / IBAN'),n('balance','الرصيد الافتتاحي')]),
+ X('tr','التحويلات المالية','🔁','transfers',[r('from','من',CH),r('to','إلى',CH),d('dt','التاريخ'),n('amt','المبلغ')]),
+ X('rec','التسويات البنكية','🏛️','reconciles',[r('bank','البنك',CH),d('dt','التاريخ'),n('stmt','رصيد كشف البنك'),t('note','ملاحظات')]),
+ X('cc','مراكز التكلفة','🪙','costCenters',[t('name','المركز'),r('br','الفرع','branches.name'),n('bud','الموازنة')]),
+ X('fa','الأصول الثابتة','🏢','fixedAssets',[t('name','الأصل'),d('dt','تاريخ الشراء'),n('val','التكلفة'),n('rate','نسبة الإهلاك %'),n('accDep','مجمع الإهلاك',0)]),
+ X('dep','إهلاك الأصول','📉','depreciations',[r('asset','الأصل','fixedAssets.name'),d('dt','التاريخ'),n('amt','قيمة الإهلاك')]),
+ X('tax','الضرائب','％','taxes',[t('name','نوع الضريبة'),n('rate','النسبة %'),n('amt','المبلغ')]),
+ X('cl','الإقفال المالي','🔒','closings',[r('yr','السنة المالية','fiscalYears.name'),t('note','ملاحظات'),n('net','الرصيد المرحل',0)]),
+ {id:'ledger',title:'الأستاذ العام',icon:'📋',rep:()=>({cols:['التاريخ','الحساب','البيان','مدين','دائن'],rows:db.journals.flatMap(j=>[[j.dt,j.dr,j.desc,money(j.amt),'-'],[j.dt,j.cr,j.desc,'-',money(j.amt)]])})},
+ {id:'tb',title:'ميزان المراجعة',icon:'⚖️',rep:trial},
+ {id:'is',title:'قائمة الدخل',icon:'📊',rep:()=>{const a=sum(db.salesInvoices,'total'),p=sum(db.purInvoices,'total'),w=sum(db.payrolls,'total');return{cols:['البند','المبلغ'],rows:[['إجمالي الإيرادات',money(a)],['تكلفة المشتريات',money(p)],['الرواتب والأجور',money(w)],['صافي الربح / الخسارة',money(a-p-w)]]}}},
+ {id:'bs',title:'قائمة المركز المالي',icon:'🧾',rep:()=>{const cash=sum(db.channels,'balance'),st=db.items.reduce((x,i)=>x+i.qty*i.price,0),fx=sum(db.fixedAssets,'val')-sum(db.fixedAssets,'accDep'),cus=sum(db.salesInvoices.filter(x=>x.pay=='آجل'),'total')-sum(db.collections,'amt'),ven=sum(db.purInvoices,'total')-sum(db.payments,'amt');return{cols:['البند','المبلغ'],rows:[['النقدية والبنوك',money(cash)],['المخزون',money(st)],['الأصول الثابتة (بالصافي)',money(fx)],['العملاء',money(cus)],['إجمالي الأصول',money(cash+st+fx+cus)],['الموردون',money(ven)]]}}},
+ {id:'cf',title:'التدفقات النقدية',icon:'💵',rep:()=>{const i=sum(db.collections,'amt'),o=sum(db.payments,'amt');return{cols:['البند','المبلغ'],rows:[['التدفقات الداخلة (تحصيل)',money(i)],['التدفقات الخارجة (دفع)',money(o)],['صافي التدفق النقدي',money(i-o)]]}}}]},
+{id:'sales',name:'المبيعات',icon:'🛒',color:'#0891b2',sub:'العملاء، الفواتير والتحصيل',tabs:[
+ X('cu','العملاء','👥','customers',[t('name','اسم العميل'),t('phone','الهاتف'),t('email','البريد'),t('addr','العنوان'),t('taxNo','الرقم الضريبي'),n('limit','حد الائتمان',0),r('rep','المندوب','reps.name')]),
+ X('sq','عروض الأسعار','📄','quotes',docF('cust',CU),{num:1,pf:'docPrefix',calc:1,tax:1}),
+ X('so','أوامر البيع','🧾','salesOrders',docF('cust',CU),{num:1,pf:'docPrefix',calc:1,tax:1}),
+ X('si','فواتير المبيعات','🧮','salesInvoices',[...docF('cust',CU),s('pay','طريقة الدفع',['آجل','نقدي','تحويل بنكي'])],{num:1,pf:'sinvPrefix',calc:1,tax:1,sale:1,feat:1}),
+ X('sr','مرتجعات المبيعات','↩️','salesReturns',[d('dt','التاريخ'),r('cust','العميل',CU),r('item','الصنف',IT),n('qty','الكمية',1),n('total','قيمة المرتجع'),t('reason','السبب')],{num:1,pf:'docPrefix'}),
+ X('cn','إشعارات الخصم','🏷️','creditNotes',[d('dt','التاريخ'),r('cust','العميل',CU),n('amt','القيمة'),t('reason','السبب')],{num:1,pf:'docPrefix'}),
+ X('col','سندات التحصيل','💵','collections',[d('dt','التاريخ'),r('cust','العميل',CU),r('chan','الخزينة / البنك',CH),n('amt','المبلغ'),t('note','رقم الشيك / الإيصال')],{num:1,pf:'docPrefix'}),
+ X('pl','قوائم الأسعار','📋','priceLists',[t('name','اسم القائمة'),r('item','الصنف',IT),n('price','السعر')]),
+ X('rp','مندوبو المبيعات','🧑‍💼','reps',[t('name','المندوب'),t('phone','الهاتف'),n('comm','العمولة %')]),
+ {id:'cs',title:'كشف حسابات العملاء',icon:'📑',rep:()=>({cols:['العميل','المبيعات الآجلة','التحصيل','إشعارات الخصم','الرصيد'],rows:db.customers.map(x=>{const a=sum(db.salesInvoices.filter(i=>i.cust==x.name&&i.pay=='آجل'),'total'),b=sum(db.collections.filter(i=>i.cust==x.name),'amt'),k=sum(db.creditNotes.filter(i=>i.cust==x.name),'amt');return[x.name,money(a),money(b),money(k),money(a-b-k)]})})}]},
+{id:'pur',name:'المشتريات',icon:'📦',color:'#7c3aed',sub:'الموردون، أوامر الشراء والمدفوعات',tabs:[
+ X('vn','الموردون','🏭','vendors',[t('name','اسم المورد'),t('phone','الهاتف'),t('email','البريد'),t('addr','العنوان'),t('taxNo','الرقم الضريبي'),t('terms','شروط السداد')]),
+ X('pq','طلبات الشراء','📝','purRequests',[d('dt','التاريخ'),r('item','الصنف',IT),r('wh','المخزن',WH),n('qty','الكمية',1),s('prio','الأولوية',['عادية','عاجلة']),t('note','ملاحظات')],{num:1,pf:'docPrefix'}),
+ X('po','أوامر الشراء','📑','purOrders',docF('vnd',VN,1),{num:1,pf:'docPrefix',calc:1,tax:1,pcost:1}),
+ X('pi','فواتير المشتريات','🧾','purInvoices',[...docF('vnd',VN,1),r('wh','المخزن المضاف إليه',WH)],{num:1,pf:'pinvPrefix',calc:1,tax:1,pcost:1,feat:1}),
+ X('pr','مرتجعات المشتريات','↩️','purReturns',[d('dt','التاريخ'),r('vnd','المورد',VN),r('item','الصنف',IT),n('qty','الكمية',1),n('total','قيمة المرتجع'),t('reason','السبب')],{num:1,pf:'docPrefix'}),
+ X('pan','إشعارات الإضافة','➕','purAddNotes',[d('dt','التاريخ'),r('vnd','المورد',VN),n('amt','القيمة'),t('note','البيان')],{num:1,pf:'docPrefix'}),
+ X('pay','سندات الدفع','💳','payments',[d('dt','التاريخ'),r('vnd','المورد',VN),r('chan','الخزينة / البنك',CH),n('amt','المبلغ'),t('note','رقم الشيك / التحويل')],{num:1,pf:'docPrefix'}),
+ {id:'vs',title:'كشف حسابات الموردين',icon:'📑',rep:()=>({cols:['المورد','المشتريات','المدفوع','الرصيد'],rows:db.vendors.map(x=>{const a=sum(db.purInvoices.filter(i=>i.vnd==x.name),'total'),b=sum(db.payments.filter(i=>i.vnd==x.name),'amt');return[x.name,money(a),money(b),money(a-b)]})})}]},
+{id:'inv',name:'المخازن',icon:'🏬',color:'#ea580c',sub:'الأصناف، الأذون والجرد',tabs:[
+ X('it','الأصناف','📦','items',[t('code','الكود'),t('name','اسم الصنف'),r('grp','المجموعة','itemGroups.name'),r('wh','المخزن',WH),t('unit','الوحدة','قطعة'),n('cost','سعر التكلفة'),n('price','سعر البيع'),n('qty','الرصيد الافتتاحي',0),n('min','حد الطلب',0)],{feat:1}),
+ X('ig','مجموعات الأصناف','🗂️','itemGroups',[t('name','اسم المجموعة')]),
+ X('wh','المخازن','🏚️','warehouses',[t('name','اسم المخزن'),t('loc','الموقع'),t('keeper','أمين المخزن')]),
+ {id:'bal',title:'أرصدة المخزون',icon:'📊',rep:()=>({cols:['الكود','الصنف','المخزن','الرصيد','سعر التكلفة','القيمة','الحالة'],rows:db.items.map(i=>[i.code,i.name,i.wh||'-',i.qty,money(i.cost||i.price),money(i.qty*(i.cost||i.price)),i.qty<=(+i.min||+S().lowStock)?'⚠ تحت حد الطلب':'متوفر'])})},
+ X('ad','أذون الإضافة والصرف','📥','invMoves',[d('dt','التاريخ'),s('type','نوع الإذن',['إذن إضافة','إذن صرف']),r('item','الصنف',IT),r('wh','المخزن',WH),n('qty','الكمية',1),t('note','البيان')],{num:1,pf:'docPrefix'}),
+ X('wt','التحويل بين المخازن','🔄','whTransfers',[d('dt','التاريخ'),r('from','من مخزن',WH),r('to','إلى مخزن',WH),r('item','الصنف',IT),n('qty','الكمية',1)],{num:1,pf:'docPrefix'}),
+ X('adj','الجرد وتسوية المخزون','📋','adjustments',[d('dt','التاريخ'),r('item','الصنف',IT),n('qty','الرصيد الفعلي بعد الجرد'),t('reason','سبب التسوية')],{num:1,pf:'docPrefix'}),
+ {id:'mv',title:'حركة الأصناف',icon:'📈',rep:()=>({cols:['الرقم','التاريخ','النوع','الصنف','المخزن','الكمية'],rows:db.invMoves.map(m=>[m.id,m.dt,m.type,m.item,m.wh,m.qty])})}]},
+{id:'hr',name:'الموارد البشرية',icon:'👥',color:'#059669',sub:'الموظفون، الحضور والرواتب',tabs:[
+ X('em','بيانات الموظفين','🧑‍💻','employees',[t('name','اسم الموظف'),t('natId','الرقم القومي'),t('phone','الهاتف'),t('job','الوظيفة'),r('dept','القسم','depts.name'),d('hire','تاريخ التعيين'),n('sal','الراتب الأساسي')],{feat:1}),
+ X('dp','الأقسام والوظائف','🏷️','depts',[t('name','القسم'),t('head','مدير القسم')]),
+ X('at','الحضور والانصراف','🕒','attendance',[r('emp','الموظف',EM),d('dt','التاريخ'),s('st','الحالة',['حاضر','متأخر','غائب','مأمورية']),t('in','وقت الحضور'),t('out','وقت الانصراف')]),
+ X('sh','الورديات','🔄','shifts',[t('name','اسم الوردية'),t('from','من'),t('to','إلى')]),
+ X('lv','الإجازات','🏖️','leaves',[r('emp','الموظف',EM),s('type','النوع',['سنوية','عارضة','مرضية','بدون أجر']),d('from','من'),n('days','عدد الأيام')]),
+ X('pa','مسيرات الرواتب','💰','payrolls',[t('month','الشهر (مثال: نوفمبر 2026)'),c('total','إجمالي المسير')],{num:1,pf:'docPrefix'}),
+ X('av','السلف','💸','advances',[r('emp','الموظف',EM),d('dt','التاريخ'),n('amt','قيمة السلفة')],{num:1,pf:'docPrefix'}),
+ X('pb','الخصومات والمكافآت','⚖️','penBon',[r('emp','الموظف',EM),s('type','النوع',['مكافأة','خصم']),n('amt','المبلغ'),t('reason','السبب')]),
+ X('co','العقود','📄','contracts',[r('emp','الموظف',EM),s('type','نوع العقد',['محدد المدة','غير محدد','تجربة']),d('from','تاريخ البداية'),t('dur','المدة')]),
+ X('in','التأمينات الاجتماعية','🛡️','insurances',[r('emp','الموظف',EM),t('no','الرقم التأميني'),n('wage','الأجر التأميني')])]},
+{id:'cmp',name:'بيانات الشركة',icon:'🏢',color:'#be185d',sub:'الشركة، الفروع والمستخدمون',tabs:[
+ {id:'prof',title:'بيانات الشركة',icon:'🏢',settings:'company'},
+ X('br','الفروع','📍','branches',[t('name','اسم الفرع'),t('addr','العنوان'),t('phone','الهاتف')]),
+ X('fy','السنوات المالية','📅','fiscalYears',[t('name','السنة'),d('from','من'),d('to','إلى')]),
+ X('pd','الفترات المحاسبية','🗓️','periods',[t('name','الفترة'),d('from','من'),d('to','إلى'),s('st','الحالة',['مفتوحة','مغلقة'])]),
+ X('cur','العملات وأسعار الصرف','💱','currencies',[t('name','العملة'),n('rate','سعر الصرف مقابل الأساسية')]),
+ X('ug','مجموعات المستخدمين','🛡️','groups',[t('name','اسم المجموعة'),t('perms','الصلاحيات (all أو acc,sales,pur,inv,hr,cmp,rep,sys)','all')]),
+ X('us','المستخدمون','👤','users',[t('username','اسم المستخدم'),t('password','كلمة المرور'),r('group','المجموعة','groups.name')])]},
+{id:'rep',name:'التقارير',icon:'📑',color:'#475569',sub:'كشوف الحسابات وتقارير الأداء',tabs:[
+ {id:'r1',title:'كشف حسابات العملاء',icon:'👥',rep:()=>findTab('cs').rep()},
+ {id:'r2',title:'كشف حسابات الموردين',icon:'🏭',rep:()=>findTab('vs').rep()},
+ {id:'r3',title:'أرصدة الخزائن والبنوك',icon:'🏦',rep:()=>({cols:['الاسم','النوع','الرصيد'],rows:db.channels.map(x=>[x.name,x.type,money(x.balance)])})},
+ {id:'r4',title:'تقييم المخزون',icon:'📦',rep:()=>findTab('bal').rep()},
+ {id:'r5',title:'المبيعات والمشتريات',icon:'📊',rep:()=>({cols:['البند','المبلغ'],rows:[['إجمالي المبيعات',money(sum(db.salesInvoices,'total'))],['إجمالي المشتريات',money(sum(db.purInvoices,'total'))],['مرتجعات المبيعات',money(sum(db.salesReturns,'total'))],['مرتجعات المشتريات',money(sum(db.purReturns,'total'))]]})},
+ {id:'r6',title:'الأرباح وتكلفة الرواتب',icon:'💹',rep:()=>findTab('is').rep()},
+ {id:'r7',title:'الأصناف تحت حد الطلب',icon:'⚠️',rep:()=>({cols:['الصنف','الرصيد','حد الطلب'],rows:db.items.filter(i=>i.qty<=(+i.min||+S().lowStock)).map(i=>[i.name,i.qty,i.min||S().lowStock])})}]},
+{id:'sys',name:'الإعدادات',icon:'⚙️',color:'#0f172a',sub:'تحكم في كل جزء من النظام',tabs:[]}];
+
+/* ---------- الإعدادات (تتحكم في كل تاب) ---------- */
+const SET=[
+{id:'general',title:'الإعدادات العامة',icon:'🎛️',f:[t('currency','رمز العملة المعروضة'),t('invFooter','ملاحظة أسفل المستندات'),b('confirmSave','تأكيد منبثق عند حفظ أي مستند')]},
+{id:'company',title:'بيانات الشركة',icon:'🏢',f:[t('name','الاسم التجاري'),t('legal','الاسم القانوني'),t('taxNo','الرقم الضريبي'),t('crNo','السجل التجاري'),t('addr','العنوان'),t('phone','الهاتف'),t('email','البريد الإلكتروني'),t('baseCur','العملة الأساسية')]},
+{id:'sacc',title:'إعدادات الحسابات',icon:'🧮',f:[r('revAcc','حساب الإيرادات الافتراضي',CO),r('expAcc','حساب المصروفات الافتراضي',CO),b('autoJournal','قيد تلقائي مع الفواتير'),t('fyStart','بداية السنة المالية (شهر)')]},
+{id:'ssales',title:'إعدادات المبيعات',icon:'🛒',f:[s('salesPay','طريقة الدفع الافتراضية',['آجل','نقدي','تحويل بنكي']),n('maxDisc','أقصى خصم مسموح %'),b('lockPrice','منع تعديل سعر البيع'),b('creditCheck','منع البيع عند تجاوز حد الائتمان')]},
+{id:'spur',title:'إعدادات المشتريات',icon:'📦',f:[r('purWh','المخزن الافتراضي',WH),b('purStock','إضافة الكمية للمخزون تلقائياً')]},
+{id:'sinv',title:'إعدادات المخازن',icon:'🏬',f:[b('allowNeg','السماح بالبيع بالسالب'),b('trackMoves','تسجيل حركة الأصناف'),n('lowStock','حد التنبيه الافتراضي للمخزون'),b('lowAlert','تنبيه عند نقص الأصناف')]},
+{id:'shr',title:'إعدادات الموارد البشرية',icon:'👥',f:[n('workDays','أيام العمل في الشهر'),n('insRate','نسبة التأمينات %'),n('otRate','معدل الإضافي'),b('hrAdj','احتساب السلف والخصومات في المسير')]},
+{id:'stax',title:'إعدادات الضرائب',icon:'％',f:[n('taxRate','نسبة ضريبة القيمة المضافة %'),n('whRate','ضريبة الخصم والإضافة %'),b('taxIncl','الأسعار شاملة الضريبة')]},
+{id:'snum',title:'ترقيم المستندات',icon:'🔢',f:[t('sinvPrefix','بادئة فواتير المبيعات'),t('pinvPrefix','بادئة فواتير المشتريات'),t('docPrefix','بادئة باقي المستندات')]},
+{id:'sprint',title:'إعدادات الطباعة',icon:'🖨️',f:[b('askPrint','سؤال الطباعة بعد كل حفظ'),s('paper','حجم الورق',['A4','A5','إيصال 80mm']),n('copies','عدد النسخ'),b('showLogo','إظهار اسم الشركة بالترويسة')]},
+{id:'ssec',title:'الأمان',icon:'🔐',f:[n('sessionMin','مدة الجلسة (دقيقة)'),n('minPwd','أقل طول لكلمة المرور')]},
+{id:'sloc',title:'اللغة والتوقيت',icon:'🌐',f:[s('lang','اللغة',['العربية (RTL)']),t('tz','المنطقة الزمنية'),s('dateFmt','صيغة التاريخ',['YYYY-MM-DD','DD/MM/YYYY'])]}];
+SET.forEach(g=>MODS[MODS.length-1].tabs.push({id:g.id,title:g.title,icon:g.icon,settings:g.id}));
+MODS[MODS.length-1].tabs.push({id:'logs',title:'سجل العمليات',icon:'📜',rep:()=>({cols:['العملية'],rows:db.logs.map(l=>[l.msg])})},{id:'bk',title:'النسخ الاحتياطي',icon:'💾',custom:backupView});
+const findTab=id=>MODS.flatMap(m=>m.tabs).find(x=>x.id==id);
+
+/* ---------- المنطق: الأرصدة والقيود ---------- */
+const stock=(nm,dq)=>{const i=db.items.find(x=>x.name==nm);if(!i)return true;const q=(+i.qty||0)+dq;if(q<0&&!S().allowNeg){alert('الرصيد المتاح غير كافٍ للصنف: '+nm);return false}i.qty=q;return true};
+const chan=(nm,dv)=>{const x=db.channels.find(c=>c.name==nm);if(x)x.balance=(+x.balance||0)+dv};
+const jr=(desc,dr,cr,amt)=>{if(S().autoJournal)db.journals.push({id:S().docPrefix+'J'+(db.journals.length+1),dt:today(),dr,cr,cc:'عام',amt,desc})};
+const H={
+ salesInvoices:r=>{if(S().creditCheck&&r.pay=='آجل'){const cu=db.customers.find(x=>x.name==r.cust);if(cu&&cu.limit>0){const bal=sum(db.salesInvoices.filter(i=>i.cust==r.cust&&i.pay=='آجل'),'total')-sum(db.collections.filter(i=>i.cust==r.cust),'amt');if(bal+r.total>cu.limit){alert('تجاوز حد الائتمان للعميل');return false}}}if(!stock(r.item,-r.qty))return false;jr('فاتورة مبيعات',r.pay=='آجل'?'العملاء':(db.channels[0]?.name||'الخزينة'),S().revAcc||'إيرادات المبيعات',r.total)},
+ purInvoices:r=>{if(S().purStock&&!stock(r.item,r.qty))return false;jr('فاتورة مشتريات',S().expAcc||'تكلفة المشتريات','الموردون',r.total)},
+ salesReturns:r=>{stock(r.item,r.qty)},purReturns:r=>stock(r.item,-r.qty),
+ collections:r=>{chan(r.chan,r.amt)},payments:r=>{chan(r.chan,-r.amt)},
+ transfers:r=>{chan(r.from,-r.amt);chan(r.to,r.amt)},
+ invMoves:r=>stock(r.item,r.type=='إذن صرف'?-r.qty:r.qty),
+ adjustments:r=>{const i=db.items.find(x=>x.name==r.item);if(i)i.qty=r.qty},
+ depreciations:r=>{const a=db.fixedAssets.find(x=>x.name==r.asset);if(a)a.accDep=(+a.accDep||0)+r.amt},
+ payrolls:r=>{let tot=sum(db.employees,'sal');if(S().hrAdj)tot+=sum(db.penBon.filter(x=>x.type=='مكافأة'),'amt')-sum(db.penBon.filter(x=>x.type=='خصم'),'amt')-sum(db.advances,'amt');r.total=Math.max(0,tot)}};
+function trial(){const rows=db.coa.map(a=>{const dr=sum(db.journals.filter(j=>j.dr==a.name),'amt')+(['أصول','مصروفات'].includes(a.type)?+a.openBal||0:0),cr=sum(db.journals.filter(j=>j.cr==a.name),'amt')+(['أصول','مصروفات'].includes(a.type)?0:+a.openBal||0);return[a.code,a.name,money(dr),money(cr)]});return{cols:['الكود','الحساب','إجمالي مدين','إجمالي دائن'],rows}}
+
+/* ---------- الواجهة ---------- */
+let view={m:null,t:null},sessTimer;
+function doLogin(e){e.preventDefault();const u=db.users.find(x=>x.username==lu.value.trim()&&x.password==lp.value);if(!u){lerr.classList.remove('hidden');return}db.session=u.username;save();boot()}
+function logout(){db.session=null;save();boot()}
+function perms(){const u=db.users.find(x=>x.username==db.session),g=db.groups.find(x=>x.name==u?.group);return!g||g.perms=='all'?ALL.split(','):g.perms.split(',').map(x=>x.trim())}
+function boot(){const on=!!db.session;login.classList.toggle('hidden',on);app.classList.toggle('hidden',!on);if(!on)return;cname.textContent=S().name;who.textContent='👤 '+db.session;view={m:null,t:null};clearTimeout(sessTimer);sessTimer=setTimeout(logout,(+S().sessionMin||60)*60000);render()}
+function go(m,t){view={m:m||null,t:t||null};render();scrollTo(0,0)}
+function render(){const m=MODS.find(x=>x.id==view.m),tb=m?.tabs.find(x=>x.id==view.t);
+ crumb.innerHTML='<a onclick="go()">الرئيسية</a>'+(m?` › <a onclick="go('${m.id}')">${m.name}</a>`:'')+(tb?' › '+tb.title:'');
+ if(!m)return home();if(!tb)return modHome(m);
+ const strip=`<div class="strip">${m.tabs.map(x=>`<button class="${x.id==tb.id?'on':''}" onclick="go('${m.id}','${x.id}')">${x.icon} ${x.title}</button>`).join('')}</div>`;
+ main.innerHTML=strip+'<div id="body"></div>';const B=$('#body');
+ if(tb.custom)tb.custom(B);else if(tb.settings)setView(B,tb);else if(tb.rep)repView(B,tb);else crudView(B,tb)}
+function home(){const p=perms(),low=db.items.filter(i=>i.qty<=(+i.min||+S().lowStock)).length;
+ main.innerHTML=`<div class="kpis"><div class="kpi"><small>إجمالي المبيعات</small><b>${money(sum(db.salesInvoices,'total'))}</b></div><div class="kpi"><small>إجمالي المشتريات</small><b>${money(sum(db.purInvoices,'total'))}</b></div><div class="kpi"><small>النقدية والبنوك</small><b>${money(sum(db.channels,'balance'))}</b></div><div class="kpi"><small>قيمة المخزون</small><b>${money(db.items.reduce((x,i)=>x+i.qty*i.price,0))}</b></div>${S().lowAlert&&low?`<div class="kpi" style="border-color:#f59e0b"><small>أصناف تحت حد الطلب</small><b>⚠ ${low}</b></div>`:''}</div>
+ <div class="apps">${MODS.filter(m=>p.includes(m.id)).map(m=>`<button class="app" style="--c:${m.color};border:1px solid var(--bd)" onclick="go('${m.id}')"><div class="ic">${m.icon}</div><b>${m.name}</b><small>${m.tabs.length} قسم</small></button>`).join('')}</div>`}
+function modHome(m){main.innerHTML=`<div class="banner"><div><h2>${m.name}</h2><p>${m.sub}</p></div><div class="ic">${m.icon}</div></div><div class="tiles" style="--c:${m.color}">${m.tabs.map(x=>`<button class="tile" style="--c:${m.color}" onclick="go('${m.id}','${x.id}')"><span>${x.icon}</span><b>${x.title}</b></button>`).join('')}</div>`}
+
+function refList(ref){const[a,k]=ref.split('.');return(db[a]||[]).map(x=>x[k])}
+function inp(f,tb){const id='f_'+f.k,v=f.t=='d'?today():(f.v??'');
+ if(f.t=='s')return`<div><label>${f.l}</label><select id="${id}" class="inp">${f.o.map(o=>`<option>${o}</option>`).join('')}</select></div>`;
+ if(f.t=='r')return`<div><label>${f.l}</label><input id="${id}" class="inp" list="dl_${f.k}" autocomplete="off" required><datalist id="dl_${f.k}">${refList(f.o).map(o=>`<option value="${esc(o)}">`).join('')}</datalist></div>`;
+ if(f.t=='n')return`<div><label>${f.l}</label><input id="${id}" type="number" step="any" class="inp" value="${v}"></div>`;
+ if(f.t=='c')return`<div><label>${f.l}</label><input id="${id}" type="number" class="inp" readonly style="font-weight:900;color:var(--b)" value="0"></div>`;
+ return`<div><label>${f.l}</label><input id="${id}" type="${f.t=='d'?'date':'text'}" class="inp" value="${esc(v)}"></div>`}
+function crudView(B,tb){const rows=db[tb.coll],fs=tb.fields;
+ B.innerHTML=`<div class="card"><h3>${tb.icon} ${tb.title}</h3><form id="frm" class="grid">${fs.map(f=>inp(f,tb)).join('')}<button class="btn">حفظ</button></form></div>
+ <div class="card"><div style="display:flex;gap:10px;margin-bottom:12px"><input id="q" class="inp" style="max-width:260px" placeholder="🔍 بحث..."><span style="flex:1"></span><button class="btn sec" onclick="printList('${tb.id}')">🖨️ طباعة القائمة</button></div><div class="tw"><table><thead><tr>${tb.num?'<th>الرقم</th>':''}${fs.map(f=>`<th>${f.l}</th>`).join('')}<th></th></tr></thead><tbody id="tbd"></tbody></table></div></div>`;
+ const frm=$('#frm');
+ if(tb.calc)frm.oninput=()=>{const g=k=>+$('#f_'+k)?.value||0;$('#f_total').value=+(g('qty')*g('price')*(1-g('disc')/100)*(1+(tb.tax?(+S().taxRate||0)/100:0))).toFixed(2)};
+ const it=$('#f_item');if(it&&(tb.calc||tb.id=='sr'))it.onchange=()=>{const i=db.items.find(x=>x.name==it.value);if(i&&$('#f_price')){$('#f_price').value=tb.pcost?(i.cost||i.price):i.price;frm.oninput&&frm.oninput()}};
+ frm.onsubmit=e=>{e.preventDefault();const row={};fs.forEach(f=>{let v=$('#f_'+f.k).value;if(f.t=='n'||f.t=='c')v=+v||0;row[f.k]=v});
+  if(tb.id=='sr'&&!row.total){const i=db.items.find(x=>x.name==row.item);row.total=row.qty*(i?.price||0)}
+  if(tb.coll=='coa'||tb.id=='ch'&&db.channels.some(c=>c.name==row.name)){}
+  if(tb.id=='si'&&S().maxDisc&&row.disc>S().maxDisc){alert('الخصم أعلى من الحد المسموح');return}
+  if(H[tb.coll]&&H[tb.coll](row)===false)return;
+  if(tb.num)row.id=(S()[tb.pf]||'')+(rows.length+1);rows.push(row);log('إضافة في '+tb.title+(row.id?' '+row.id:''));save();
+  if(tb.id=='cu'||1)render();S().confirmSave&&alert('تم الحفظ');S().askPrint&&tb.id!='ug'&&tb.id!='us'&&askPrint(tb,row)};
+ const draw=()=>{const f=($('#q').value||'').toLowerCase(),sh=rows.map((r,i)=>({r,i})).filter(x=>JSON.stringify(x.r).toLowerCase().includes(f));
+  $('#tbd').innerHTML=sh.map(({r,i})=>`<tr>${tb.num?`<td><b>${esc(r.id)}</b></td>`:''}${fs.map(f=>`<td>${f.t=='n'||f.t=='c'?(/qty|days|rate|comm|min|disc/.test(f.k)?r[f.k]:money(r[f.k])):esc(r[f.k])}</td>`).join('')}<td class="act"><button title="طباعة" onclick="printRow('${tb.id}',${i})">🖨️</button><button title="حذف" onclick="delRow('${tb.id}',${i})">🗑️</button></td></tr>`).join('')||`<tr><td colspan="${fs.length+2}" class="empty">لا توجد بيانات بعد — أضف أول سجل من النموذج أعلاه</td></tr>`};
+ $('#q').oninput=draw;draw()}
+function delRow(id,i){if(confirm('حذف هذا السجل؟')){const tb=findTab(id);db[tb.coll].splice(i,1);log('حذف من '+tb.title);save();render()}}
+function repView(B,tb){const R=tb.rep();B.innerHTML=`<div class="card"><div style="display:flex;justify-content:space-between"><h3>${tb.icon} ${tb.title}</h3><button class="btn sec" onclick="printHtml('${tb.title}',$('#rt').outerHTML)">🖨️ طباعة</button></div><div class="tw"><table id="rt"><thead><tr>${R.cols.map(c=>`<th>${c}</th>`).join('')}</tr></thead><tbody>${R.rows.map(r=>`<tr>${r.map(x=>`<td>${esc(x)}</td>`).join('')}</tr>`).join('')||`<tr><td colspan="${R.cols.length}" class="empty">لا توجد بيانات</td></tr>`}</tbody></table></div></div>`}
+function setView(B,tb){const g=SET.find(x=>x.id==tb.settings);B.innerHTML=`<div class="card"><h3>${g.icon} ${g.title}</h3><form id="sf" class="grid">${g.f.map(f=>f.t=='b'?`<label class="chk"><input type="checkbox" id="s_${f.k}" ${S()[f.k]?'checked':''}>${f.l}</label>`:inp({...f,v:S()[f.k]},tb).replace(`id="f_${f.k}"`,`id="s_${f.k}"`).replace(/value="[^"]*"/,`value="${esc(S()[f.k]??'')}"`).replace(`<option>${S()[f.k]}</option>`,`<option selected>${S()[f.k]}</option>`)).join('')}<button class="btn">حفظ الإعدادات</button></form></div>`;
+ $('#sf').onsubmit=e=>{e.preventDefault();g.f.forEach(f=>{const el=$('#s_'+f.k);S()[f.k]=f.t=='b'?el.checked:f.t=='n'?+el.value:el.value});log('تعديل '+g.title);save();cname.textContent=S().name;alert('تم حفظ الإعدادات وتطبيقها')}}
+function coaView(B){const kids=p=>db.coa.filter(a=>a.parent==p);
+ const node=(a,l)=>`<div class="nd" style="padding-right:${10+l*26}px">${kids(a.code).length?'📂':'📄'} <b>${a.code}</b> ${esc(a.name)} <em>${a.type} · ${money(a.openBal)}</em>${kids(a.code).length?'':`<button style="background:none;border:0" onclick="delCoa('${a.code}')">🗑️</button>`}</div>`+kids(a.code).map(k=>node(k,l+1)).join('');
+ const roots=db.coa.filter(a=>!a.parent||!db.coa.some(p=>p.code==a.parent));
+ B.innerHTML=`<div class="card"><h3>🌳 إضافة حساب</h3><form id="cf" class="grid"><div><label>الكود</label><input id="c_code" class="inp" required></div><div><label>اسم الحساب</label><input id="c_name" class="inp" required></div><div><label>النوع</label><select id="c_type" class="inp"><option>أصول</option><option>التزامات</option><option>حقوق ملكية</option><option>إيرادات</option><option>مصروفات</option></select></div><div><label>الحساب الأب</label><select id="c_par" class="inp"><option value="">— حساب رئيسي —</option>${db.coa.map(a=>`<option value="${a.code}">${a.code} ${esc(a.name)}</option>`).join('')}</select></div><div><label>الرصيد الافتتاحي</label><input id="c_bal" type="number" step="any" class="inp" value="0"></div><button class="btn">إضافة</button></form></div><div class="card tree"><h3>شجرة الحسابات</h3>${roots.map(a=>node(a,0)).join('')}</div>`;
+ $('#cf').onsubmit=e=>{e.preventDefault();if(db.coa.some(a=>a.code==c_code.value)){alert('الكود مستخدم من قبل');return}const row={code:c_code.value,name:c_name.value,type:c_type.value,parent:c_par.value,openBal:+c_bal.value||0};db.coa.push(row);log('إضافة حساب '+row.code);save();render();S().askPrint&&askPrint({title:'حساب جديد',fields:[t('code','الكود'),t('name','الاسم'),t('type','النوع'),t('parent','الحساب الأب'),n('openBal','الرصيد الافتتاحي')]},row)}}
+function delCoa(code){if(confirm('حذف الحساب؟')){db.coa=db.coa.filter(a=>a.code!=code);save();render()}}
+function backupView(B){B.innerHTML=`<div class="card"><h3>💾 النسخ الاحتياطي</h3><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn" onclick="exportBk()">تصدير نسخة JSON</button><label class="btn sec" style="cursor:pointer">استيراد نسخة<input type="file" accept=".json" hidden onchange="importBk(this)"></label><button class="btn red" onclick="resetAll()">تفريغ النظام</button></div></div>`}
+function exportBk(){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(db,null,1)],{type:'application/json'}));a.download='tantawe-backup-'+today()+'.json';a.click()}
+function importBk(el){const f=el.files[0];if(!f)return;f.text().then(x=>{try{db={...seed(),...JSON.parse(x)};save();boot();alert('تم الاستيراد')}catch(e){alert('ملف غير صالح')}})}
+function resetAll(){if(confirm('سيتم حذف كل البيانات. متابعة؟')){db=seed();db.session='admin';save();boot()}}
+
+/* ---------- الطباعة ---------- */
+function printHtml(title,body){const w=window.open('','_blank');if(!w){alert('اسمح بالنوافذ المنبثقة للطباعة');return}
+ w.document.write(`<html dir="rtl" lang="ar"><head><meta charset="UTF-8"><title>${esc(title)}</title><style>@page{size:${S().paper=='A5'?'A5':'A4'}}body{font-family:Cairo,Tahoma,sans-serif;padding:24px;color:#0f172a}h1{margin:0;color:#0b1f44}h2{border-bottom:2px solid #1d4ed8;padding-bottom:8px}table{width:100%;border-collapse:collapse}th,td{border:1px solid #cbd5e1;padding:7px;text-align:right}th{background:#e8eef9}footer{margin-top:30px;text-align:center;color:#64748b}</style></head><body>${S().showLogo?`<h1>${esc(S().name)}</h1><div>${esc(S().addr||'')} ${esc(S().phone||'')} ${S().taxNo?'| ض: '+esc(S().taxNo):''}</div>`:''}<h2>${esc(title)}</h2>${body}<footer>${esc(S().invFooter||'')}</footer></body></html>`);w.document.close();w.focus();setTimeout(()=>{for(let i=0;i<(+S().copies||1);i++)w.print()},400)}
+function printDoc(tb,row){printHtml(tb.title+(row.id?' رقم '+row.id:''),`<table>${tb.fields.map(f=>`<tr><th style="width:35%">${f.l}</th><td>${f.t=='n'||f.t=='c'?(/qty|days|rate|comm|min|disc/.test(f.k)?row[f.k]:money(row[f.k])):esc(row[f.k])}</td></tr>`).join('')}</table>`)}
+function printRow(id,i){const tb=findTab(id);printDoc(tb,db[tb.coll][i])}
+function printList(id){const tb=findTab(id);printHtml(tb.title,`<table><tr>${tb.fields.map(f=>`<th>${f.l}</th>`).join('')}</tr>${db[tb.coll].map(r=>`<tr>${tb.fields.map(f=>`<td>${esc(r[f.k])}</td>`).join('')}</tr>`).join('')}</table>`)}
+function askPrint(tb,row){const m=$('#modal');m.innerHTML=`<div><div style="font-size:38px">🖨️</div><h3 style="margin:0">تم الحفظ بنجاح</h3><div style="color:#64748b">هل تريد طباعة ${esc(tb.title)} الآن؟</div><div class="r"><button class="btn" id="pyes">طباعة</button><button class="btn sec" id="pno">لاحقاً</button></div></div>`;m.classList.remove('hidden');$('#pyes').onclick=()=>{m.classList.add('hidden');printDoc(tb,row)};$('#pno').onclick=()=>m.classList.add('hidden')}
+boot();
+</script>
+</body></html>
