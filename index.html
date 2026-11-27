@@ -22,7 +22,7 @@ button{cursor:pointer;font-weight:700}
 .inp{width:100%;padding:10px 12px;border:1px solid #cbd5e1;border-radius:10px;background:#f8fafc;font-size:13px}
 .inp:focus{outline:2px solid #93b4f8;background:#fff;border-color:var(--b)}
 .btn{background:linear-gradient(135deg,var(--n),var(--b));color:#fff;border:0;border-radius:10px;padding:10px 18px;font-size:13px}
-.btn:hover{filter:brightness(1.12)}.btn.sec{background:#e2e8f0;color:#0f172a}.btn.red{background:#be123c}
+.btn:hover{filter:brightness(1.12)}.btn.sec{background:#e2e8f0;color:#0f172a}.btn.red{background:#be123c}.btn.green{background:#059669;color:#fff}
 .err{background:#fff1f2;color:#be123c;border:1px solid #fecdd3;padding:8px;border-radius:8px;text-align:center;font-weight:700}
 .top{background:linear-gradient(90deg,var(--k),var(--n));color:#fff;display:flex;align-items:center;gap:14px;padding:10px 22px;position:sticky;top:0;z-index:10}
 .top .logo{font-weight:900;font-size:16px;cursor:pointer;display:flex;align-items:center;gap:8px}
@@ -57,7 +57,7 @@ th{background:var(--n);color:#fff;padding:10px}td{padding:9px 10px;border-top:1p
 .tree .nd{padding:7px 10px;border-bottom:1px solid #eef2f7;display:flex;gap:10px;align-items:center}.tree .nd:hover{background:#eff6ff}
 .tree .nd b{color:var(--n)}.tree .nd em{font-style:normal;color:#64748b;font-size:11px;margin-right:auto}
 .modal{position:fixed;inset:0;background:rgba(7,11,20,.6);display:grid;place-items:center;z-index:50}
-.modal>div{background:#fff;border-radius:18px;padding:26px;max-width:340px;text-align:center;display:grid;gap:12px}
+.modal>div{background:#fff;border-radius:18px;padding:26px;max-width:440px;width:90%;text-align:center;display:grid;gap:12px}
 .modal .r{display:flex;gap:10px}.modal .r button{flex:1}
 /* القائمة المنسدلة الفورية للحقول المرتبطة */
 .cmb{position:relative}
@@ -103,12 +103,14 @@ textarea.sql-box{width:100%;min-height:110px;padding:12px;border:1px solid #cbd5
 <script>
 const K='tantawe_erp_v2',$=s=>document.querySelector(s),today=()=>new Date().toISOString().slice(0,10);
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const COLL='coa journals channels transfers reconciles costCenters fixedAssets depreciations taxes closings reps customers quotes salesOrders salesInvoices salesReturns creditNotes collections priceLists vendors purRequests purOrders purInvoices purReturns purAddNotes payments itemGroups warehouses items invMoves whTransfers adjustments employees depts attendance shifts leaves payrolls advances penBon contracts insurances branches fiscalYears periods currencies groups users logs dynReports'.split(' ');
+const COLL='coa journals channels transfers reconciles costCenters fixedAssets depreciations taxes closings reps customers quotes salesOrders salesInvoices salesReturns creditNotes collections priceLists vendors purQuotes purOrders purInvoices purReturns purAddNotes payments itemGroups warehouses items invMoves whTransfers adjustments employees depts attendance shifts leaves payrolls advances penBon contracts insurances branches fiscalYears periods currencies groups users logs dynReports'.split(' ');
 const ALL='acc,sales,pur,inv,hr,cmp,rep,sys';
-function seed(){const d={session:null,settings:{sinvPrefix:'INV-',pinvPrefix:'PO-',docPrefix:'DOC-',currency:'ج.م',invFooter:'شكراً لتعاملكم معنا',askPrint:true,confirmSave:false,name:'TANTAWE ERP',baseCur:'الجنيه المصري (EGP)',autoJournal:true,salesPay:'آجل',purStock:true,allowNeg:false,trackMoves:true,hrAdj:true,taxRate:14,workDays:26,insRate:11,paper:'A4',copies:1,showLogo:true,sessionMin:60,minPwd:4,lowStock:5,lowAlert:true,lang:'العربية (RTL)',tz:'إفريقيا/القاهرة',dateFmt:'YYYY-MM-DD'}};
+function seed(){const d={session:null,settings:{sinvPrefix:'INV-',pinvPrefix:'PO-',docPrefix:'DOC-',currency:'ج.م',invFooter:'شكراً لتعاملكم معنا',askPrint:true,confirmSave:false,name:'TANTAWE ERP',baseCur:'الجنيه المصري (EGP)',autoJournal:true,salesPay:'آجل',purStock:true,allowNeg:false,trackMoves:true,hrAdj:true,taxRate:14,workDays:26,insRate:11,paper:'A4',copies:1,showLogo:true,sessionMin:60,minPwd:4,lowStock:5,lowAlert:true,lang:'العربية (RTL)',tz:'إفريقيا/القاهرة',dateFmt:'YYYY-MM-DD',autoInvMove:true,showDiscCol:true,showTaxCol:true}};
 COLL.forEach(c=>d[c]=[]);
-d.coa=[['1','الأصول','أصول','',0],['11','الأصول المتداولة','أصول','1',0],['1101','الخزينة','أصول','11',0],['1102','البنوك','أصول','11',0],['1103','العملاء','أصول','11',0],['1104','المخزون','أصول','11',0],['12','الأصول الثابتة','أصول','1',0],['2','الالتزامات','التزامات','',0],['2101','الموردون','التزامات','2',0],['2102','ضريبة القيمة المضافة','التزامات','2',0],['3','حقوق الملكية','حقوق ملكية','',0],['3101','رأس المال','حقوق ملكية','3',0],['4','الإيرادات','إيرادات','',0],['4101','إيرادات المبيعات','إيرادات','4',0],['5','المصروفات','مصروفات','',0],['5101','تكلفة المشتريات','مصروفات','5',0],['5102','الرواتب والأجور','مصروفات','5',0]].map(a=>({code:a[0],name:a[1],type:a[2],parent:a[3],openBal:a[4]}));
-d.branches=[{name:'الفرع الرئيسي'}];d.warehouses=[{name:'المخزن الرئيسي'}];d.itemGroups=[{name:'عام'}];d.currencies=[{name:'الجنيه المصري',rate:1}];d.fiscalYears=[{name:'2026'}];
+d.coa=[['1','الأصول','أصول','',0],['11','الأصول المتداولة','أصول','1',0],['1101','الخزينة','أصول','11',0],['1102','البنوك','أصول','11',0],['1103','العملاء','أصول','11',0],['1104','المخزون','أصول','11',0],['12','الأصول الثابتة','أصول','1',0],['2','الالتزامات','التزامات','',0],['2101','الموردون','التزامات','2',0],['2102','ضريبة القيمة المضافة','التزامات','2',0],['3','حقوق الملكية','حقوق ملكية','',0],['3101','رأس المال','حقوق ملكية','3',0],['3102','الأرباح المرحلة','حقوق ملكية','3',0],['4','الإيرادات','إيرادات','',0],['4101','إيرادات المبيعات','إيرادات','4',0],['5','المصروفات','مصروفات','',0],['5101','تكلفة المشتريات','مصروفات','5',0],['5102','الرواتب والأجور','مصروفات','5',0]].map(a=>({code:a[0],name:a[1],type:a[2],parent:a[3],openBal:a[4]}));
+d.branches=[{name:'الفرع الرئيسي'}];d.warehouses=[{name:'المخزن الرئيسي'}];d.itemGroups=[{name:'عام'}];
+d.currencies=[{name:'الجنيه المصري (EGP)',rate:1},{name:'الدولار الأمريكي (USD)',rate:50},{name:'اليورو (EUR)',rate:53},{name:'الريال السعودي (SAR)',rate:13.3}];
+d.fiscalYears=[{name:'2026',from:'2026-01-01',to:'2026-12-31',st:'مفتوحة'}];
 d.groups=[{name:'مدير عام',perms:'all'},{name:'محاسب',perms:'acc,sales,pur,rep'},{name:'مبيعات ومخازن',perms:'sales,inv,rep'}];
 d.users=[{username:'admin',password:'1234',group:'مدير عام'},{username:'acc1',password:'123',group:'محاسب'}];
 d.dynReports=[{name:'أرصدة الأصناف الحالية',sql:'SELECT code, name, wh, qty, cost, price FROM items'},{name:'فواتير المبيعات الآجلة',sql:"SELECT id, dt, cust, item, qty, total FROM salesInvoices WHERE pay = 'آجل'"}];
@@ -148,7 +150,7 @@ const MODS=[
  ]),
  X('dep','إهلاك الأصول','📉','depreciations',[r('asset','الأصل',FA),d('dt','التاريخ'),n('amt','قيمة الإهلاك')]),
  X('tax','الضرائب','％','taxes',[t('name','نوع الضريبة'),n('rate','النسبة %'),n('amt','المبلغ')]),
- X('cl','الإقفال المالي','🔒','closings',[r('yr','السنة المالية','fiscalYears.name'),t('note','ملاحظات'),n('net','الرصيد المرحل',0)]),
+ {id:'cl',title:'إقفال السنة المالية',icon:'🔒',custom:closingView},
  {id:'ledger',title:'الأستاذ العام',icon:'📋',rep:()=>({cols:['التاريخ','الحساب','البيان','مدين','دائن'],rows:db.journals.flatMap(j=>[[j.dt,j.dr,j.desc,money(j.amt),'-'],[j.dt,j.cr,j.desc,'-',money(j.amt)]])})},
  {id:'tb',title:'ميزان المراجعة',icon:'⚖️',rep:trial},
  {id:'is',title:'قائمة الدخل',icon:'📊',rep:()=>{const a=sum(db.salesInvoices,'total'),p=sum(db.purInvoices,'total'),w=sum(db.payrolls,'total');return{cols:['البند','المبلغ'],rows:[['إجمالي الإيرادات',money(a)],['تكلفة المشتريات',money(p)],['الرواتب والأجور',money(w)],['صافي الربح / الخسارة',money(a-p-w)]]}}},
@@ -157,9 +159,9 @@ const MODS=[
 {id:'sales',name:'المبيعات',icon:'🛒',color:'#0891b2',sub:'العملاء، الفواتير والتحصيل',tabs:[
  X('cu','العملاء','👥','customers',[t('name','اسم العميل'),t('phone','الهاتف'),t('email','البريد'),t('addr','العنوان'),t('taxNo','الرقم الضريبي'),n('limit','حد الائتمان',0),r('rep','المندوب','reps.name'),r('acc','حساب العميل',CO)]),
  X('sq','عروض الأسعار','📄','quotes',docF('cust',CU),{num:1,pf:'docPrefix',calc:1,tax:1}),
- X('so','أوامر البيع','🧾','salesOrders',docF('cust',CU),{num:1,pf:'docPrefix',calc:1,tax:1}),
- X('si','فواتير المبيعات','🧮','salesInvoices',[...docF('cust',CU),s('pay','طريقة الدفع',['آجل','نقدي','تحويل بنكي'])],{num:1,pf:'sinvPrefix',calc:1,tax:1,sale:1,feat:1}),
- X('sr','مرتجعات المبيعات','↩️','salesReturns',[d('dt','التاريخ'),r('cust','العميل',CU),r('item','الصنف',IT),n('qty','الكمية',1),n('total','قيمة المرتجع'),t('reason','السبب')],{num:1,pf:'docPrefix'}),
+ X('so','أوامر البيع','🧾','salesOrders',docF('cust',CU),{num:1,pf:'docPrefix',calc:1,tax:1,importFrom:'quotes',importLabel:'📥 استدعاء عرض سعر'}),
+ X('si','فواتير المبيعات','🧮','salesInvoices',[...docF('cust',CU),s('pay','طريقة الدفع',['آجل','نقدي','تحويل بنكي'])],{num:1,pf:'sinvPrefix',calc:1,tax:1,sale:1,feat:1,importFrom:'salesOrders',importLabel:'📥 استدعاء أمر بيع'}),
+ X('sr','مرتجعات المبيعات','↩️','salesReturns',[d('dt','التاريخ'),r('cust','العميل',CU),r('item','الصنف',IT),n('qty','الكمية',1),n('total','قيمة المرتجع'),t('reason','السبب')],{num:1,pf:'docPrefix',importFrom:'salesInvoices',importLabel:'📥 استدعاء فاتورة مبيعات'}),
  X('cn','إشعارات الخصم','🏷️','creditNotes',[d('dt','التاريخ'),r('cust','العميل',CU),n('amt','القيمة'),t('reason','السبب')],{num:1,pf:'docPrefix'}),
  X('col','سندات التحصيل','💵','collections',[d('dt','التاريخ'),r('cust','العميل',CU),r('chan','الخزينة / البنك',CH),n('amt','المبلغ'),t('note','رقم الشيك / الإيصال')],{num:1,pf:'docPrefix'}),
  X('pl','قوائم الأسعار','📋','priceLists',[t('name','اسم القائمة'),r('item','الصنف',IT),n('price','السعر')]),
@@ -167,10 +169,10 @@ const MODS=[
  {id:'cs',title:'كشف حسابات العملاء',icon:'📑',rep:()=>({cols:['العميل','المبيعات الآجلة','التحصيل','إشعارات الخصم','الرصيد'],rows:db.customers.map(x=>{const a=sum(db.salesInvoices.filter(i=>i.cust==x.name&&i.pay=='آجل'),'total'),b=sum(db.collections.filter(i=>i.cust==x.name),'amt'),k=sum(db.creditNotes.filter(i=>i.cust==x.name),'amt');return[x.name,money(a),money(b),money(k),money(a-b-k)]})})}]},
 {id:'pur',name:'المشتريات',icon:'📦',color:'#7c3aed',sub:'الموردون، أوامر الشراء والمدفوعات',tabs:[
  X('vn','الموردون','🏭','vendors',[t('name','اسم المورد'),t('phone','الهاتف'),t('email','البريد'),t('addr','العنوان'),t('taxNo','الرقم الضريبي'),t('terms','شروط السداد'),r('acc','حساب المورد',CO)]),
- X('pq','طلبات الشراء','📝','purRequests',[d('dt','التاريخ'),r('item','الصنف',IT),r('wh','المخزن',WH),n('qty','الكمية',1),s('prio','الأولوية',['عادية','عاجلة']),t('note','ملاحظات')],{num:1,pf:'docPrefix'}),
- X('po','أوامر الشراء','📑','purOrders',docF('vnd',VN,1),{num:1,pf:'docPrefix',calc:1,tax:1,pcost:1}),
- X('pi','فواتير المشتريات','🧾','purInvoices',[...docF('vnd',VN,1),r('wh','المخزن المضاف إليه',WH)],{num:1,pf:'pinvPrefix',calc:1,tax:1,pcost:1,feat:1}),
- X('pr','مرتجعات المشتريات','↩️','purReturns',[d('dt','التاريخ'),r('vnd','المورد',VN),r('item','الصنف',IT),n('qty','الكمية',1),n('total','قيمة المرتجع'),t('reason','السبب')],{num:1,pf:'docPrefix'}),
+ X('pq','عروض أسعار المشتريات','📝','purQuotes',docF('vnd',VN,1),{num:1,pf:'docPrefix',calc:1,tax:1,pcost:1}),
+ X('po','أوامر الشراء','📑','purOrders',docF('vnd',VN,1),{num:1,pf:'docPrefix',calc:1,tax:1,pcost:1,importFrom:'purQuotes',importLabel:'📥 استدعاء عرض سعر شراء'}),
+ X('pi','فواتير المشتريات','🧾','purInvoices',[...docF('vnd',VN,1),r('wh','المخزن المضاف إليه',WH)],{num:1,pf:'pinvPrefix',calc:1,tax:1,pcost:1,feat:1,importFrom:'purOrders',importLabel:'📥 استدعاء أمر شراء'}),
+ X('pr','مرتجعات المشتريات','↩️','purReturns',[d('dt','التاريخ'),r('vnd','المورد',VN),r('item','الصنف',IT),n('qty','الكمية',1),n('total','قيمة المرتجع'),t('reason','السبب')],{num:1,pf:'docPrefix',importFrom:'purInvoices',importLabel:'📥 استدعاء فاتورة مشتريات'}),
  X('pan','إشعارات الإضافة','➕','purAddNotes',[d('dt','التاريخ'),r('vnd','المورد',VN),n('amt','القيمة'),t('note','البيان')],{num:1,pf:'docPrefix'}),
  X('pay','سندات الدفع','💳','payments',[d('dt','التاريخ'),r('vnd','المورد',VN),r('chan','الخزينة / البنك',CH),n('amt','المبلغ'),t('note','رقم الشيك / التحويل')],{num:1,pf:'docPrefix'}),
  {id:'vs',title:'كشف حسابات الموردين',icon:'📑',rep:()=>({cols:['المورد','المشتريات','المدفوع','الرصيد'],rows:db.vendors.map(x=>{const a=sum(db.purInvoices.filter(i=>i.vnd==x.name),'total'),b=sum(db.payments.filter(i=>i.vnd==x.name),'amt');return[x.name,money(a),money(b),money(a-b)]})})}]},
@@ -197,9 +199,9 @@ const MODS=[
 {id:'cmp',name:'بيانات الشركة',icon:'🏢',color:'#be185d',sub:'الشركة، الفروع والمستخدمون',tabs:[
  {id:'prof',title:'بيانات الشركة',icon:'🏢',settings:'company'},
  X('br','الفروع','📍','branches',[t('name','اسم الفرع'),t('addr','العنوان'),t('phone','الهاتف')]),
- X('fy','السنوات المالية','📅','fiscalYears',[t('name','السنة'),d('from','من'),d('to','إلى')]),
+ X('fy','السنوات المالية','📅','fiscalYears',[t('name','السنة'),d('from','من'),d('to','إلى'),s('st','الحالة',['مفتوحة','مغلقة'])]),
  X('pd','الفترات المحاسبية','🗓️','periods',[t('name','الفترة'),d('from','من'),d('to','إلى'),s('st','الحالة',['مفتوحة','مغلقة'])]),
- X('cur','العملات وأسعار الصرف','💱','currencies',[t('name','العملة'),n('rate','سعر الصرف مقابل الأساسية')]),
+ {id:'cur',title:'العملات وأسعار الصرف',icon:'💱',custom:currenciesView},
  X('ug','مجموعات المستخدمين','🛡️','groups',[t('name','اسم المجموعة'),t('perms','الصلاحيات (all أو acc,sales,pur,inv,hr,cmp,rep,sys)','all')]),
  X('us','المستخدمون','👤','users',[t('username','اسم المستخدم'),t('password','كلمة المرور'),r('group','المجموعة','groups.name')])]},
 {id:'rep',name:'التقارير',icon:'📑',color:'#475569',sub:'كشوف الحسابات وتقارير الأداء',tabs:[
@@ -213,14 +215,15 @@ const MODS=[
  {id:'dyn',title:'التقارير الديناميكية',icon:'⚡',custom:dynRepView}]},
 {id:'sys',name:'الإعدادات',icon:'⚙️',color:'#0f172a',sub:'تحكم في كل جزء من النظام',tabs:[]}];
 
-/* ---------- الإعدادات ---------- */
+/* ---------- الإعدادات الموسعة ---------- */
 const SET=[
 {id:'general',title:'الإعدادات العامة',icon:'🎛️',f:[t('currency','رمز العملة المعروضة'),t('invFooter','ملاحظة أسفل المستندات'),b('confirmSave','تأكيد منبثق عند حفظ أي مستند')]},
 {id:'company',title:'بيانات الشركة',icon:'🏢',f:[t('name','الاسم التجاري'),t('legal','الاسم القانوني'),t('taxNo','الرقم الضريبي'),t('crNo','السجل التجاري'),t('addr','العنوان'),t('phone','الهاتف'),t('email','البريد الإلكتروني'),t('baseCur','العملة الأساسية')]},
 {id:'sacc',title:'إعدادات الحسابات',icon:'🧮',f:[r('revAcc','حساب الإيرادات الافتراضي',CO),r('expAcc','حساب المصروفات الافتراضي',CO),b('autoJournal','قيد تلقائي مع الفواتير'),t('fyStart','بداية السنة المالية (شهر)')]},
-{id:'ssales',title:'إعدادات المبيعات',icon:'🛒',f:[s('salesPay','طريقة الدفع الافتراضية',['آجل','نقدي','تحويل بنكي']),n('maxDisc','أقصى خصم مسموح %'),b('lockPrice','منع تعديل سعر البيع'),b('creditCheck','منع البيع عند تجاوز حد الائتمان')]},
+{id:'ssales',title:'إعدادات المبيعات والمستندات',icon:'🛒',f:[s('salesPay','طريقة الدفع الافتراضية',['آجل','نقدي','تحويل بنكي']),n('maxDisc','أقصى خصم مسموح %'),b('lockPrice','منع تعديل سعر البيع'),b('creditCheck','منع البيع عند تجاوز حد الائتمان'),b('autoInvMove','توليد إذن المخزن (صرف/إضافة) تلقائياً مع الفاتورة')]},
 {id:'spur',title:'إعدادات المشتريات',icon:'📦',f:[r('purWh','المخزن الافتراضي',WH),b('purStock','إضافة الكمية للمخزون تلقائياً')]},
 {id:'sinv',title:'إعدادات المخازن',icon:'🏬',f:[b('allowNeg','السماح بالبيع بالسالب'),b('trackMoves','تسجيل حركة الأصناف'),n('lowStock','حد التنبيه الافتراضي للمخزون'),b('lowAlert','تنبيه عند نقص الأصناف')]},
+{id:'sui',title:'التحكم في العرض والأعمدة',icon:'👁️',f:[b('showDiscCol','إظهار عمود الخصم في الجدول والطباعة'),b('showTaxCol','إظهار قيمة الضريبة منفصلة')]},
 {id:'shr',title:'إعدادات الموارد البشرية',icon:'👥',f:[n('workDays','أيام العمل في الشهر'),n('insRate','نسبة التأمينات %'),n('otRate','معدل الإضافي'),b('hrAdj','احتساب السلف والخصومات في المسير')]},
 {id:'stax',title:'إعدادات الضرائب',icon:'％',f:[n('taxRate','نسبة ضريبة القيمة المضافة %'),n('whRate','ضريبة الخصم والإضافة %'),b('taxIncl','الأسعار شاملة الضريبة')]},
 {id:'snum',title:'ترقيم المستندات',icon:'🔢',f:[t('sinvPrefix','بادئة فواتير المبيعات'),t('pinvPrefix','بادئة فواتير المشتريات'),t('docPrefix','بادئة باقي المستندات')]},
@@ -236,10 +239,7 @@ const findTab=id=>MODS.flatMap(m=>m.tabs).find(x=>x.id==id);
 function coaOptions(){
   return db.coa.map(a=>{
     const hasKids=db.coa.some(x=>x.parent==a.code);
-    return {
-      value:a.name,
-      sub:`كود ${a.code} · ${a.type}${hasKids?' · رئيسي':' · فرعي'}`
-    };
+    return {value:a.name,sub:`كود ${a.code} · ${a.type}${hasKids?' · رئيسي':' · فرعي'}`};
   });
 }
 function refItems(ref){
@@ -257,13 +257,39 @@ function refItems(ref){
   });
 }
 
-/* ---------- المنطق: الأرصدة والقيود ---------- */
+/* ---------- المنطق: الأرصدة والقيود والتوليد التلقائي ---------- */
 const stock=(nm,dq)=>{const i=db.items.find(x=>x.name==nm);if(!i)return true;const q=(+i.qty||0)+dq;if(q<0&&!S().allowNeg){alert('الرصيد المتاح غير كافٍ للصنف: '+nm);return false}i.qty=q;return true};
 const chan=(nm,dv)=>{const x=db.channels.find(c=>c.name==nm);if(x)x.balance=(+x.balance||0)+dv};
 const jr=(desc,dr,cr,amt)=>{if(S().autoJournal)db.journals.push({id:S().docPrefix+'J'+(db.journals.length+1),dt:today(),dr,cr,cc:'عام',amt,desc})};
+
 const H={
- salesInvoices:r=>{if(S().creditCheck&&r.pay=='آجل'){const cu=db.customers.find(x=>x.name==r.cust);if(cu&&cu.limit>0){const bal=sum(db.salesInvoices.filter(i=>i.cust==r.cust&&i.pay=='آجل'),'total')-sum(db.collections.filter(i=>i.cust==r.cust),'amt');if(bal+r.total>cu.limit){alert('تجاوز حد الائتمان للعميل');return false}}}if(!stock(r.item,-r.qty))return false;const cu=db.customers.find(x=>x.name==r.cust);jr('فاتورة مبيعات - '+(r.cust||''),r.pay=='آجل'?(cu?.acc||'العملاء'):(db.channels[0]?.name||'الخزينة'),S().revAcc||'إيرادات المبيعات',r.total)},
- purInvoices:r=>{if(S().purStock&&!stock(r.item,r.qty))return false;const vn=db.vendors.find(x=>x.name==r.vnd);jr('فاتورة مشتريات - '+(r.vnd||''),S().expAcc||'تكلفة المشتريات',vn?.acc||'الموردون',r.total)},
+ salesInvoices:(r,tb)=>{
+   if(S().creditCheck&&r.pay=='آجل'){
+     const cu=db.customers.find(x=>x.name==r.cust);
+     if(cu&&cu.limit>0){
+       const bal=sum(db.salesInvoices.filter(i=>i.cust==r.cust&&i.pay=='آجل'),'total')-sum(db.collections.filter(i=>i.cust==r.cust),'amt');
+       if(bal+r.total>cu.limit){alert('تجاوز حد الائتمان للعميل');return false}
+     }
+   }
+   if(!stock(r.item,-r.qty))return false;
+   const cu=db.customers.find(x=>x.name==r.cust);
+   jr('فاتورة مبيعات - '+(r.cust||''),r.pay=='آجل'?(cu?.acc||'العملاء'):(db.channels[0]?.name||'الخزينة'),S().revAcc||'إيرادات المبيعات',r.total);
+   if(S().autoInvMove){
+     const invM={id:S().docPrefix+'M'+(db.invMoves.length+1),dt:r.dt||today(),type:'إذن صرف',item:r.item,wh:db.warehouses[0]?.name||'المخزن الرئيسي',qty:r.qty,note:'صرف تلقائي عن فاتورة '+r.id};
+     db.invMoves.push(invM);
+     r._linkedMove=invM;
+   }
+ },
+ purInvoices:(r,tb)=>{
+   if(S().purStock&&!stock(r.item,r.qty))return false;
+   const vn=db.vendors.find(x=>x.name==r.vnd);
+   jr('فاتورة مشتريات - '+(r.vnd||''),S().expAcc||'تكلفة المشتريات',vn?.acc||'الموردون',r.total);
+   if(S().autoInvMove){
+     const invM={id:S().docPrefix+'M'+(db.invMoves.length+1),dt:r.dt||today(),type:'إذن إضافة',item:r.item,wh:r.wh||db.warehouses[0]?.name||'المخزن الرئيسي',qty:r.qty,note:'إضافة تلقائية عن فاتورة شراء '+r.id};
+     db.invMoves.push(invM);
+     r._linkedMove=invM;
+   }
+ },
  salesReturns:r=>{stock(r.item,r.qty)},purReturns:r=>stock(r.item,-r.qty),
  collections:r=>{chan(r.chan,r.amt);const cu=db.customers.find(x=>x.name==r.cust);jr('تحصيل من '+(r.cust||''),r.chan||'الخزينة',cu?.acc||'العملاء',r.amt)},
  payments:r=>{chan(r.chan,-r.amt);const vn=db.vendors.find(x=>x.name==r.vnd);jr('سداد إلى '+(r.vnd||''),vn?.acc||'الموردون',r.chan||'الخزينة',r.amt)},
@@ -312,7 +338,7 @@ function home(){const p=perms(),low=db.items.filter(i=>i.qty<=(+i.min||+S().lowS
  <div class="apps">${MODS.filter(m=>p.includes(m.id)).map(m=>`<button class="app" style="--c:${m.color};border:1px solid var(--bd)" onclick="go('${m.id}')"><div class="ic">${m.icon}</div><b>${m.name}</b><small>${m.tabs.length} قسم</small></button>`).join('')}</div>`}
 function modHome(m){main.innerHTML=`<div class="banner"><div><h2>${m.name}</h2><p>${m.sub}</p></div><div class="ic">${m.icon}</div></div><div class="tiles" style="--c:${m.color}">${m.tabs.map(x=>`<button class="tile" style="--c:${m.color}" onclick="go('${m.id}','${x.id}')"><span>${x.icon}</span><b>${x.title}</b></button>`).join('')}</div>`}
 
-/* ---------- قائمة منسدلة بحثية فورية لأي حقل مرتبط ---------- */
+/* ---------- قائمة منسدلة بحثية فورية ---------- */
 function initCombos(){
   document.querySelectorAll('.cmb').forEach(box=>{
     const inpEl=box.querySelector('input.cmb-inp');
@@ -353,9 +379,42 @@ function inp(f,tb,prefix='f_',valOverride){
   return`<div><label>${f.l}</label><input id="${id}" type="${f.t=='d'?'date':'text'}" class="inp" value="${esc(v)}"></div>`;
 }
 
+/* ---------- استدعاء السجلات والربط بين الدورات ---------- */
+function openImportModal(tb){
+  const srcColl=tb.importFrom;
+  const list=db[srcColl]||[];
+  const m=$('#modal');
+  if(!list.length){
+    alert('لا توجد مستندات سابقة متاحة للاستدعاء');
+    return;
+  }
+  m.innerHTML=`<div><h3>${esc(tb.importLabel||'استدعاء مستند')}</h3><div style="color:#64748b;font-size:12px">اختر المستند المراد تحويله إلى ${esc(tb.title)}:</div>
+  <div style="max-height:240px;overflow-y:auto;text-align:right" class="tw"><table><thead><tr><th>الرقم</th><th>التاريخ</th><th>الطرف</th><th>الصنف</th><th>الإجمالي</th><th></th></tr></thead><tbody>
+  ${list.map((r,idx)=>`<tr><td><b>${esc(r.id||(idx+1))}</b></td><td>${esc(r.dt)}</td><td>${esc(r.cust||r.vnd||'-')}</td><td>${esc(r.item||'-')}</td><td>${money(r.total||r.amt)}</td><td><button class="btn green" onclick="doImportRow('${tb.id}','${srcColl}',${idx})">اختيار</button></td></tr>`).join('')}
+  </tbody></table></div>
+  <button class="btn sec" onclick="$('#modal').classList.add('hidden')">إلغاء</button></div>`;
+  m.classList.remove('hidden');
+}
+
+function doImportRow(tbId,srcColl,idx){
+  const srcRow=db[srcColl][idx];
+  const tb=findTab(tbId);
+  $('#modal').classList.add('hidden');
+  tb.fields.forEach(f=>{
+    const el=$('#f_'+f.k);
+    if(el&&srcRow[f.k]!==undefined){
+      el.value=srcRow[f.k];
+    }
+  });
+  if($('#frm').oninput)$('#frm').oninput();
+  const it=$('#f_item');
+  if(it)it.dispatchEvent(new Event('change',{bubbles:true}));
+}
+
 function crudView(B,tb){
   const rows=db[tb.coll],fs=tb.fields;
-  B.innerHTML=`<div class="card"><h3>${tb.icon} ${tb.title}</h3><form id="frm" class="grid">${fs.map(f=>inp(f,tb)).join('')}<button class="btn">حفظ</button></form></div>
+  const impBtn=tb.importFrom?`<button type="button" class="btn green" style="margin-bottom:10px" onclick="openImportModal(findTab('${tb.id}'))">${esc(tb.importLabel)}</button>`:'';
+  B.innerHTML=`<div class="card"><div style="display:flex;justify-content:space-between;align-items:center"><h3>${tb.icon} ${tb.title}</h3>${impBtn}</div><form id="frm" class="grid">${fs.map(f=>inp(f,tb)).join('')}<button class="btn">حفظ</button></form></div>
   <div class="card"><div style="display:flex;gap:10px;margin-bottom:12px"><input id="q" class="inp" style="max-width:260px" placeholder="🔍 بحث..."><span style="flex:1"></span><button class="btn sec" onclick="printList('${tb.id}')">🖨️ طباعة القائمة</button></div><div class="tw"><table><thead><tr>${tb.num?'<th>الرقم</th>':''}${fs.map(f=>`<th>${f.l}</th>`).join('')}${tb.coll=='fixedAssets'?'<th>صافي القيمة</th>':''}<th></th></tr></thead><tbody id="tbd"></tbody></table></div></div>`;
   const frm=$('#frm');
   if(tb.calc)frm.oninput=()=>{const g=k=>+$('#f_'+k)?.value||0;$('#f_total').value=+(g('qty')*g('price')*(1-g('disc')/100)*(1+(tb.tax?(+S().taxRate||0)/100:0))).toFixed(2)};
@@ -366,7 +425,7 @@ function crudView(B,tb){
       const h=$('#hint_f_item');
       if(i){
         if(h)h.textContent=`المتاح بالمخزن: ${i.qty||0} ${i.unit||''} | سعر البيع: ${money(i.price)} | التكلفة: ${money(i.cost)}`;
-        if((tb.calc||tb.id=='sr')&&$('#f_price')){$('#f_price').value=tb.pcost?(i.cost||i.price):i.price;frm.oninput&&frm.oninput()}
+        if((tb.calc||tb.id=='sr'||tb.id=='pr')&&$('#f_price')){$('#f_price').value=tb.pcost?(i.cost||i.price):i.price;frm.oninput&&frm.oninput()}
       }else if(h)h.textContent='';
     };
   }
@@ -382,9 +441,9 @@ function crudView(B,tb){
       if(f.t=='n'||f.t=='c')v=+v||0;
       row[f.k]=v;
     }
-    if(tb.id=='sr'&&!row.total){const i=db.items.find(x=>x.name==row.item);row.total=row.qty*(i?.price||0)}
+    if((tb.id=='sr'||tb.id=='pr')&&!row.total){const i=db.items.find(x=>x.name==row.item);row.total=row.qty*(i?.price||0)}
     if(tb.id=='si'&&S().maxDisc&&row.disc>S().maxDisc){alert('الخصم أعلى من الحد المسموح');return}
-    if(H[tb.coll]&&H[tb.coll](row)===false)return;
+    if(H[tb.coll]&&H[tb.coll](row,tb)===false)return;
     if(tb.num)row.id=(S()[tb.pf]||'')+(rows.length+1);
     rows.push(row);
     log('إضافة في '+tb.title+(row.id?' '+row.id:''));
@@ -410,6 +469,51 @@ function setView(B,tb){
   const g=SET.find(x=>x.id==tb.settings);
   B.innerHTML=`<div class="card"><h3>${g.icon} ${g.title}</h3><form id="sf" class="grid">${g.f.map(f=>f.t=='b'?`<label class="chk"><input type="checkbox" id="s_${f.k}" ${S()[f.k]?'checked':''}>${f.l}</label>`:inp(f,tb,'s_',S()[f.k]??'')).join('')}<button class="btn">حفظ الإعدادات</button></form></div>`;
   $('#sf').onsubmit=e=>{e.preventDefault();g.f.forEach(f=>{const el=$('#s_'+f.k);S()[f.k]=f.t=='b'?el.checked:f.t=='n'?+el.value:el.value});log('تعديل '+g.title);save();cname.textContent=S().name;alert('تم حفظ الإعدادات وتطبيقها')};
+}
+
+/* ---------- تابة العملات ---------- */
+function currenciesView(B){
+  B.innerHTML=`<div class="card"><h3>💱 إدارة العملات وأسعار الصرف</h3><form id="curf" class="grid"><div><label>اسم العملة والرمز</label><input id="cur_name" class="inp" placeholder="مثال: يورو (EUR)" required></div><div><label>سعر الصرف مقابل العملة الأساسية</label><input id="cur_rate" type="number" step="any" class="inp" value="1" required></div><button class="btn">إضافة عملة</button></form></div>
+  <div class="card"><h3>العملات المتاحة</h3><div class="tw"><table><thead><tr><th>العملة</th><th>سعر الصرف</th><th>التحكم</th></tr></thead><tbody>
+  ${db.currencies.map((c,idx)=>`<tr><td><b>${esc(c.name)}</b></td><td>${c.rate}</td><td class="act"><button title="حذف" onclick="delCur(${idx})">🗑️</button></td></tr>`).join('')}
+  </tbody></table></div></div>`;
+  $('#curf').onsubmit=e=>{
+    e.preventDefault();
+    db.currencies.push({name:$('#cur_name').value.trim(),rate:+$('#cur_rate').value||1});
+    save();log('إضافة عملة: '+$('#cur_name').value);render();
+  };
+}
+function delCur(idx){if(confirm('حذف هذه العملة؟')){db.currencies.splice(idx,1);save();render()}}
+
+/* ---------- إقفال السنة المالية ---------- */
+function closingView(B){
+  const curFy=db.fiscalYears.find(x=>x.st=='مفتوحة')||db.fiscalYears[db.fiscalYears.length-1];
+  const rev=sum(db.salesInvoices,'total'),exp=sum(db.purInvoices,'total')+sum(db.payrolls,'total');
+  const net=rev-exp;
+  B.innerHTML=`<div class="card"><h3>🔒 إقفال السنة المالية الرحالة</h3>
+  <div style="font-size:14px;line-height:2">
+    <div>السنة المالية الحالية: <b>${esc(curFy?.name||'2026')}</b> (${curFy?.from||''} إلى ${curFy?.to||''})</div>
+    <div>إجمالي الإيرادات: <b style="color:#059669">${money(rev)}</b> | إجمالي المصروفات: <b style="color:#be123c">${money(exp)}</b></div>
+    <div>صافي نتيجـة الأعمال (الربح / الخسارة): <b style="color:var(--b);font-size:18px">${money(net)}</b></div>
+  </div>
+  <hr style="border:0;border-top:1px solid var(--bd);margin:16px 0">
+  <button class="btn red" style="padding:12px 24px;font-size:14px" onclick="doCloseYear('${esc(curFy?.name||'2026')}',${net})">🔒 إقفال السنة الحالية وتدوير الأرصدة للسنة الجديدة</button>
+  </div>
+  <div class="card"><h3>سجل السجلات المالية المقفلة</h3><div class="tw"><table><thead><tr><th>السنة</th><th>الفترة</th><th>النتيجة المرحّلة</th><th>الحالة</th></tr></thead><tbody>
+  ${db.fiscalYears.map(f=>`<tr><td><b>${esc(f.name)}</b></td><td>${f.from} إلى ${f.to}</td><td>${money(sum(db.closings.filter(c=>c.yr==f.name),'net'))}</td><td><span style="color:${f.st=='مغلقة'?'#be123c':'#059669'};font-weight:900">${f.st||'مفتوحة'}</span></td></tr>`).join('')}
+  </tbody></table></div></div>`;
+}
+function doCloseYear(yrName,netAmt){
+  if(!confirm(`هل أنت أصل ومتردد في إقفال السنة المالية ${yrName}؟ سيتم ترحيل الأرباح والخسائر وحسابات الأرصدة وإعادة تدويرها لسنة جديدة.`))return;
+  const fy=db.fiscalYears.find(x=>x.name==yrName);
+  if(fy)fy.st='مغلقة';
+  const nextYr=String((+yrName||2026)+1);
+  db.fiscalYears.push({name:nextYr,from:nextYr+'-01-01',to:nextYr+'-12-31',st:'مفتوحة'});
+  db.closings.push({yr:yrName,dt:today(),note:'إقفال وتدوير تلقائي لسنة '+yrName,net:netAmt});
+  jr('قيد إقفال الأرباح والخسائر لسنة '+yrName,'إيرادات المبيعات','الأرباح المرحلة',netAmt);
+  log('إقفال السنة المالية '+yrName+' وفتح السنة '+nextYr);
+  save();render();
+  alert('تم إقفال السنة المالية بنجاح وفتح سنة مالية جديدة وتدوير الأرصدة!');
 }
 
 function coaView(B){
@@ -510,13 +614,40 @@ function exportBk(){const a=document.createElement('a');a.href=URL.createObjectU
 function importBk(el){const f=el.files[0];if(!f)return;f.text().then(x=>{try{db={...seed(),...JSON.parse(x)};save();boot();alert('تم الاستيراد')}catch(e){alert('ملف غير صالح')}})}
 function resetAll(){if(confirm('سيتم حذف كل البيانات. متابعة؟')){db=seed();db.session='admin';save();boot()}}
 
-/* ---------- الطباعة ---------- */
-function printHtml(title,body){const w=window.open('','_blank');if(!w){alert('اسمح بالنوافذ المنبثقة للطباعة');return}
- w.document.write(`<html dir="rtl" lang="ar"><head><meta charset="UTF-8"><title>${esc(title)}</title><style>@page{size:${S().paper=='A5'?'A5':'A4'}}body{font-family:Cairo,Tahoma,sans-serif;padding:24px;color:#0f172a}h1{margin:0;color:#0b1f44}h2{border-bottom:2px solid #1d4ed8;padding-bottom:8px}table{width:100%;border-collapse:collapse}th,td{border:1px solid #cbd5e1;padding:7px;text-align:right}th{background:#e8eef9}footer{margin-top:30px;text-align:center;color:#64748b}</style></head><body>${S().showLogo?`<h1>${esc(S().name)}</h1><div>${esc(S().addr||'')} ${esc(S().phone||'')} ${S().taxNo?'| ض: '+esc(S().taxNo):''}</div>`:''}<h2>${esc(title)}</h2>${body}<footer>${esc(S().invFooter||'')}</footer></body></html>`);w.document.close();w.focus();setTimeout(()=>{for(let i=0;i<(+S().copies||1);i++)w.print()},400)}
-function printDoc(tb,row){printHtml(tb.title+(row.id?' رقم '+row.id:''),`<table>${tb.fields.map(f=>`<tr><th style="width:35%">${f.l}</th><td>${f.t=='n'||f.t=='c'?(/qty|days|rate|comm|min|disc|lifeYears/.test(f.k)?row[f.k]:money(row[f.k])):esc(row[f.k])}</td></tr>`).join('')}</table>`)}
+/* ---------- الطباعة والطباعة المتتالية للإذن ---------- */
+function printHtml(title,body,chainCall){
+  const w=window.open('','_blank');
+  if(!w){alert('اسمح بالنوافذ المنبثقة للطباعة');return}
+  w.document.write(`<html dir="rtl" lang="ar"><head><meta charset="UTF-8"><title>${esc(title)}</title><style>@page{size:${S().paper=='A5'?'A5':'A4'}}body{font-family:Cairo,Tahoma,sans-serif;padding:24px;color:#0f172a}h1{margin:0;color:#0b1f44}h2{border-bottom:2px solid #1d4ed8;padding-bottom:8px}table{width:100%;border-collapse:collapse}th,td{border:1px solid #cbd5e1;padding:7px;text-align:right}th{background:#e8eef9}footer{margin-top:30px;text-align:center;color:#64748b}</style></head><body>${S().showLogo?`<h1>${esc(S().name)}</h1><div>${esc(S().addr||'')} ${esc(S().phone||'')} ${S().taxNo?'| ض: '+esc(S().taxNo):''}</div>`:''}<h2>${esc(title)}</h2>${body}<footer>${esc(S().invFooter||'')}</footer></body></html>`);
+  w.document.close();w.focus();
+  setTimeout(()=>{
+    for(let i=0;i<(+S().copies||1);i++)w.print();
+    if(chainCall)chainCall();
+  },400);
+}
+function printDoc(tb,row,chainCall){
+  printHtml(tb.title+(row.id?' رقم '+row.id:''),`<table>${tb.fields.map(f=>`<tr><th style="width:35%">${f.l}</th><td>${f.t=='n'||f.t=='c'?(/qty|days|rate|comm|min|disc|lifeYears/.test(f.k)?row[f.k]:money(row[f.k])):esc(row[f.k])}</td></tr>`).join('')}</table>`,chainCall);
+}
 function printRow(id,i){const tb=findTab(id);printDoc(tb,db[tb.coll][i])}
 function printList(id){const tb=findTab(id);printHtml(tb.title,`<table><tr>${tb.fields.map(f=>`<th>${f.l}</th>`).join('')}</tr>${db[tb.coll].map(r=>`<tr>${tb.fields.map(f=>`<td>${esc(r[f.k])}</td>`).join('')}</tr>`).join('')}</table>`)}
-function askPrint(tb,row){const m=$('#modal');m.innerHTML=`<div><div style="font-size:38px">🖨️</div><h3 style="margin:0">تم الحفظ بنجاح</h3><div style="color:#64748b">هل تريد طباعة ${esc(tb.title)} الآن؟</div><div class="r"><button class="btn" id="pyes">طباعة</button><button class="btn sec" id="pno">لاحقاً</button></div></div>`;m.classList.remove('hidden');$('#pyes').onclick=()=>{m.classList.add('hidden');printDoc(tb,row)};$('#pno').onclick=()=>m.classList.add('hidden')}
+
+function askPrint(tb,row){
+  const m=$('#modal');
+  const hasLinkedMove=!!row._linkedMove;
+  m.innerHTML=`<div><div style="font-size:38px">🖨️</div><h3 style="margin:0">تم الحفظ بنجاح</h3><div style="color:#64748b">هل تريد طباعة ${esc(tb.title)} الآن؟${hasLinkedMove?'<br><b style="color:var(--b)">(سيتم طباعة إذن المخزن بعد الفاتورة تلقائياً)</b>':''}</div><div class="r"><button class="btn" id="pyes">طباعة</button><button class="btn sec" id="pno">لاحقاً</button></div></div>`;
+  m.classList.remove('hidden');
+  $('#pyes').onclick=()=>{
+    m.classList.add('hidden');
+    printDoc(tb,row,()=>{
+      if(hasLinkedMove){
+        const invTb=findTab('ad');
+        printDoc(invTb,row._linkedMove);
+      }
+    });
+  };
+  $('#pno').onclick=()=>m.classList.add('hidden');
+}
+
 boot();
 </script>
 </body></html>
