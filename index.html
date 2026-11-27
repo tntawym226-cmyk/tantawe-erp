@@ -26,7 +26,7 @@ button{cursor:pointer;font-weight:700}
 .err{background:#fff1f2;color:#be123c;border:1px solid #fecdd3;padding:8px;border-radius:8px;text-align:center;font-weight:700}
 .top{background:linear-gradient(90deg,var(--k),var(--n));color:#fff;display:flex;align-items:center;gap:14px;padding:10px 22px;position:sticky;top:0;z-index:10}
 .top .logo{font-weight:900;font-size:16px;cursor:pointer;display:flex;align-items:center;gap:8px}
-.top .logo i{font-style:normal;background:var(--b);width:32px;height:32px;border-radius:9px;display:grid;place-items:center}
+.top .logo i{font-style:normal;background:var(--b);width:32px;height:32px;border-radius:99px;display:grid;place-items:center}
 .top .sp{flex:1}.top button{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.2);border-radius:8px;padding:6px 12px}
 .crumb{padding:14px 26px 0;color:#64748b;font-weight:700}.crumb a{color:var(--b);cursor:pointer}
 main{padding:18px 26px 40px;max-width:1500px;margin:auto}
@@ -103,11 +103,13 @@ textarea.sql-box{width:100%;min-height:110px;padding:12px;border:1px solid #cbd5
 <script>
 const K='tantawe_erp_v2',$=s=>document.querySelector(s),today=()=>new Date().toISOString().slice(0,10);
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const COLL='coa journals channels transfers reconciles costCenters fixedAssets depreciations taxes closings reps customers quotes salesOrders salesInvoices salesReturns creditNotes collections priceLists vendors purQuotes purOrders purInvoices purReturns purAddNotes payments itemGroups warehouses items invMoves whTransfers adjustments employees depts attendance shifts leaves payrolls advances penBon contracts insurances branches fiscalYears periods currencies groups users logs dynReports'.split(' ');
+const COLL='coa journals channels expVouchers revVouchers expenseTypes revenueTypes transfers reconciles costCenters fixedAssets depreciations taxes closings reps customers quotes salesOrders salesInvoices salesReturns creditNotes collections priceLists vendors purQuotes purOrders purInvoices purReturns purAddNotes payments itemGroups warehouses items invMoves whTransfers adjustments employees depts attendance shifts leaves payrolls advances penBon contracts insurances branches fiscalYears periods currencies groups users logs dynReports'.split(' ');
 const ALL='acc,sales,pur,inv,hr,cmp,rep,sys';
 function seed(){const d={session:null,settings:{sinvPrefix:'INV-',pinvPrefix:'PO-',docPrefix:'DOC-',currency:'ج.م',invFooter:'شكراً لتعاملكم معنا',askPrint:true,confirmSave:false,name:'TANTAWE ERP',baseCur:'الجنيه المصري (EGP)',autoJournal:true,salesPay:'آجل',purStock:true,allowNeg:false,trackMoves:true,hrAdj:true,taxRate:14,workDays:26,insRate:11,paper:'A4',copies:1,showLogo:true,sessionMin:60,minPwd:4,lowStock:5,lowAlert:true,lang:'العربية (RTL)',tz:'إفريقيا/القاهرة',dateFmt:'YYYY-MM-DD',autoInvMove:true,showDiscCol:true,showTaxCol:true}};
 COLL.forEach(c=>d[c]=[]);
-d.coa=[['1','الأصول','أصول','',0],['11','الأصول المتداولة','أصول','1',0],['1101','الخزينة','أصول','11',0],['1102','البنوك','أصول','11',0],['1103','العملاء','أصول','11',0],['1104','المخزون','أصول','11',0],['12','الأصول الثابتة','أصول','1',0],['2','الالتزامات','التزامات','',0],['2101','الموردون','التزامات','2',0],['2102','ضريبة القيمة المضافة','التزامات','2',0],['3','حقوق الملكية','حقوق ملكية','',0],['3101','رأس المال','حقوق ملكية','3',0],['3102','الأرباح المرحلة','حقوق ملكية','3',0],['4','الإيرادات','إيرادات','',0],['4101','إيرادات المبيعات','إيرادات','4',0],['5','المصروفات','مصروفات','',0],['5101','تكلفة المشتريات','مصروفات','5',0],['5102','الرواتب والأجور','مصروفات','5',0]].map(a=>({code:a[0],name:a[1],type:a[2],parent:a[3],openBal:a[4]}));
+d.coa=[['1','الأصول','أصول','',0],['11','الأصول المتداولة','أصول','1',0],['1101','الخزينة','أصول','11',0],['1102','البنوك','أصول','11',0],['1103','العملاء','أصول','11',0],['1104','المخزون','أصول','11',0],['12','الأصول الثابتة','أصول','1',0],['2','الالتزامات','التزامات','',0],['2101','الموردون','التزامات','2',0],['2102','ضريبة القيمة المضافة','التزامات','2',0],['3','حقوق الملكية','حقوق ملكية','',0],['3101','رأس المال','حقوق ملكية','3',0],['3102','الأرباح المرحلة','حقوق ملكية','3',0],['4','الإيرادات','إيرادات','',0],['4101','إيرادات المبيعات','إيرادات','4',0],['4102','إيرادات متنوعة وأرباح أخرى','إيرادات','4',0],['5','المصروفات','مصروفات','',0],['5101','تكلفة المشتريات','مصروفات','5',0],['5102','الرواتب والأجور','مصروفات','5',0],['5103','مصاريف عمومية وإدارية','مصروفات','5',0],['5104','مصاريف إيجار وصيانة','مصروفات','5',0]].map(a=>({code:a[0],name:a[1],type:a[2],parent:a[3],openBal:a[4]}));
+d.expenseTypes=[{name:'مصاريف إيجار',acc:'مصاريف إيجار وصيانة'},{name:'كهرباء ومياه',acc:'مصاريف عمومية وإدارية'},{name:'صيانة وتشغيل',acc:'مصاريف إيجار وصيانة'},{name:'دعاية وإعلان',acc:'مصاريف عمومية وإدارية'},{name:'مصاريف نثرية',acc:'مصاريف عمومية وإدارية'}];
+d.revenueTypes=[{name:'إيراد خدمات وفحص',acc:'إيرادات متنوعة وأرباح أخرى'},{name:'عمولات واستشارات',acc:'إيرادات متنوعة وأرباح أخرى'},{name:'أرباح بيع أصول',acc:'إيرادات متنوعة وأرباح أخرى'}];
 d.branches=[{name:'الفرع الرئيسي'}];d.warehouses=[{name:'المخزن الرئيسي'}];d.itemGroups=[{name:'عام'}];
 d.currencies=[{name:'الجنيه المصري (EGP)',rate:1},{name:'الدولار الأمريكي (USD)',rate:50},{name:'اليورو (EUR)',rate:53},{name:'الريال السعودي (SAR)',rate:13.3}];
 d.fiscalYears=[{name:'2026',from:'2026-01-01',to:'2026-12-31',st:'مفتوحة'}];
@@ -124,13 +126,15 @@ const sum=(a,k)=>a.reduce((s,x)=>s+(+x[k]||0),0);
 /* ---------- تعريف الحقول ---------- */
 const t=(k,l,v)=>({k,l,t:'t',v}),n=(k,l,v)=>({k,l,t:'n',v}),d=(k,l)=>({k,l,t:'d'}),s=(k,l,o)=>({k,l,t:'s',o}),r=(k,l,o)=>({k,l,t:'r',o}),c=(k,l)=>({k,l,t:'c'});
 const X=(id,title,icon,coll,fields,o={})=>({id,title,icon,coll,fields,...o});
-const CU='customers.name',VN='vendors.name',IT='items.name',CH='channels.name',WH='warehouses.name',CO='coa.name',EM='employees.name',FA='fixedAssets.name';
+const CU='customers.name',VN='vendors.name',IT='items.name',CH='channels.name',CO='coa.name',EM='employees.name',FA='fixedAssets.name',WH='warehouses.name',EXT='expenseTypes.name',RVT='revenueTypes.name';
 const docF=(who,whoRef,pcost)=>[d('dt','التاريخ'),r(who,who=='cust'?'العميل':'المورد',whoRef),r('item','الصنف',IT),n('qty','الكمية',1),n('price','السعر'),n('disc','خصم %',0),c('total','الإجمالي (شامل الضريبة)')];
 
 const MODS=[
-{id:'acc',name:'الحسابات',icon:'🧮',color:'#1d4ed8',sub:'الدليل، القيود، الخزائن والقوائم المالية',tabs:[
+{id:'acc',name:'الحسابات',icon:'🧮',color:'#1d4ed8',sub:'الدليل، القيود، الخزائن والمصروفات والإيرادات',tabs:[
  {id:'coa',title:'شجرة الحسابات',icon:'🌳',custom:coaView},
  X('je','القيود اليومية','📒','journals',[d('dt','التاريخ'),r('dr','الحساب المدين',CO),r('cr','الحساب الدائن',CO),r('cc','مركز التكلفة','costCenters.name'),n('amt','المبلغ'),t('desc','البيان')],{pf:'docPrefix'}),
+ X('ev','سندات الصرف (المصروفات)','💸','expVouchers',[d('dt','التاريخ'),r('expType','نوع المصروف',EXT),r('chan','الخزينة / البنك المصروف منه',CH),n('amt','المبلغ المصروف'),t('desc','البيان / السبب')],{num:1,pf:'docPrefix'}),
+ X('rv','سندات القبض (الإيرادات)','💰','revVouchers',[d('dt','التاريخ'),r('revType','نوع الإيراد',RVT),r('chan','الخزينة / البنك المودع فيه',CH),n('amt','المبلغ المحصل'),t('desc','البيان / المصدر')],{num:1,pf:'docPrefix'}),
  X('ch','الخزائن والبنوك','🏦','channels',[t('name','الاسم'),s('type','النوع',['خزينة','بنك']),t('accNo','رقم الحساب / IBAN'),n('balance','الرصيد الافتتاحي')]),
  X('tr','التحويلات المالية','🔁','transfers',[r('from','من',CH),r('to','إلى',CH),d('dt','التاريخ'),n('amt','المبلغ')]),
  X('rec','التسويات البنكية','🏛️','reconciles',[r('bank','البنك',CH),d('dt','التاريخ'),n('stmt','رصيد كشف البنك'),t('note','ملاحظات')]),
@@ -153,9 +157,14 @@ const MODS=[
  {id:'cl',title:'إقفال السنة المالية',icon:'🔒',custom:closingView},
  {id:'ledger',title:'الأستاذ العام',icon:'📋',rep:()=>({cols:['التاريخ','الحساب','البيان','مدين','دائن'],rows:db.journals.flatMap(j=>[[j.dt,j.dr,j.desc,money(j.amt),'-'],[j.dt,j.cr,j.desc,'-',money(j.amt)]])})},
  {id:'tb',title:'ميزان المراجعة',icon:'⚖️',rep:trial},
- {id:'is',title:'قائمة الدخل',icon:'📊',rep:()=>{const a=sum(db.salesInvoices,'total'),p=sum(db.purInvoices,'total'),w=sum(db.payrolls,'total');return{cols:['البند','المبلغ'],rows:[['إجمالي الإيرادات',money(a)],['تكلفة المشتريات',money(p)],['الرواتب والأجور',money(w)],['صافي الربح / الخسارة',money(a-p-w)]]}}},
+ {id:'is',title:'قائمة الدخل',icon:'📊',rep:()=>{
+   const sales=sum(db.salesInvoices,'total'),pur=sum(db.purInvoices,'total'),salaries=sum(db.payrolls,'total');
+   const expV=sum(db.expVouchers,'amt'),revV=sum(db.revVouchers,'amt');
+   const totRev=sales+revV,totExp=pur+salaries+expV;
+   return{cols:['البند','المبلغ'],rows:[['إجمالي إيرادات المبيعات',money(sales)],['إيرادات متنوعة أخرى (سندات القبض)',money(revV)],['إجمالي الإيرادات',money(totRev)],['تكلفة المشتريات',money(pur)],['الرواتب والأجور',money(salaries)],['مصروفات عمومية وتشغيلية (سندات الصرف)',money(expV)],['إجمالي المصروفات',money(totExp)],['صافي الربح / الخسارة',money(totRev-totExp)]]}
+ }},
  {id:'bs',title:'قائمة المركز المالي',icon:'🧾',rep:()=>{const cash=sum(db.channels,'balance'),st=db.items.reduce((x,i)=>x+i.qty*i.price,0),fx=sum(db.fixedAssets,'val')-sum(db.fixedAssets,'accDep'),cus=sum(db.salesInvoices.filter(x=>x.pay=='آجل'),'total')-sum(db.collections,'amt'),ven=sum(db.purInvoices,'total')-sum(db.payments,'amt');return{cols:['البند','المبلغ'],rows:[['النقدية والبنوك',money(cash)],['المخزون',money(st)],['الأصول الثابتة (بالصافي)',money(fx)],['العملاء',money(cus)],['إجمالي الأصول',money(cash+st+fx+cus)],['الموردون',money(ven)]]}}},
- {id:'cf',title:'التدفقات النقدية',icon:'💵',rep:()=>{const i=sum(db.collections,'amt'),o=sum(db.payments,'amt');return{cols:['البند','المبلغ'],rows:[['التدفقات الداخلة (تحصيل)',money(i)],['التدفقات الخارجة (دفع)',money(o)],['صافي التدفق النقدي',money(i-o)]]}}}]},
+ {id:'cf',title:'التدفقات النقدية',icon:'💵',rep:()=>{const i=sum(db.collections,'amt')+sum(db.revVouchers,'amt'),o=sum(db.payments,'amt')+sum(db.expVouchers,'amt');return{cols:['البند','المبلغ'],rows:[['التدفقات الداخلة (تحصيل وإيرادات)',money(i)],['التدفقات الخارجة (دفع ومصروفات)',money(o)],['صافي التدفق النقدي',money(i-o)]]}}}]},
 {id:'sales',name:'المبيعات',icon:'🛒',color:'#0891b2',sub:'العملاء، الفواتير والتحصيل',tabs:[
  X('cu','العملاء','👥','customers',[t('name','اسم العميل'),t('phone','الهاتف'),t('email','البريد'),t('addr','العنوان'),t('taxNo','الرقم الضريبي'),n('limit','حد الائتمان',0),r('rep','المندوب','reps.name'),r('acc','حساب العميل',CO)]),
  X('sq','عروض الأسعار','📄','quotes',docF('cust',CU),{num:1,pf:'docPrefix',calc:1,tax:1}),
@@ -210,7 +219,7 @@ const MODS=[
  {id:'r3',title:'أرصدة الخزائن والبنوك',icon:'🏦',rep:()=>({cols:['الاسم','النوع','الرصيد'],rows:db.channels.map(x=>[x.name,x.type,money(x.balance)])})},
  {id:'r4',title:'تقييم المخزون',icon:'📦',rep:()=>findTab('bal').rep()},
  {id:'r5',title:'المبيعات والمشتريات',icon:'📊',rep:()=>({cols:['البند','المبلغ'],rows:[['إجمالي المبيعات',money(sum(db.salesInvoices,'total'))],['إجمالي المشتريات',money(sum(db.purInvoices,'total'))],['مرتجعات المبيعات',money(sum(db.salesReturns,'total'))],['مرتجعات المشتريات',money(sum(db.purReturns,'total'))]]})},
- {id:'r6',title:'الأرباح وتكلفة الرواتب',icon:'💹',rep:()=>findTab('is').rep()},
+ {id:'r6',title:'الأرباح وتكلفة الرواتب والمصاريف',icon:'💹',rep:()=>findTab('is').rep()},
  {id:'r7',title:'الأصناف تحت حد الطلب',icon:'⚠️',rep:()=>({cols:['الصنف','الرصيد','حد الطلب'],rows:db.items.filter(i=>i.qty<=(+i.min||+S().lowStock)).map(i=>[i.name,i.qty,i.min||S().lowStock])})},
  {id:'dyn',title:'التقارير الديناميكية',icon:'⚡',custom:dynRepView}]},
 {id:'sys',name:'الإعدادات',icon:'⚙️',color:'#0f172a',sub:'تحكم في كل جزء من النظام',tabs:[]}];
@@ -218,6 +227,7 @@ const MODS=[
 /* ---------- الإعدادات الموسعة ---------- */
 const SET=[
 {id:'general',title:'الإعدادات العامة',icon:'🎛️',f:[t('currency','رمز العملة المعروضة'),t('invFooter','ملاحظة أسفل المستندات'),b('confirmSave','تأكيد منبثق عند حفظ أي مستند')]},
+{id:'stypes',title:'أنواع المصروفات والإيرادات',icon:'🏷️',f:[],customSettings:typesSettingsView},
 {id:'company',title:'بيانات الشركة',icon:'🏢',f:[t('name','الاسم التجاري'),t('legal','الاسم القانوني'),t('taxNo','الرقم الضريبي'),t('crNo','السجل التجاري'),t('addr','العنوان'),t('phone','الهاتف'),t('email','البريد الإلكتروني'),t('baseCur','العملة الأساسية')]},
 {id:'sacc',title:'إعدادات الحسابات',icon:'🧮',f:[r('revAcc','حساب الإيرادات الافتراضي',CO),r('expAcc','حساب المصروفات الافتراضي',CO),b('autoJournal','قيد تلقائي مع الفواتير'),t('fyStart','بداية السنة المالية (شهر)')]},
 {id:'ssales',title:'إعدادات المبيعات والمستندات',icon:'🛒',f:[s('salesPay','طريقة الدفع الافتراضية',['آجل','نقدي','تحويل بنكي']),n('maxDisc','أقصى خصم مسموح %'),b('lockPrice','منع تعديل سعر البيع'),b('creditCheck','منع البيع عند تجاوز حد الائتمان'),b('autoInvMove','توليد إذن المخزن (صرف/إضافة) تلقائياً مع الفاتورة')]},
@@ -253,6 +263,8 @@ function refItems(ref){
     else if(a=='channels')sub=`${x.type||''} · رصيد: ${money(x.balance)}`;
     else if(a=='employees')sub=x.job||x.dept||'موظف';
     else if(a=='fixedAssets')sub=`كود: ${x.code||'-'} · صافي: ${money((+x.val||0)-(+x.accDep||0))}`;
+    else if(a=='expenseTypes')sub=`مرتبط بحساب: ${x.acc||'عام'}`;
+    else if(a=='revenueTypes')sub=`مرتبط بحساب: ${x.acc||'عام'}`;
     return {value:x[k],sub};
   });
 }
@@ -263,6 +275,16 @@ const chan=(nm,dv)=>{const x=db.channels.find(c=>c.name==nm);if(x)x.balance=(+x.
 const jr=(desc,dr,cr,amt)=>{if(S().autoJournal)db.journals.push({id:S().docPrefix+'J'+(db.journals.length+1),dt:today(),dr,cr,cc:'عام',amt,desc})};
 
 const H={
+ expVouchers:r=>{
+   chan(r.chan,-r.amt);
+   const et=db.expenseTypes.find(x=>x.name==r.expType);
+   jr('سند صرف مصروف: '+(r.expType||''),et?.acc||'مصروفات عمومية وإدارية',r.chan||'الخزينة',r.amt);
+ },
+ revVouchers:r=>{
+   chan(r.chan,r.amt);
+   const rt=db.revenueTypes.find(x=>x.name==r.revType);
+   jr('سند قبض إيراد: '+(r.revType||''),r.chan||'الخزينة',rt?.acc||'إيرادات متنوعة وأرباح أخرى',r.amt);
+ },
  salesInvoices:(r,tb)=>{
    if(S().creditCheck&&r.pay=='آجل'){
      const cu=db.customers.find(x=>x.name==r.cust);
@@ -467,9 +489,57 @@ function repView(B,tb){const R=tb.rep();B.innerHTML=`<div class="card"><div styl
 
 function setView(B,tb){
   const g=SET.find(x=>x.id==tb.settings);
+  if(g.customSettings){g.customSettings(B);return}
   B.innerHTML=`<div class="card"><h3>${g.icon} ${g.title}</h3><form id="sf" class="grid">${g.f.map(f=>f.t=='b'?`<label class="chk"><input type="checkbox" id="s_${f.k}" ${S()[f.k]?'checked':''}>${f.l}</label>`:inp(f,tb,'s_',S()[f.k]??'')).join('')}<button class="btn">حفظ الإعدادات</button></form></div>`;
   $('#sf').onsubmit=e=>{e.preventDefault();g.f.forEach(f=>{const el=$('#s_'+f.k);S()[f.k]=f.t=='b'?el.checked:f.t=='n'?+el.value:el.value});log('تعديل '+g.title);save();cname.textContent=S().name;alert('تم حفظ الإعدادات وتطبيقها')};
 }
+
+/* ---------- إعدادات أنواع المصروفات والإيرادات ---------- */
+function typesSettingsView(B){
+  B.innerHTML=`
+  <div class="card">
+    <h3>🏷️ إضافة نوع مصروف جديد</h3>
+    <form id="exp_type_form" class="grid">
+      <div><label>اسم المصروف</label><input id="et_name" class="inp" placeholder="مثال: مصاريف شحن ونقل" required></div>
+      <div><label>الحساب المرتبط بالشجرة</label><div class="cmb" data-ref="coa.name"><input id="et_acc" class="inp cmb-inp" placeholder="اختر من الشجرة..." required><div class="cmb-list hidden"></div></div></div>
+      <button class="btn">إضافة النوع</button>
+    </form>
+  </div>
+  <div class="card">
+    <h3>قائمة أنواع المصروفات المسجلة</h3>
+    <div class="tw"><table><thead><tr><th>النوع</th><th>الحساب المرتبط</th><th>التحكم</th></tr></thead><tbody>
+    ${db.expenseTypes.map((x,idx)=>`<tr><td><b>${esc(x.name)}</b></td><td>${esc(x.acc||'-')}</td><td class="act"><button onclick="delExpType(${idx})">🗑️</button></td></tr>`).join('')||`<tr><td colspan="3" class="empty">لا توجد أنواع بعد</td></tr>`}
+    </tbody></table></div>
+  </div>
+
+  <div class="card" style="margin-top:20px">
+    <h3>💰 إضافة نوع إيراد جديد</h3>
+    <form id="rev_type_form" class="grid">
+      <div><label>اسم الإيراد</label><input id="rt_name" class="inp" placeholder="مثال: إيرادات تأجير" required></div>
+      <div><label>الحساب المرتبط بالشجرة</label><div class="cmb" data-ref="coa.name"><input id="rt_acc" class="inp cmb-inp" placeholder="اختر من الشجرة..." required><div class="cmb-list hidden"></div></div></div>
+      <button class="btn green">إضافة النوع</button>
+    </form>
+  </div>
+  <div class="card">
+    <h3>قائمة أنواع الإيرادات المسجلة</h3>
+    <div class="tw"><table><thead><tr><th>النوع</th><th>الحساب المرتبط</th><th>التحكم</th></tr></thead><tbody>
+    ${db.revenueTypes.map((x,idx)=>`<tr><td><b>${esc(x.name)}</b></td><td>${esc(x.acc||'-')}</td><td class="act"><button onclick="delRevType(${idx})">🗑️</button></td></tr>`).join('')||`<tr><td colspan="3" class="empty">لا توجد أنواع بعد</td></tr>`}
+    </tbody></table></div>
+  </div>`;
+
+  $('#exp_type_form').onsubmit=e=>{
+    e.preventDefault();
+    db.expenseTypes.push({name:$('#et_name').value.trim(),acc:$('#et_acc').value.trim()});
+    save();log('إضافة نوع مصروف: '+$('#et_name').value);render();
+  };
+  $('#rev_type_form').onsubmit=e=>{
+    e.preventDefault();
+    db.revenueTypes.push({name:$('#rt_name').value.trim(),acc:$('#rt_acc').value.trim()});
+    save();log('إضافة نوع إيراد: '+$('#rt_name').value);render();
+  };
+}
+function delExpType(i){if(confirm('حذف هذا النوع؟')){db.expenseTypes.splice(i,1);save();render()}}
+function delRevType(i){if(confirm('حذف هذا النوع؟')){db.revenueTypes.splice(i,1);save();render()}}
 
 /* ---------- تابة العملات ---------- */
 function currenciesView(B){
@@ -488,12 +558,14 @@ function delCur(idx){if(confirm('حذف هذه العملة؟')){db.currencies.s
 /* ---------- إقفال السنة المالية ---------- */
 function closingView(B){
   const curFy=db.fiscalYears.find(x=>x.st=='مفتوحة')||db.fiscalYears[db.fiscalYears.length-1];
-  const rev=sum(db.salesInvoices,'total'),exp=sum(db.purInvoices,'total')+sum(db.payrolls,'total');
+  const rev=sum(db.salesInvoices,'total')+sum(db.revVouchers,'amt');
+  const exp=sum(db.purInvoices,'total')+sum(db.payrolls,'total')+sum(db.expVouchers,'amt');
   const net=rev-exp;
   B.innerHTML=`<div class="card"><h3>🔒 إقفال السنة المالية الرحالة</h3>
   <div style="font-size:14px;line-height:2">
     <div>السنة المالية الحالية: <b>${esc(curFy?.name||'2026')}</b> (${curFy?.from||''} إلى ${curFy?.to||''})</div>
-    <div>إجمالي الإيرادات: <b style="color:#059669">${money(rev)}</b> | إجمالي المصروفات: <b style="color:#be123c">${money(exp)}</b></div>
+    <div>إجمالي الإيرادات (المبيعات والإيرادات الأخرى): <b style="color:#059669">${money(rev)}</b></div>
+    <div>إجمالي المصروفات (المشتريات والرواتب والمصاريف): <b style="color:#be123c">${money(exp)}</b></div>
     <div>صافي نتيجـة الأعمال (الربح / الخسارة): <b style="color:var(--b);font-size:18px">${money(net)}</b></div>
   </div>
   <hr style="border:0;border-top:1px solid var(--bd);margin:16px 0">
@@ -504,7 +576,7 @@ function closingView(B){
   </tbody></table></div></div>`;
 }
 function doCloseYear(yrName,netAmt){
-  if(!confirm(`هل أنت أصل ومتردد في إقفال السنة المالية ${yrName}؟ سيتم ترحيل الأرباح والخسائر وحسابات الأرصدة وإعادة تدويرها لسنة جديدة.`))return;
+  if(!confirm(`هل أنت محتار في إقفال السنة المالية ${yrName}؟ سيتم ترحيل الأرباح والخسائر وحسابات الأرصدة وإعادة تدويرها لسنة جديدة.`))return;
   const fy=db.fiscalYears.find(x=>x.name==yrName);
   if(fy)fy.st='مغلقة';
   const nextYr=String((+yrName||2026)+1);
@@ -584,7 +656,7 @@ function dynRepView(B){
     <button class="btn sec" id="dr_save">💾 حفظ التقرير</button>
     <button class="btn sec" onclick="printHtml($('#dr_name').value||'تقرير ديناميكي',$('#dr_out').innerHTML)">🖨️ طباعة النتيجة</button>
   </div>
-  <div style="margin-top:10px;color:#64748b;font-size:11.5px">الجداول المتاحة: <code>items</code>, <code>customers</code>, <code>vendors</code>, <code>salesInvoices</code>, <code>purInvoices</code>, <code>journals</code>, <code>coa</code>, <code>fixedAssets</code>, <code>employees</code>, <code>channels</code></div>
+  <div style="margin-top:10px;color:#64748b;font-size:11.5px">الجداول المتاحة: <code>items</code>, <code>customers</code>, <code>vendors</code>, <code>salesInvoices</code>, <code>purInvoices</code>, <code>expVouchers</code>, <code>revVouchers</code>, <code>journals</code>, <code>coa</code>, <code>fixedAssets</code>, <code>employees</code>, <code>channels</code></div>
   </div>
   <div class="card"><h3>نتيجة التقرير</h3><div id="dr_out" class="tw"></div></div>`;
 
